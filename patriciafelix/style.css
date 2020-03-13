@@ -128,10 +128,6 @@ nav button {
     width: 168px;
 }
 
-.right {
-    float: right;
-}
-
 footer {
     grid-area: footer;
     background-color: #30C1F9;
