@@ -13,9 +13,11 @@ body {
     grid-template-rows: 70px 1fr 40px;
     grid-template-areas: 
         'header header'
-        'nav main'
+        'nav    main'
         'footer footer';
 }
+
+/* HEADER */
 
 header {
     grid-area: header;
@@ -26,7 +28,11 @@ header {
     padding-left: 36px;
     font-weight: 700;
     font-size: 36px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    z-index: 1;
 }
+
+/* NAV */
 
 nav {
     grid-area: nav;
@@ -35,7 +41,21 @@ nav {
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
+
+nav h2 {
+    color: #F95F2F;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+nav button {
+    margin-bottom: 15px;
+}
+
+/* MAIN */
 
 main {
     grid-area: main;
@@ -44,22 +64,59 @@ main {
 
 section {
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 0 auto 20px auto;
 }
 
-main .container {
+#school { grid-area: school;}
+#lbl-note { 
+    grid-area: lbl-note;
+    align-self: center;
+}
+#note { 
+    grid-area: note; 
+    justify-self: flex-end;
+}
+#assess { 
+    grid-area: assess;
+    font-weight: 600;
+    align-self: center;
+}
+#bimonthly { 
+    grid-area: bimonthly; 
+    justify-self: flex-end;
+}
+#trimonthly {
+    grid-area: trimonthly; 
+    justify-self: flex-end;
+}
+
+.container {
     display: grid;
-    grid-template-rows: 60px 60px 60px 60px;
+    grid-template-rows: repeat(4, 60px);
     grid-template-columns: 40% 60%;
     background-color: #EAEAEA;
     padding: 50px 15%;
     color: #1D215C;
     grid-template-areas: 
-        'input-school input-school'
-        'label-note input-note'
-        'label-test test-bi'
-        '.          test-tri';
+        'school   school'
+        'lbl-note note'
+        'assess   bimonthly'
+        '.        trimonthly';
 }
+
+#school, #note {
+    background: #FFFFFF;
+    border: 1px solid #1D215C;
+    box-sizing: border-box;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    width: 100%;
+    height: 48px;
+    padding: 5px 20px;
+    font-size: 16px;
+}
+
+/* BUTTONS */
 
 button {
     width: 250px;
@@ -73,60 +130,42 @@ button {
 }
 
 button:hover {
-    background-color: #2BADE0;
+    background-color: #F95F2F;
 }
 
-input, #input-school {
-    background: #FFFFFF;
-    border: 1px solid #1D215C;
-    box-sizing: border-box;
-    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    width: 100%;
-    height: 48px;
-    padding: 5px 20px;
-    font-size: 16px;
+button:disabled {
+    background-color: #C4C4C4;
+    box-shadow: none;
+    color: #EAEAEA;
 }
 
-nav h2 {
-    color: #F95F2F;
-    font-size: 36px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-nav button {
-    margin-bottom: 15px;
-}
-
-#btn-exclude, #btn-next {
-    float: right;
-}
-
-.btn-active, .btn-active:hover  {
+.active, .active:hover {
     background-color: #F95F2F;
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-.btn-inactive, .btn-inactive:hover {
-    background-color: #C4C4C4;
+#exclude, #next {
+    float: right;
 }
 
-.btn-submit {
+.submit {
     background-color: #FDC340;
     color: #1D215C;
 }
 
-.btn-submit:hover {
+.submit:hover {
     background-color: #F0BA3C;
 }
 
-.btn-p {
+.add {
     width: 48px;
 }
 
-.btn-m {
+.med {
     width: 168px;
 }
+
+/* FOOTER */
 
 footer {
     grid-area: footer;
@@ -138,47 +177,33 @@ footer {
     font-size: 14px;
 }
 
-#input-school { grid-area: input-school;}
-#label-note { 
-    grid-area: label-note;
-    align-self: center;
-}
-#input-note { 
-    grid-area: input-note; 
-    justify-self: flex-end;
-}
-#label-test { 
-    grid-area: label-test;
-    font-weight: 600;
-    align-self: center;
-}
-#test-bi { 
-    grid-area: test-bi; 
-    justify-self: flex-end;
-}
-#test-tri {
-    grid-area: test-tri; 
-    justify-self: flex-end;
-}
+/* MEDIA QUERIES */
 
 @media (max-width: 1000px) {
     main .container {
-        grid-template-rows: 55px 55px 55px 55px 55px 55px;
+        grid-template-rows: repeat(6, 55px);
         grid-template-columns: 1fr;
         grid-template-areas: 
-            'input-school'
-            'label-note'
-            'input-note'
-            'label-test'
-            'test-bi'
-            'test-tri';
+            'school'
+            'lbl-note'
+            'note'
+            'assess'
+            'bimonthly'
+            'trimonthly';
     } 
 }
 
 @media (max-width: 900px) {
+    #tab-school, #exclude, #back, #next {
+        width: 120px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 800px) {
     body {
         grid-template-columns: 100%;
-        grid-template-rows: 10vh 90vh 95vh 5vh;
+        grid-template-rows: 10vh 90vh 1fr 10vh;
         grid-template-areas: 
             'header'
             'nav'
@@ -188,10 +213,6 @@ footer {
 }
 
 @media (max-width: 600px) {
-    #btn-school, #btn-exclude, #btn-back, #btn-next {
-        width: 120px;
-        font-size: 14px;
-    }
     footer {
         font-size: 12px;
     }

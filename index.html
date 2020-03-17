@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>aBordo | Cadastrar Escolas</title>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            aBordo
+        </div>
+    </header>
+
+    <nav>
+        <h2>Cadastrar</h2>
+        <button>Dados Pessoais</button>
+        <button class="active">Escolas</button>
+        <button disabled>Disciplinas</button>
+        <button disabled>Turmas</button>
+        <br>
+        <button class="submit">Finalizar</button>
+    </nav>
+
+    <main>
+        <section>
+            <button id="tab-school" class="active">Escola 1</button>
+            <button class="add">+</button>
+            <button id="exclude" class="med disabled">Excluir</button>
+
+            <form action="">
+                <div class="container">
+                    <select name="school" id="school" required>
+                        <option value="" disabled selected>Nome da escola</option>
+                        <option value="escola1">Escola 1</option>
+                        <option value="escola2">Escola 2</option>
+                        <option value="escola3">Escola 3</option>
+                    </select>
+
+                    <label id="lbl-note" for="">Média mínima para aprovação</label>
+                    <select name="note" id="note" required>
+                        <option value="5">5.0</option>
+                        <option value="6" selected>6.0</option>
+                        <option value="7">7.0</option>
+                    </select>
+
+                    <label id="assess" for="">Período de Avaliação</label>
+                    <button onclick="isBimonthly()" id="bimonthly" type="button">Bimestre</button>
+                    <button onclick="isTrimonthly()" id="trimonthly" type="button">Trimestre</button>
+
+                </div>
+                <br>
+                <button type="button" id="back" class="med">« Voltar</button>
+                <button type="submit" id="next" class="med">Próximo »</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        @Copyright aBordo 2020. Todos os direitos reservados.
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
