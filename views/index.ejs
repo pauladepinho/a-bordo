@@ -1,0 +1,42 @@
+<%- include("partials/header.ejs", {title: "Bem-Vindo aBordo!"}) %>
+
+<body>
+  <header>
+    <h1>aBordo</h1>
+  </header>
+  <div>
+    <h3>PROFESSORES,</h3>
+    <p>este é o seu DIÁRIO ESCOLAR virtual!</p>
+    <ul>
+      <li>Faça chamadas,</li>
+      <li>lance notas,</li>
+      <li>veja estatíticas,</li>
+      <li>contate responsáveis.</li>
+    </ul>
+    <h3>RESPONSÁVEL,</h3>
+    <p>acompanhe o desempenho escolar dos seus filhos!</p>
+    <p>Receba avisos direto dos professores e não perca a data da próxima reunião de Pais e Mestres.</p>
+  </div>
+  <main>
+    <form action="/" method="POST" autocomplete="on">
+
+      <label for="teacher">Sou PROFESSOR</label>
+      <input type="radio" name="userType" value="teacher" id="teacher" checked>
+      <label for="guardian">Sou RESPONSÁVEL</label>
+      <input type="radio" name="userType" value="guardian" id="guardian">
+
+      <input type="email" placeholder="Meu e-mail" required>
+      <input type="password" placeholder="Minha senha" required>
+      <input type="checkbox" onclick="toogleVisibility()" id="toggleVisibility">
+
+      <input type="checkbox" checked="checked" name="rememberMe" id="rememberMe">
+      <label for="rememberMe">Lembre-me</label>
+      <a href="#">Esqueci minha senha</a>
+
+      <button type="submit" name="login">Entrar</button>
+      <button type="submit" name="signup">Cadastrar</button>
+    </form>
+  </main>
+</body>
+
+</html>

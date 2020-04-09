@@ -1,0 +1,65 @@
+<%- include("partials/header.ejs", {title: "Cadastrar - Escolas"}) %>
+
+<body id="schools-form">
+    <header>
+        <h1>aBordo</h1>
+    </header>
+    <nav>
+        <h2>Cadastrar</h2>
+        <ul>
+            <li><button type="button">Dados pessoais</button></li>
+            <li><button class="selected" type="button">Escolas</button></li>
+            <li><button type="button">Turmas</button></li>
+        </ul>
+    </nav>
+    <form action="/register/schools" method="POST" autocomplete="on">
+
+        <main>
+            <section>
+                <div id="new-instances">
+                    <div class="instances-list">
+                        <button type="button" class="selected" id="school1" onclick="select()">Escola 1</button>
+                    </div>
+                    <button type="button" class="btn-add" id="add-instance" onclick="addInstance()">+</button>
+                    <button type="button" id="del-instance" onclick="delInstance()" disabled>Excluir</button>
+                </div>
+                <div id="gray-box">
+                    <div id="form-box">
+
+                        <select id="school" name="school">
+                            <option value="" disabled selected>Nome da escola</option>
+                            <option value="0">Colégio Pedro II</option>
+                            <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
+                            </option>
+                        </select>
+
+                        <select id="grade" name="grade">
+                            <option value="" disabled selected>Média para aprovação</option>
+                            <option value="" disabled>Escala de 0 a 10 pontos</option>
+                            <option value="5">5,0 pontos</option>
+                            <option value="6">6,0 pontos</option>
+                            <option value="7">7,0 pontos</option>
+                            <option value="" disabled>Escala de 0 a 100 pontos</option>
+                            <option value="50">50 pontos</option>
+                            <option value="60">60 pontos</option>
+                            <option value="70">70 pontos</option>
+                        </select>
+
+                        <p>Sistema de avaliação: <span id="term"></span></p>
+                        <button type="button" id="bimonthly" onclick="isBimonthly()">Bimestral</button>
+                        <button type="button" id="trimonthly" onclick="isTrimonthly()">Trimestral</button>
+                    </div>
+                </div>
+                <div id="back-and-forth">
+                    <button type="submit" id="back">
+                        < Voltar</button>
+                            <button type="submit" id="forth">Próximo ></button>
+                </div>
+            </section>
+        </main>
+    </form>
+
+    <script type="text/javascript" src="../javascripts/interactions.js"></script>
+</body>
+
+</html>

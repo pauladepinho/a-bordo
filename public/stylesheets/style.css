@@ -1,0 +1,568 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  font-family: 'Work Sans', sans-serif;
+  font-size: 16px;
+}
+
+:focus {
+  outline: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+header {
+  background-color: #30C1F9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
+
+  height: 4rem;
+  width: 100vw;
+  
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+}
+
+h1 {
+  color: #ffffff;
+  font-size: 2.25rem;
+  font-weight: 700;
+
+  margin-left: 3rem;
+  margin-top: 8px;
+}
+
+/* NAVIGATION BAR STYLES */
+nav {
+  background-color: #B6ECFD;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
+
+  height: 100%;
+  width: 25%;
+
+  z-index: 1;
+
+  position: fixed;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+nav h2 {
+  color: #F95F2F;
+  font-size: 2.25rem;
+  font-weight: 700;
+
+  margin-top: 7rem;
+  margin-bottom: 3.5rem;
+}
+
+nav div.navbar {
+  width: 80%;
+  padding: 0;
+}
+
+div.navbar ul.nav {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+a.nav-link {
+  background-color: #30C1F9;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+
+  border: none;
+  border-radius: 5px;
+
+  height: 48px;
+
+  margin-bottom: 1.5rem;
+
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+li .nav-link:hover {
+  background-color: #F95F2F !important;
+  color: #ffffff;
+}
+
+li .nav-link:active {
+  background-color: #df5127  !important;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  color: #ffffff;
+}
+
+a.active {
+  background-color: #F95F2F !important;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  color: #ffffff;
+}
+/* END OF NAVIGATION BAR STYLES */
+
+main {
+  /* same as nav width */
+  margin-left: 25%;
+}
+
+/* SETTING SCROLL SNAPING */
+form > div {
+  height: 90vh;
+  overflow: scroll;
+
+  scroll-snap-type: y mandatory;
+
+  display: flex;
+  flex-flow: column nowrap;
+
+  /* necessary for Bootstrap scrollspying */
+  position: relative;
+}
+
+main form div section {
+  height: 100%;
+  overflow: scroll;
+
+  scroll-snap-stop: always;
+  scroll-snap-align: center;
+  flex: none;
+  /* END OF SETTING SCROLL SNAPING */
+
+  padding: 4.5rem 3.5rem;
+}
+
+section#set-classes {
+  padding-top: 1rem;
+}
+
+section#set-user {
+  padding-left: 7rem;
+  padding-right: 7rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+section div.gray-box {
+  background-color: #EAEAEA;
+
+  padding: 3.5rem;
+
+  height: 55vh;
+  overflow: scroll;
+  margin-bottom: 3rem;
+}
+
+section#set-schools div.gray-box {
+  overflow: visible;
+}
+
+/* SETTING USER */
+section#set-user > div {
+  margin-bottom: 1rem;
+
+  width: 100%;
+
+  display: flex;
+}
+
+section#set-user div input {
+  width: inherit;
+}
+
+section#set-user div span.gap {
+  width: 1rem;
+}
+
+section#set-user div#add-pic {
+  width: 190px;
+  height: 190px;
+
+  background-image: url("../images/silhouette.jpg");
+  background-position: center;
+  background-size: cover;
+
+  border: 1px solid;
+  border-radius: 10px;
+
+  margin-bottom: 3rem;
+}
+
+/* HIDDING PHOTO INPUT BUTTON */
+div#add-pic input {
+  z-index: 1000;
+  opacity: 0;
+  cursor: pointer;
+}
+/* END OF HIDDING PHOTO INPUT BUTTON */
+
+/* TOGGLING PASSWORD VISIBILITY */
+div#password div.new-password {
+  position: relative;
+  width: inherit;
+}
+
+div.new-password div.eye-icon {
+  width: 32px;
+  height: 48px;
+
+  position: absolute;
+  top: 0;
+  right: 12px;
+
+  background-image: url("../images/eye.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  cursor: pointer;
+}
+/* END OF TOGGLING PASSWORD VISIBILITY */
+
+li.dash {
+  background-color: #EAEAEA;
+  width: 7%;
+  height: 6px;
+}
+
+section#set-user ul {
+  list-style: none;
+
+  width: 100%;
+
+  font-weight: 700;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+section#set-user ul li {
+  font-size: 14px;
+  color: #C4C4C4;
+}
+
+section#set-user ul li span {
+  color: #FE539B;
+  font-weight: 700;
+}
+/* END OF SETTING USER */
+
+/* BUTTONS FOR ADDING NEW SCHOOLS AND CLASSES */
+section > div:first-child button {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+section div.instances-list {
+  display: inline-block;
+}
+
+
+div#new-classes button {
+  margin-top: .5rem;
+}
+
+button.btn-add{
+  width: 48px;
+}
+
+button.btn-del {
+  background-color: #FE539B;
+  width: 48px;
+}
+
+button#del-school,
+button#del-class {
+  background-color: #FE539B;
+  width: 168px;
+  float: right;
+}
+
+button#del-school:disabled,
+button#del-class:disabled,
+button#del-school[disabled],
+button#del-class[disabled] {
+  background-color: #C4C4C4;
+}
+/* END OF BUTTONS FOR ADDING NEW SCHOOLS AND CLASSES */
+
+/* SCHOOLS SETTING */
+#set-schools select {
+  width: 100%;
+}
+
+#set-schools p {
+  margin-top: 12px;
+}
+
+#set-schools span#term {
+  font-weight: 700;
+}
+
+#set-schools #bimonthly, #trimonthly {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+/* SETTING RADIO INPUT APPEARANCE */
+#set-schools .btn-appearance {
+  position: relative;
+}
+
+#set-schools input[type=radio] {
+  position: absolute;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 1000;
+  opacity: 0;
+  cursor: pointer;
+}
+/* END OF SETTING RADIO INPUT APPEARANCE */
+/* END OF SCHOOLS SETTING*/
+
+/* CLASSES SETTING */
+div#class-code {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+div#class-code label {
+  margin-right: 1rem;
+}
+
+div#new-courses {
+  margin-bottom: 2.5rem;
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+div#new-courses select {
+  margin-right: 6px;
+}
+
+div#new-courses .buttons {
+  margin-right: 6px;
+  align-self: center;
+}
+
+div#students-list {
+  align-self: center;
+}
+
+div#students-list div#heading span:last-child {
+  margin-left: 73px;
+}
+
+div#students-list input[type=number] {
+  width: 90px;
+  margin-bottom: 0px;
+}
+
+div#students-list input[type=text] {
+  width: 480px;
+  margin: 0;
+}
+
+/* CHECKBOX CUSTOMIZING */
+.checkbox-container {
+  display: inline-block;
+  
+  position: relative;
+
+  margin-left: .5rem;
+  padding-left: 32px;
+
+  cursor: pointer;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-container span.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+  background-color: white;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  border: 1px solid;
+  border-radius: 50%;
+}
+
+.checkbox-container:hover input ~ span.checkmark {
+  background-color: #F95F2F;
+}
+
+.checkbox-container input:checked ~ span.checkmark {
+  background-color: #30C1F9;
+}
+
+span.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ span.checkmark:after {
+  display: block;
+}
+
+.checkbox-container span.checkmark:after {
+  top: 4px;
+	left: 4px;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+  background: white;
+  border: 1px solid;
+}
+/* END OF CHECKBOX CUSTOMIZING */
+/* END OF CLASSES SETTING */
+
+/* BUTTONS, SELECTS AND INPUTS*/
+select {
+  height: 48px;
+
+  background-color: white;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+
+  border: 1px solid #1D215C;
+  border-radius: 10px;
+
+  margin-bottom: 12px;
+  padding: 0 60px 0 24px;
+
+  cursor: pointer;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-image: url("../images/arrow-select-01.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: contain;
+}
+
+input[type=text], input[type=number],
+input[type=tel], input[type=email],
+input[type=password] {
+  height: 48px;
+  background-color: white;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+
+  border: 1px solid #1D215C;
+  border-radius: 10px;
+
+  padding: 0 24px;
+  font-size: 16px;
+}
+
+button, .btn-appearance {
+  background-color: #30C1F9;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+  border: none;
+  border-radius: 5px;
+
+  width: 264px;
+  height: 48px;
+
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 600;
+
+  /* this will be used in divs */
+  text-align: center;
+  vertical-align: middle;
+  line-height: 48px;
+}
+
+button:hover,
+.btn-appearance:hover {
+  background-color: #F95F2F;
+  color: #ffffff;
+}
+
+button:active,
+.btn-appearance:active {
+  background-color: #df5127 !important;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  color: #ffffff;
+}
+
+button:disabled,
+button[disabled],
+.btn-appearance:disabled,
+.btn-appearance[disabled] {
+  background-color: #C4C4C4;
+  box-shadow: none;
+  color: #EAEAEA;
+}
+
+.selected {
+  background-color: #F95F2F;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  color: #ffffff;
+}
+
+.special {
+  background-color: #FDC340;
+  color: rgb(60, 60, 60);
+
+  width: 100%;
+}
+
+.special:hover {
+  background-color: #26cc3c;
+  color: white;
+}
+
+.special:active {
+  background-color: rgb(28, 187, 49) !important;
+  color: white;
+}
+
+button#launch {
+  background-image: url("../images/airplane.ico");
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position-x: 98%;
+  background-position-y: center;
+}
+
+/* MEDIA QUERIES */
+
+/* @media (max-width:768px) {
+    .board {
+        flex-direction: column;
+    }
+} */
