@@ -1,0 +1,87 @@
+<%- include("partials/header.ejs", {title: "Cadastrar - Disciplinas"}) %>
+
+<body>
+    <header>
+        <h1>aBordo</h1>
+    </header>
+
+    <form action="/register/courses" method="POST" autocomplete="on">
+        <nav>
+            <h2>Cadastrar</h2>
+            <ul>
+                <li><button type="button">Dados pessoais</button></li>
+                <li><button type="button">Escolas</button></li>
+                <li><button type="button">Disciplinas</button></li>
+                <li><button type="button" disabled>Turmas</button></li>
+            </ul>
+            <button type="submit">Finalizar</button>
+        </nav>
+        <main>
+            <div class="instances-list">
+                <button type="button" class="selected" id="school0" onclick="select()">Escola 1</button>
+            </div>
+            <div id="new-instances">
+                <div class="instances-list">
+                    <button type="button" class="selected" id="course0" onclick="select()">Disciplina 1</button>
+                </div>
+                <button type="button" id="add" onclick="addInstance()">+</button>
+                <button type="button" id="delete" onclick="delInstance()" disabled>Excluir</button>
+            </div>
+            <div id="gray-box">
+                <div id="alignment">
+                    <div id="courses-list">
+                        <select id="course" name="course" required>
+                            <option value="" disabled selected>Escolher discplina</option>
+                            <option value="other">Outra (adicionar)</option>
+                            <option value="arts">Artes</option>
+                            <option value="biology">Biologia</option>
+                            <option value="sciences">Ciências</option>
+                            <option value="phys-ed">Educação Física</option>
+                            <option value="philosophy">Filosofia</option>
+                            <option value="physics">Física</option>
+                            <option value="geography">Geografia</option>
+                            <option value="geomethy">Geometria</option>
+                            <option value="history">História</option>
+                            <option value="literature">Literatura</option>
+                            <option value="math">Matemática</option>
+                            <option value="music">Música</option>
+                            <option value="spanish-lang">Língua Espanhola</option>
+                            <option value="french-lang">Língua Francesa</option>
+                            <option value="english-lang">Língua Inglesa</option>
+                            <option value="portuguese-lang">Língua Portuguesa</option>
+                            <option value="chemistry">Química</option>
+                            <option value="writing">Redação</option>
+                            <option value="sociology">Sociologia</option>
+                            <option value="drama">Teatro</option>
+                        </select>
+                        <input type="text" placeholder="Nome da displina">
+                    </div>
+                    <div id="min-grade">
+                        <label for="grade">Média mínima para aprovação:</label>
+                        <select id="grade" name="grade">
+                            <option value="0" disabled selected>Selecionar média</option>
+                            <option value="5">5,0 pontos</option>
+                            <option value="6">6,0 pontos</option>
+                            <option value="7">7,0 pontos</option>
+                        </select>
+                    </div>
+                    <div id="academic-terms">
+                        <p id="term-type">Avaliações BIMESTRAIS.</p>
+                        <div id="bi-tri">
+                            <button type="button" class="selected" id="bimestre"
+                                onclick="isBimestral()">Bimestre</button>
+                            <button type="button" id="trimestre" onclick="isTrimestral()">Trimestre</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="back-and-forth">
+                <button type="submit" id="back">
+                    < Voltar</button>
+                        <button type="submit" id="forth" disabled>Próximo ></button>
+            </div>
+        </main>
+    </form>
+</body>
+
+</html>
