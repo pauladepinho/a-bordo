@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -6,7 +6,7 @@
 
   box-sizing: border-box;
 
-  font-family: 'Work Sans', sans-serif;
+  font-family: "Work Sans", sans-serif;
   font-size: 16px;
 }
 
@@ -19,12 +19,12 @@ button:focus {
 }
 
 header {
-  background-color: #30C1F9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
+  background-color: #30c1f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 
   height: 4rem;
-  width: 100vw;
-  
+  width: 100%;
+
   position: sticky;
   top: 0;
   z-index: 100;
@@ -44,8 +44,8 @@ h1 {
 
 /* NAVIGATION BAR STYLES */
 nav {
-  background-color: #B6ECFD;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
+  background-color: #b6ecfd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 
   height: 100%;
   width: 25%;
@@ -60,7 +60,7 @@ nav {
 }
 
 nav h2 {
-  color: #F95F2F;
+  color: #f95f2f;
   font-size: 2.25rem;
   font-weight: 700;
 
@@ -80,8 +80,8 @@ div.navbar ul.nav {
 }
 
 a.nav-link {
-  background-color: #30C1F9;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+  background-color: #30c1f9;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
   border: none;
   border-radius: 5px;
@@ -97,19 +97,19 @@ a.nav-link {
 }
 
 li .nav-link:hover {
-  background-color: #F95F2F !important;
+  background-color: #f95f2f !important;
   color: #ffffff;
 }
 
 li .nav-link:active {
-  background-color: #df5127  !important;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  background-color: #df5127 !important;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
   color: #ffffff;
 }
 
 a.active {
-  background-color: #F95F2F !important;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  background-color: #f95f2f !important;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
   color: #ffffff;
 }
 /* END OF NAVIGATION BAR STYLES */
@@ -159,7 +159,7 @@ section#set-user {
 }
 
 section div.gray-box {
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
 
   padding: 3.5rem;
 
@@ -235,7 +235,7 @@ div.new-password div.eye-icon {
 /* END OF TOGGLING PASSWORD VISIBILITY */
 
 li.dash {
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   width: 7%;
   height: 6px;
 }
@@ -254,11 +254,11 @@ section#set-user ul {
 
 section#set-user ul li {
   font-size: 14px;
-  color: #C4C4C4;
+  color: #c4c4c4;
 }
 
 section#set-user ul li span {
-  color: #FE539B;
+  color: #fe539b;
   font-weight: 700;
 }
 /* END OF SETTING USER */
@@ -272,23 +272,22 @@ section div.instances-list {
   display: inline-block;
 }
 
-
 div#new-classes button {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
-button.btn-add{
+button.btn-add {
   width: 48px;
 }
 
 button.btn-del {
-  background-color: #FE539B;
+  background-color: #fe539b;
   width: 48px;
 }
 
 button#del-school,
 button#del-class {
-  background-color: #FE539B;
+  background-color: #fe539b;
   width: 168px;
   float: right;
 }
@@ -297,7 +296,7 @@ button#del-school:disabled,
 button#del-class:disabled,
 button#del-school[disabled],
 button#del-class[disabled] {
-  background-color: #C4C4C4;
+  background-color: #c4c4c4;
 }
 /* END OF BUTTONS FOR ADDING NEW SCHOOLS AND CLASSES */
 
@@ -314,7 +313,8 @@ button#del-class[disabled] {
   font-weight: 700;
 }
 
-#set-schools #bimonthly, #trimonthly {
+#set-schools #bimonthly,
+#trimonthly {
   margin-bottom: 1rem;
   width: 100%;
 }
@@ -324,7 +324,7 @@ button#del-class[disabled] {
   position: relative;
 }
 
-#set-schools input[type=radio] {
+#set-schools input[type="radio"] {
   position: absolute;
   left: 0;
 
@@ -372,12 +372,12 @@ div#students-list div#heading span:last-child {
   margin-left: 73px;
 }
 
-div#students-list input[type=number] {
+div#students-list input[type="number"] {
   width: 90px;
   margin-bottom: 0px;
 }
 
-div#students-list input[type=text] {
+div#students-list input[type="text"] {
   width: 480px;
   margin: 0;
 }
@@ -385,10 +385,10 @@ div#students-list input[type=text] {
 /* CHECKBOX CUSTOMIZING */
 .checkbox-container {
   display: inline-block;
-  
+
   position: relative;
 
-  margin-left: .5rem;
+  margin-left: 0.5rem;
   padding-left: 32px;
 
   cursor: pointer;
@@ -414,17 +414,17 @@ div#students-list input[type=text] {
   height: 24px;
   width: 24px;
   background-color: white;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
   border: 1px solid;
   border-radius: 50%;
 }
 
 .checkbox-container:hover input ~ span.checkmark {
-  background-color: #F95F2F;
+  background-color: #f95f2f;
 }
 
 .checkbox-container input:checked ~ span.checkmark {
-  background-color: #30C1F9;
+  background-color: #30c1f9;
 }
 
 span.checkmark:after {
@@ -439,10 +439,10 @@ span.checkmark:after {
 
 .checkbox-container span.checkmark:after {
   top: 4px;
-	left: 4px;
-	width: 12px;
-	height: 12px;
-	border-radius: 50%;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   background: white;
   border: 1px solid;
 }
@@ -454,9 +454,9 @@ select {
   height: 48px;
 
   background-color: white;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
 
-  border: 1px solid #1D215C;
+  border: 1px solid #1d215c;
   border-radius: 10px;
 
   margin-bottom: 12px;
@@ -473,23 +473,26 @@ select {
   background-size: contain;
 }
 
-input[type=text], input[type=number],
-input[type=tel], input[type=email],
-input[type=password] {
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="email"],
+input[type="password"] {
   height: 48px;
   background-color: white;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
 
-  border: 1px solid #1D215C;
+  border: 1px solid #1d215c;
   border-radius: 10px;
 
   padding: 0 24px;
   font-size: 16px;
 }
 
-button, .btn-appearance {
-  background-color: #30C1F9;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+button,
+.btn-appearance {
+  background-color: #30c1f9;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border: none;
   border-radius: 5px;
 
@@ -508,14 +511,14 @@ button, .btn-appearance {
 
 button:hover,
 .btn-appearance:hover {
-  background-color: #F95F2F;
+  background-color: #f95f2f;
   color: #ffffff;
 }
 
 button:active,
 .btn-appearance:active {
   background-color: #df5127 !important;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
   color: #ffffff;
 }
 
@@ -523,19 +526,19 @@ button:disabled,
 button[disabled],
 .btn-appearance:disabled,
 .btn-appearance[disabled] {
-  background-color: #C4C4C4;
+  background-color: #c4c4c4;
   box-shadow: none;
-  color: #EAEAEA;
+  color: #eaeaea;
 }
 
 .selected {
-  background-color: #F95F2F;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, .25);
+  background-color: #f95f2f;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
   color: #ffffff;
 }
 
 .special {
-  background-color: #FDC340;
+  background-color: #fdc340;
   color: rgb(60, 60, 60);
 
   width: 100%;
@@ -566,3 +569,67 @@ button#launch {
         flex-direction: column;
     }
 } */
+
+/* side-nav */
+.side-menu {
+  width: 336px;
+  background-color: #b6ecfd;
+  padding: 93px 36px 0 36px;
+}
+
+.side-menu select,
+.side-menu .btn {
+  width: 100%;
+}
+
+.side-menu .btn {
+  margin-bottom: 24px;
+  background-color: #30C1F9;
+  border: 1px solid #30C1F9;
+}
+
+.side-menu .btn-attendance {
+  background-color: #f95f2f;
+  border: 1px solid #f95f2f;
+  margin-top: 70px;
+}
+
+/* attendance-selectors */
+.attendance-selector {
+  padding: 24px;
+}
+
+.attendance-selector .selectors .datepicker,
+.attendance-selector .observation .observations {
+  margin-bottom: 24px;
+}
+
+.observations {
+  height: 100px;
+}
+
+.attendance-table td, .attendance-table th {
+  line-height: 36px;
+}
+
+.attendance-table .table-button {
+  height: 36px;
+  width: 132px;
+  font-size: 16px;
+  border-radius: 18px;
+  line-height: 36px;
+  margin-right: 12px;
+  box-shadow: none;
+}
+
+.table-button.-checked {
+  width: 36px;
+}
+
+.table-button.-absent {
+  background-color: #FE539B;
+}
+
+.table-button.-late {
+  background-color: #FDC340;
+}
