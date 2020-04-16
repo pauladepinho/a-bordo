@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/images/airplane.ico" />
+  <title>aBordo - Lançar Notas</title>
+  <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel='stylesheet' href='/stylesheets/set-notes.css' />
+</head>
+
+<body>
+  <header>
+    <h1>aBordo</h1>
+  </header>
+
+  <nav>
+    <div class="navbar select">
+      <select name="school" id="school" required>
+        <option value="" disabled>Nome da escola</option>
+        <option value="0" selected>Colégio Pedro II</option>
+        <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
+      </select>
+      <select name="class" id="class" required>
+        <option value="" disabled selected>Turma [nº da turma]</option>
+        <option value="0000">0000</option>
+        <option value="0001" selected>0001</option>
+      </select>
+      <select name="course" id="course" required>
+        <option value="" disabled selected>Nome da disciplina</option>
+        <option value="history">História</option>
+        <option value="literature">Literatura</option>
+        <option value="math" selected>Matemática</option>
+      </select>
+    </div>
+    <div class="navbar">
+      <ul class="nav">
+        <li><a class="nav-link" href="#">
+            Fazer Chamada
+          </a></li>
+        <li><a class="nav-link active" href="#">
+            Lançar Notas
+          </a></li>
+        <li><a class="nav-link" href="#">
+            Diário de Classe
+          </a></li>
+        <li><a class="nav-link" href="#">
+            Estatísticas
+          </a></li>
+        <li><a class="nav-link" href="#">
+            Contatar Responsáveis
+          </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="select">
+      <select name="period" id="period" required>
+        <option value="1" selected>1º Trimestre</option>
+        <option value="2">2º Trimestre</option>
+        <option value="3">3º Trimestre</option>
+      </select>
+      <select name="evaluation" id="evaluation" required>
+        <option value="1">1ª Avaliação</option>
+        <option value="2" selected>2ª Avaliação</option>
+        <option value="1">3ª Avaliação</option>
+        <option value="1">4ª Avaliação</option>
+      </select>
+      <select name="max" id="max" required>
+        <option value="2">Valor máximo: 2.0 pts</option>
+        <option value="3">Valor máximo: 3.0 pts</option>
+        <option value="4">Valor máximo: 4.0 pts</option>
+        <option value="5">Valor máximo: 5.0 pts</option>
+      </select>
+    </div>
+
+    <div class="compose ">
+    </div>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Nº</th>
+            <th scope="col">ALUNO</th>
+            <th scope="col">1ª AVAL.</th>
+            <th scope="col">2ª AVAL.</th>
+            <th scope="col">3ª AVAL.</th>
+            <th scope="col">4ª AVAL.</th>
+            <th scope="col">MÉDIA</th>
+            <th scope="col">NÃO AVALIADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < 5; i++) { %>
+          <tr>
+            <th scope="row">1</th>
+            <td>João de Oliveira da Silva Santos</td>
+            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota"></td>      
+            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota"></td>      
+            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota"></td>      
+            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota"></td>
+            <td>00</td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <% } %>          
+        </tbody>
+      </table>
+  </main>
+
+  <%- include("partials/footer.ejs") %>

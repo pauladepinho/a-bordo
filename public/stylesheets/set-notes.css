@@ -1,0 +1,39 @@
+* {
+    box-sizing: border-box;
+}
+
+nav .select {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+.select select {
+    width: 100%;
+}
+
+main {
+    padding: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+main .select {
+    width: 30%;
+}
+
+main .compose  {
+    flex-grow: 1;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    border: solid 1px #F95F2F;
+}
+
+table th {
+    font-size: 0.8rem;
+}
+
+.table input {
+    width: 100px;
+    padding: 10px;
+}
+
