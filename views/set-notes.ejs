@@ -63,51 +63,68 @@
 
   <main>
     <div class="select">
-      <select name="evaluation" id="evaluation" required>
-        <option value="1">1ª Avaliação</option>
-        <option value="2" selected>2ª Avaliação</option>
-        <option value="1">3ª Avaliação</option>
-        <option value="1">4ª Avaliação</option>
+      <select name="evaluation" id="evaluation" onchange="enableOption()">
+        <option value="1" selected>1ª Avaliação</option>
+        <option value="2">2ª Avaliação</option>
+        <option value="3">3ª Avaliação</option>
+        <option value="4">4ª Avaliação</option>
       </select>
-      <select name="max" id="max" required>
-        <option value="2">Valor máximo: 2.0 pts</option>
-        <option value="3">Valor máximo: 3.0 pts</option>
-        <option value="4">Valor máximo: 4.0 pts</option>
-        <option value="5">Valor máximo: 5.0 pts</option>
+      <select name="max" id="max" disabled>
+        <option value="2">Valor máximo:</option>
       </select>
     </div>
 
-    <div class="compose ">
-    </div>
+    <table class="compose">
+      <thead>
+        <th class="title">
+          Compor média:
+        </th>
+        <tr>
+          <th scope="col">1ª AVAL.</th>
+          <th scope="col">2ª AVAL.</th>
+          <th scope="col">3ª AVAL.</th>
+          <th scope="col">4ª AVAL.</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><label for="av1"></label><input id="av1" type="number" max="10" min="0" step="0.5" placeholder="Peso"></td>
+        <td><label for="av2"></label><input id="av2" type="number" max="10" min="0" step="0.5" placeholder="Peso" disabled></td>
+        <td><label for="av3"></label><input id="av3" type="number" max="10" min="0" step="0.5" placeholder="Peso" disabled></td>
+        <td><label for="av4"></label><input id="av4" type="number" max="10" min="0" step="0.5" placeholder="Peso" disabled></td>
+      </tr>
+    </tbody>
+    </table>
 
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Nº</th>
-            <th scope="col">ALUNO</th>
-            <th scope="col">1ª AVAL.</th>
-            <th scope="col">2ª AVAL.</th>
-            <th scope="col">3ª AVAL.</th>
-            <th scope="col">4ª AVAL.</th>
-            <th scope="col">MÉDIA</th>
-            <th scope="col">NÃO AVALIADO</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% for (let i = 0; i < 5; i++) { %>
-          <tr>
-            <th scope="row">1</th>
-            <td>João de Oliveira da Silva Santos</td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota"></td>      
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota"></td>      
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota"></td>      
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota"></td>
-            <td>00</td>
-            <td><input type="checkbox"></td>
-          </tr>
-          <% } %>          
-        </tbody>
-      </table>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Nº</th>
+          <th scope="col">ALUNO</th>
+          <th scope="col">1ª AVAL.</th>
+          <th scope="col">2ª AVAL.</th>
+          <th scope="col">3ª AVAL.</th>
+          <th scope="col">4ª AVAL.</th>
+          <th scope="col">MÉDIA</th>
+          <th scope="col">NÃO AVALIADO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let i = 1; i <= 10; i++) { %>
+        <tr>
+          <th scope="row"><%= i %></th>
+          <td>João de Oliveira da Silva Santos</td>
+          <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
+          <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
+          <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
+          <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
+          <td>00</td>
+          <td><input type="checkbox"></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
   </main>
 
   <%- include("partials/footer.ejs") %>
