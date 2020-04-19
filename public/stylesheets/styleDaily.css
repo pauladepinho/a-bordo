@@ -1,0 +1,85 @@
+header{
+    position: fixed;
+}
+nav{
+    z-index: 3;
+}
+
+.navbar .nav .divSelect{
+    margin-top: 7vh;
+    margin-bottom: 7vh;
+}
+
+.navbar select{
+    width: 100%;
+}
+
+.navbar li a{
+    height: 80%;
+}
+
+main{
+    width: 75vw;
+    margin-top: 3%;
+}
+
+main li{
+    width: 200px;
+    list-style-type: none;
+    margin-top: 5px;
+}
+
+#search-items{
+    position: fixed;
+    width: 75vw;
+    padding-top: 40px;
+    z-index: 1;
+    background-color: white;
+}
+
+#chart{
+    padding-left: 30px;
+    padding-right: 40px;
+    height: 10%;
+}
+
+#chart .col-5{
+    padding-right: 0;
+}
+
+#container {
+    width: 25%;
+    height: 80%;
+    margin: 0;
+    padding: 0;
+}
+
+#content{
+    position: absolute;
+    margin-top: 32vh;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.table{
+    margin-bottom: 0;
+    width: 100%;
+
+}
+
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 0px 0px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 1.33;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 0px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 20px;
+}

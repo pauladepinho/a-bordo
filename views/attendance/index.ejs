@@ -1,0 +1,116 @@
+<%- include("../partials/header.ejs", { title: "Realizar Chamada" }) %>
+
+<div class="container-fluid">
+  <header>
+    <h1>aBordo</h1>
+  </header>
+  <nav class="side-menu">
+    <select name="escola" id="escola">
+      <option selected disabled>Nome da Escola</option>
+      <option value="Catavento">Catavento</option>
+      <option value="Luiza">Luiza Hidaka</option>
+    </select>
+    <select name="turma" id="turma">
+      <option selected disabled>Turma [nº da turma]</option>
+      <option value="1A">1A</option>
+      <option value="2A">2A</option>
+    </select>
+    <select name="disciplina" id="disciplina">
+      <option selected disabled>Nome da disciplina</option>
+      <option value="Portugues">Portugues</option>
+      <option value="Matematica">Matematica</option>
+    </select>
+    <select name="trimestre" id="trimestre">
+      <option selected disabled>Trimestre</option>
+      <option value="1º">1ºTrimestre</option>
+      <option value="2º">2ºTrimestre</option>
+    </select>
+
+    <a href="Fazer chamada" class="btn btn-primary btn-attendance"
+      >Fazer chamada</a
+    >
+    <a href="Lançar notas" class="btn btn-primary">Lançar notas</a>
+    <a href="Ver diário de classe" class="btn btn-primary"
+      >Ver diário de classe</a
+    >
+    <a href="Ver estatística" class="btn btn-primary">Ver estatística</a>
+    <a href="Contatar responsáveis" class="btn btn-primary"
+      >Contatar responsáveis</a
+    >
+  </nav>
+  <main class="attendance-content">
+    <section class="attendance-selector row">
+      <div class="selectors col-sm-4">
+        <input type="date" id="data" name="data" class="form-control datepicker" />
+        <select name="tempos-aula" id="tempos-aula" class="form-control">
+          <option selected disabled>Tempos de Aula</option>
+          <option value="1º">01 Tempos de Aula</option>
+          <option value="2º">02 Tempos de Aula</option>
+        </select>
+      </div>
+      <div class="observation col-sm-8">
+        <textarea placeholder="Observações" class="form-control observations" id="observations" name="observations" rows=4></textarea>
+        <input type="checkbox">Dia de Avaliação</input>
+      </div>
+    </section>
+    <section class="attendance-table">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th colspan="2">ALUNO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>01</th>
+            <td>João de Oliveira da Silva Santos</td>
+            <td>
+              <button class="table-button -checked">P</button>
+              <button class="table-button -checked">P</button>
+              <button class="table-button -absent -checked">F</button> 
+            </td>
+          </tr>
+          <tr>
+            <th>01</th>
+            <td>João de Oliveira da Silva Santos</td>
+            <td>
+              <button class="table-button">PRESENTE</button>
+              <button class="table-button -absent">FALTOU</button>
+              <button class="table-button -late">ATRASADO</button>
+            </td>
+          </tr>
+          <tr>
+            <th>01</th>
+            <td>João de Oliveira da Silva Santos</td>
+            <td>
+              <button class="table-button">PRESENTE</button>
+              <button class="table-button -absent">FALTOU</button>
+              <button class="table-button -late">ATRASADO</button>
+            </td>
+          </tr>
+          <tr>
+            <th>01</th>
+            <td>João de Oliveira da Silva Santos</td>
+            <td>
+              <button class="table-button">PRESENTE</button>
+              <button class="table-button -absent">FALTOU</button>
+              <button class="table-button -late">ATRASADO</button>
+            </td>
+          </tr>
+          <tr>
+            <th>01</th>
+            <td>João de Oliveira da Silva Santos</td>
+            <td>
+              <button class="table-button">PRESENTE</button>
+              <button class="table-button -absent">FALTOU</button>
+              <button class="table-button -late">ATRASADO</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<%- include("../partials/footer.ejs") %>

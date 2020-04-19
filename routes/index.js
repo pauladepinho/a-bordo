@@ -6,4 +6,12 @@ router.get('/', function (req, res, next) {
   res.render('index');
 });
 
+router.get("/attendance", (req, res) => {
+  res.render("attendance");
+});
+
+router.get('/lancarnotas', function (req, res) {
+  res.render('set-notes');
+});
+
 module.exports = router;

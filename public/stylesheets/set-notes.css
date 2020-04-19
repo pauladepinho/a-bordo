@@ -1,0 +1,62 @@
+* {
+    box-sizing: border-box;
+}
+
+nav .select {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+main {
+    padding: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+main .select {
+    width: 30%;
+}
+
+.select select {
+    width: 100%;
+}
+
+main .compose  {
+    margin-left: 1rem;
+}
+
+.compose label {
+    width: 20px;
+    height: 10px;
+    margin: 5px;
+    padding-left: 5px;
+}
+
+.compose .title {
+    font-weight: normal;
+    padding-top: 7px ;
+    padding-bottom: 15px;
+}
+
+.compose td:first-child label {background: #54A2EB;}
+.compose td:nth-child(2) label {background: #C979FB;}
+.compose td:nth-child(3) label {background: #FFAC60;}
+.compose td:nth-child(4) label {background: #41E5AA;}
+
+.table th:nth-child(3) {color: #54A2EB;}
+.table th:nth-child(4) {color: #C979FB;}
+.table th:nth-child(5) {color: #FFAC60;}
+.table th:nth-child(6) {color: #41E5AA;}
+
+table th {
+    font-size: 0.8rem;
+}
+
+.table input, .compose input {
+    width: 100px;
+    padding: 10px;
+}
+
+input:disabled {
+    background-color: #eee;
+}     
