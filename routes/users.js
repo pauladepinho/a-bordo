@@ -10,4 +10,8 @@ router.get('/register', (req, res) => {
   res.render('create');
 });
 
+router.get('/daily-of-class', (req, res) => {
+  res.render('daily');
+});
+
 module.exports = router;
