@@ -269,7 +269,7 @@ a.nav-link {
   border: none;
   border-radius: 5px;
 
-  height: 48px;
+  min-height: 48px;
 
   margin-bottom: 1.5rem;
 
@@ -777,11 +777,20 @@ button[disabled],
   border-radius:5px
 }
 
-.side-menu .btn-attendance {
+/* .side-menu .btn-attendance {
   background-color: #f95f2f;
   border: 1px solid #f95f2f;
   margin-top: 70px;
   border-radius:5px;
+} */
+
+nav .select {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+.select select {
+  width: 100%;
 }
 
 /* attendance-selectors */

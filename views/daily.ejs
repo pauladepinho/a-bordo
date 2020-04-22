@@ -18,7 +18,7 @@
     <h1>aBordo</h1>
   </header>
 
-  <nav>
+  <!-- <nav>
     <div class="navbar">
       <ul class="nav">
         <div class="divSelect">
@@ -35,13 +35,7 @@
             <option value="2">2°</option>
           </select>
 
-          <select id="class" name="class" required>
-            <option value="" disabled selected>N° da turma</option>
-            <option value="1">1°</option>
-            <option value="2">2°</option>
-          </select>
-
-          <select id="course1" name="course1" required>
+          <select id="course" name="course" required>
             <option value="" disabled selected>Nome da disciplina</option>
             <option value="arts">Artes</option>
             <option value="biology">Biologia</option>
@@ -64,21 +58,92 @@
             <option value="sociology">Sociologia</option>
             <option value="drama">Teatro</option>
           </select>
+
+          <select name="period" id="period" required>
+            <option value="1" selected>1º Trimestre</option>
+            <option value="2">2º Trimestre</option>
+            <option value="3">3º Trimestre</option>
+          </select>
         </div>
 
-        <li><a class="nav-link" href="#set-call">
+        <li><a class="nav-link" href="http://localhost:3000/fazer-chamada">
             Fazer chamada
           </a></li>
-        <li><a class="nav-link" href="#set-release-note">
+        <li><a class="nav-link" href="http://localhost:3000/lancar-notas">
             Lançar notas
           </a></li>
-        <li><a class="nav-link" href="http://localhost:3000/users/daily-of-class" focus>
-            Ver diário de classe
+        <li><a class="nav-link active" href="#">
+            Diário de classe
           </a></li>
-        <li><a class="nav-link" href="#set-statistics">
-            Ver estatísticas
+        <li><a class="nav-link" href="#">
+            Estatísticas
           </a></li>
-        <li><a class="nav-link" href="#set-contact-responsible">
+        <li><a class="nav-link" href="#">
+            Contatar responsáveis
+          </a></li>
+      </ul>
+    </div>
+  </nav> -->
+
+  <nav>
+    <div class="navbar select">
+      <select name="school" id="school" required>
+        <option value="" disabled selected>Nome da escola</option>
+        <option value="0">Colégio Pedro II</option>
+        <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
+      </select>
+
+      <select name="class" id="class" required>
+        <option value="" disabled selected>Turma [nº da turma]</option>
+        <option value="0000">0000</option>
+        <option value="0001">0001</option>
+      </select>
+
+      <select id="course" name="course" required>
+        <option value="" disabled selected>Nome da disciplina</option>
+        <option value="arts">Artes</option>
+        <option value="biology">Biologia</option>
+        <option value="sciences">Ciências</option>
+        <option value="phys-ed">Educação Física</option>
+        <option value="philosophy">Filosofia</option>
+        <option value="physics">Física</option>
+        <option value="geography">Geografia</option>
+        <option value="geomethy">Geometria</option>
+        <option value="history">História</option>
+        <option value="literature">Literatura</option>
+        <option value="math">Matemática</option>
+        <option value="music">Música</option>
+        <option value="spanish-lang">Língua Espanhola</option>
+        <option value="french-lang">Língua Francesa</option>
+        <option value="english-lang">Língua Inglesa</option>
+        <option value="portuguese-lang">Língua Portuguesa</option>
+        <option value="chemistry">Química</option>
+        <option value="writing">Redação</option>
+        <option value="sociology">Sociologia</option>
+        <option value="drama">Teatro</option>
+      </select>
+
+      <select name="period" id="period" required>
+        <option value="1" selected>1º Trimestre</option>
+        <option value="2">2º Trimestre</option>
+        <option value="3">3º Trimestre</option>
+      </select>
+    </div>
+    <div class="navbar">
+      <ul class="nav">
+        <li><a class="nav-link" href="http://localhost:3000/fazer-chamada">
+            Fazer chamada
+          </a></li>
+        <li><a class="nav-link" href="http://localhost:3000/lancar-notas">
+            Lançar notas
+          </a></li>
+        <li><a class="nav-link active" href="#">
+            Diário de classe
+          </a></li>
+        <li><a class="nav-link" href="#">
+            Estatísticas
+          </a></li>
+        <li><a class="nav-link" href="#">
             Contatar responsáveis
           </a></li>
       </ul>

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="/images/airplane.ico" />
-  <title>aBordo - Lançar Notas</title>
+  <title>aBordo - Lançar notas</title>
   <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <link rel='stylesheet' href='/stylesheets/set-notes.css' />
@@ -19,21 +19,41 @@
   <nav>
     <div class="navbar select">
       <select name="school" id="school" required>
-        <option value="" disabled>Nome da escola</option>
-        <option value="0" selected>Colégio Pedro II</option>
+        <option value="" disabled selected>Nome da escola</option>
+        <option value="0">Colégio Pedro II</option>
         <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
       </select>
+
       <select name="class" id="class" required>
         <option value="" disabled selected>Turma [nº da turma]</option>
         <option value="0000">0000</option>
-        <option value="0001" selected>0001</option>
+        <option value="0001">0001</option>
       </select>
-      <select name="course" id="course" required>
+
+      <select id="course" name="course" required>
         <option value="" disabled selected>Nome da disciplina</option>
+        <option value="arts">Artes</option>
+        <option value="biology">Biologia</option>
+        <option value="sciences">Ciências</option>
+        <option value="phys-ed">Educação Física</option>
+        <option value="philosophy">Filosofia</option>
+        <option value="physics">Física</option>
+        <option value="geography">Geografia</option>
+        <option value="geomethy">Geometria</option>
         <option value="history">História</option>
         <option value="literature">Literatura</option>
-        <option value="math" selected>Matemática</option>
+        <option value="math">Matemática</option>
+        <option value="music">Música</option>
+        <option value="spanish-lang">Língua Espanhola</option>
+        <option value="french-lang">Língua Francesa</option>
+        <option value="english-lang">Língua Inglesa</option>
+        <option value="portuguese-lang">Língua Portuguesa</option>
+        <option value="chemistry">Química</option>
+        <option value="writing">Redação</option>
+        <option value="sociology">Sociologia</option>
+        <option value="drama">Teatro</option>
       </select>
+
       <select name="period" id="period" required>
         <option value="1" selected>1º Trimestre</option>
         <option value="2">2º Trimestre</option>
@@ -42,20 +62,20 @@
     </div>
     <div class="navbar">
       <ul class="nav">
-        <li><a class="nav-link" href="#">
-            Fazer Chamada
+        <li><a class="nav-link" href="http://localhost:3000/fazer-chamada">
+            Fazer chamada
           </a></li>
         <li><a class="nav-link active" href="#">
-            Lançar Notas
+            Lançar notas
           </a></li>
-        <li><a class="nav-link" href="#">
-            Diário de Classe
+        <li><a class="nav-link" href="http://localhost:3000/ver-diario-de-classe">
+            Diário de classe
           </a></li>
         <li><a class="nav-link" href="#">
             Estatísticas
           </a></li>
         <li><a class="nav-link" href="#">
-            Contatar Responsáveis
+            Contatar responsáveis
           </a></li>
       </ul>
     </div>
@@ -87,13 +107,17 @@
         </tr>
       </thead>
       <tbody>
-      <tr>
-        <td><label for="av1"></label><input id="av1" type="number" max="10" min="0" step="0.5" placeholder="Peso"></td>
-        <td><label for="av2"></label><input id="av2" type="number" max="10" min="0" step="0.5" placeholder="Peso" disabled></td>
-        <td><label for="av3"></label><input id="av3" type="number" max="10" min="0" step="0.5" placeholder="Peso" disabled></td>
-        <td><label for="av4"></label><input id="av4" type="number" max="10" min="0" step="0.5" placeholder="Peso" disabled></td>
-      </tr>
-    </tbody>
+        <tr>
+          <td><label for="av1"></label><input id="av1" type="number" max="10" min="0" step="0.5" placeholder="Peso">
+          </td>
+          <td><label for="av2"></label><input id="av2" type="number" max="10" min="0" step="0.5" placeholder="Peso"
+              disabled></td>
+          <td><label for="av3"></label><input id="av3" type="number" max="10" min="0" step="0.5" placeholder="Peso"
+              disabled></td>
+          <td><label for="av4"></label><input id="av4" type="number" max="10" min="0" step="0.5" placeholder="Peso"
+              disabled></td>
+        </tr>
+      </tbody>
     </table>
 
 
