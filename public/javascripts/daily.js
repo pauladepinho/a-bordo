@@ -12,6 +12,7 @@ function mostrarNota() {
     presence.hidden = true;
     let notes = document.getElementById("notes")
     notes.hidden = false;
+<<<<<<< HEAD
 }
 
 anychart.onDocumentReady(function () {
@@ -89,7 +90,10 @@ anychart.onDocumentReady(function () {
     chart.container('container');
     // initiate chart drawing
     chart.draw();
-});});
+});
+=======
     let container = document.getElementById("chart")
     container.hidden = false
 }
+
+>>>>>>> pr/3
