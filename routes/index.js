@@ -6,7 +6,7 @@ router.get('/', function (req, res, next) {
   res.render('index');
 });
 
-router.get("/attendance", (req, res) => {
+router.get("/chamada", (req, res) => {
   res.render("attendance");
 });
 
