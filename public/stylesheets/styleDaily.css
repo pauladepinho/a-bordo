@@ -29,57 +29,159 @@ main li{
     margin-top: 5px;
 }
 
+
+td div{
+    width: 90px;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+}
+
+tHead th div{
+    font-size: 10px;
+}
+
 #search-items{
     position: fixed;
     width: 75vw;
-    padding-top: 40px;
+    padding: 0 30px;
+    padding-top: 45px;
+    height: 31vh;
     z-index: 1;
     background-color: white;
 }
 
-#chart{
-    padding-left: 30px;
-    padding-right: 40px;
-    height: 10%;
+#notes{
+    width: 73.2vw;
 }
 
-#chart .col-5{
-    padding-right: 0;
+#notes .tBody th{
+    text-align: center;
+}
+
+#doughnut-chart{
+    width: 50px !important;
+    height: 60px !important;
+}
+
+#notes .tBody tr #doughnut-chart{
+    height: 70px;
+    padding: 0px !important;
+    margin: 0 !important;
+    padding-right: 5px !important;
+    padding-top: 7px !important;
+}
+
+#notes .tBody tr td div{
+    display: block;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 25px;
+    text-align: center;
+}
+#notes .tBody tr td{
+    height: 70px;
+    padding: 0px !important;
+    margin: 0 !important;
+}
+
+#notes .tBody tr td,#notes .tBody tr th{
+    vertical-align: middle;
+    height: 70px;
+}
+
+#chart{
+    height: 10vh !important;
 }
 
 #container {
-    width: 25%;
+    width: 25vw;
     height: 80%;
     margin: 0;
     padding: 0;
 }
 
+#chartContainer:nth-child(odd){
+    background-color: #E5E5E5;
+}
+
 #content{
     position: absolute;
-    margin-top: 32vh;
-    padding-left: 30px;
-    padding-right: 30px;
+    margin-top: 14%;
 }
+
 .table{
     margin-bottom: 0;
-    width: 100%;
-
 }
 
-.btn-circle.btn-xl {
-    width: 70px;
-    height: 70px;
+a{
+    color: white !important;
+}
+
+.tHead th{
+    border-right: gray solid 1px;
+    font-size: 15px;
+}
+
+th{
+    font-weight: normal;
+    width: 100px;
+}
+
+.tHead th:first-child{
+    border-right: 0px;
+    text-align: center;
+}
+
+.tBody th{
+    text-align: center;
+}
+
+td{
+    border-right: gray solid 1px;
+    padding: 0px;
+}
+
+
+p{
+    margin:0px;
+}
+
+td p{
+    width: 320px;
+}
+
+th p{
+    font-size: 15px;
+}
+
+th:first-child{
+    height: 30px;
+    width: 40px;
+    text-align: center;
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+.btn-circle.btn-xl{
+    width: 50px;
+    height: 50px;
     padding: 0px 0px;
     border-radius: 35px;
     font-size: 24px;
-    line-height: 1.33;
 }
 
 .btn-circle {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     padding: 0px 0px;
     border-radius: 15px;
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+.btn{
+    background-color: #30C1F9;
+    border-color: #30C1F9;
 }

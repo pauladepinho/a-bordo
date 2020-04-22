@@ -8,5 +8,91 @@
 <script src="/javascripts/interactions.js"></script>
 
 </body>
+<!-- CONFIG DAILY -->
+<script src="/javascripts/daily.js"></script>
+<!-- CHART CONFIG -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+   var options = {
+       series: [{
+                name: '50%',
+                data: [50]
+            }, {
+                name: '15%',
+                data: [15]
+            }, {
+            name: '20%',
+            data: [20]
+            }, {
+            name: '15%',
+            data: [15]
+            }, {
+                name: 'Total',
+                data: [0,100]
+            }],
+            chart: {
+                toolbar: {
+                    show: false
+                },
+                height: 150,
+                type: 'bar',
+                stacked: true,
+                stackType: '100%'
+            },
+            plotOptions: {
+            bar: {
+                horizontal: true,
+            },
+            },
+            title: {
+            text: 'Composição da média'
+            },
+            fill: {
+            opacity: 1
+            },
+            legend: {
+            position: 'top'
+            },
+            yaxis: {
+                show: false,
+                showAlways: false,
+                showForNullSeries: false,
+                reversed: false,
+                labels: {
+                    show: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                crosshairs: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            },
+            xaxis: {
+                showAlways: false,
+                showForNullSeries: false,
+                labels: {
+                    show: false,
+                    trim: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+                axisBorder: {
+                    show: false
+                },
+                crosshairs: {
+                    show: false
+                }
+            },
+            colors: ['#54A2EB', '#C979FB', '#FFAC60', '#41E5AA', '#30C1F9']
+    };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+</script>
 
 </html>

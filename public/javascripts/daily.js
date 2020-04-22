@@ -3,6 +3,8 @@ function mostrarChamada() {
     presence.hidden = false;
     let notes = document.getElementById("notes")
     notes.hidden = true
+    let container = document.getElementById("chart")
+    container.hidden = true
 }
 
 function mostrarNota() {
@@ -87,4 +89,7 @@ anychart.onDocumentReady(function () {
     chart.container('container');
     // initiate chart drawing
     chart.draw();
-});
+});});
+    let container = document.getElementById("chart")
+    container.hidden = false
+}
