@@ -146,7 +146,7 @@
     </div>
   </nav>
 
-  <main>
+  <!-- <main>
     <section id="search-items">
       <section id="chart" class="row">
         <div class="col-3">
@@ -177,1212 +177,1212 @@
             <option value="presence">Presença do Aluno</option>
             <option value="highest-grade">Por maior nota</option>
             <option value="lowest-grade">Por menor nota</option>
-          </select>
-=======
-    <main>
-        <section id="search-items">
-            <section class="row">
-                <div class="col-3">
-                    <select id="period" name="period" required>
-                        <option value="1t">1° Trimestre</option>
-                        <option value="2t">2° Trimestre</option>
-                        <option value="3t">3° Trimestre</option>
-                        <option value="1b">1° Bimestre</option>
-                        <option value="2b">2° Bimestre</option>
-                        <option value="3b">3° Bimestre</option>
-                        <option value="4b">4° Bimestre</option>
-                        <option value="MF">Média final</option>
-                    </select>
-                    
-                    <li><a class="nav-link" id="chamada" onclick="mostrarChamada()">
-                        Chamada
-                    </a></li>
+          </select> -->
+<!-- ======= -->
+  <main>
+    <section id="search-items">
+        <section class="row">
+            <div class="col-3">
+                <select id="period" name="period" required>
+                    <option value="1t">1° Trimestre</option>
+                    <option value="2t">2° Trimestre</option>
+                    <option value="3t">3° Trimestre</option>
+                    <option value="1b">1° Bimestre</option>
+                    <option value="2b">2° Bimestre</option>
+                    <option value="3b">3° Bimestre</option>
+                    <option value="4b">4° Bimestre</option>
+                    <option value="MF">Média final</option>
+                </select>
+                
+                <li><a class="nav-link" id="chamada" onclick="mostrarChamada()">
+                    Chamada
+                </a></li>
+              </div>
+              
+              <section class="col-4">
+                <select id="set-search" name="set-search" required>
+                  <option value="" disabled selected>Ordenar alunos por:</option>
+                  <option value="number">N° do Aluno</option>
+                  <option value="name">Nome do Aluno</option>
+                  <option value="presence">Presença do Aluno</option>
+                  <option value="highest-grade">Por maior nota</option>
+                  <option value="lowest-grade">Por menor nota</option>
+                </select>
+                <li><a class="nav-link" id="nota" onclick="mostrarNota()">
+                    Notas
+                </a></li> 
+              </section>
+            <div class="col-5"><div id="chart" hidden></div></div>
+        </section>
+    </section>
+
+    <section id="content">
+        <table class="table table-striped" id="presence" >
+            <thead>
+              <tr class="tHead">
+                <th scope="col"> <p>N°</p> </th>
+                <th scope="col">ALUNO</th>
+                <th scope="col"><p>Seg.</p> <p>04/05</p></th>
+                <th scope="col"><p>Ter.</p> <p>05/05</p></th>
+                <th scope="col">Qua. 06/05</th>
+                <th scope="col">Qui. 07/05</th>
+                <th scope="col">Sex. 08/05</th>
+                <th scope="col">Seg. 11/05</th>
+                <th scope="col">Ter. 12/05</th>
+                <th scope="col">Qua. 13/05</th>
+                <th scope="col">Qui. 14/05</th>
+                <th scope="col">Sex. 15/05</th>
+                <th scope="col">Seg. 18/05</th>
+                <th scope="col">Ter. 19/05</th>
+                <th scope="col">Qua. 20/05</th>
+                <th scope="col">Qui. 21/05</th>
+                <th scope="col">Sex. 22/05</th>
+                <th scope="col">Seg. 25/05</th>
+                <th scope="col">Ter. 26/05</th>
+                <th scope="col">Qua. 27/05</th>
+                <th scope="col">Qui. 28/05</th>
+                <th scope="col">Sex. 29/05</th>
+                <th scope="col">Seg. 30/05</th>
+                <th scope="col">Ter. 31/05</th>
+              </tr>
+            </thead>
+            <tbody class="tBody">
+              <tr>
+                <th scope="row">01</th>
+                <td><p>João de Oliveira da Silva Santos</p></td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
                   </div>
-                  
-                  <section class="col-4">
-                    <select id="set-search" name="set-search" required>
-                      <option value="" disabled selected>Ordenar alunos por:</option>
-                      <option value="number">N° do Aluno</option>
-                      <option value="name">Nome do Aluno</option>
-                      <option value="presence">Presença do Aluno</option>
-                      <option value="highest-grade">Por maior nota</option>
-                      <option value="lowest-grade">Por menor nota</option>
-                    </select>
-                    <li><a class="nav-link" id="nota" onclick="mostrarNota()">
-                        Notas
-                    </a></li> 
-                  </section>
-                <div class="col-5"><div id="chart" hidden></div></div>
-            </section>
-        </section>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">02</th>
+                <td>João de Oliveira da Silva Santos</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">03</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">04</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">05</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">06</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">07</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">07</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">07</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">07</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">07</th>
+                <td>Larry</td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                <td>
+                  <div>
+                    <div class="panel-body">
+                      <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                      <div class="panel-body">
+                        <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
 
-        <section id="content">
-            <table class="table table-striped" id="presence" >
-                <thead>
-                  <tr class="tHead">
-                    <th scope="col"> <p>N°</p> </th>
-                    <th scope="col">ALUNO</th>
-                    <th scope="col"><p>Seg.</p> <p>04/05</p></th>
-                    <th scope="col"><p>Ter.</p> <p>05/05</p></th>
-                    <th scope="col">Qua. 06/05</th>
-                    <th scope="col">Qui. 07/05</th>
-                    <th scope="col">Sex. 08/05</th>
-                    <th scope="col">Seg. 11/05</th>
-                    <th scope="col">Ter. 12/05</th>
-                    <th scope="col">Qua. 13/05</th>
-                    <th scope="col">Qui. 14/05</th>
-                    <th scope="col">Sex. 15/05</th>
-                    <th scope="col">Seg. 18/05</th>
-                    <th scope="col">Ter. 19/05</th>
-                    <th scope="col">Qua. 20/05</th>
-                    <th scope="col">Qui. 21/05</th>
-                    <th scope="col">Sex. 22/05</th>
-                    <th scope="col">Seg. 25/05</th>
-                    <th scope="col">Ter. 26/05</th>
-                    <th scope="col">Qua. 27/05</th>
-                    <th scope="col">Qui. 28/05</th>
-                    <th scope="col">Sex. 29/05</th>
-                    <th scope="col">Seg. 30/05</th>
-                    <th scope="col">Ter. 31/05</th>
-                  </tr>
-                </thead>
-                <tbody class="tBody">
-                  <tr>
-                    <th scope="row">01</th>
-                    <td><p>João de Oliveira da Silva Santos</p></td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">02</th>
-                    <td>João de Oliveira da Silva Santos</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">03</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">04</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">05</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">06</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">07</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">07</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">07</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">07</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">07</th>
-                    <td>Larry</td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                    <td>
-                      <div>
-                        <div class="panel-body">
-                          <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                          <div class="panel-body">
-                            <button class="btn btn-primary btn-circle">P<i class="fa fa-list"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
+          <table class="table table-striped" id="notes" hidden>
+            <thead>
+              <tr class="tHead">
+                <th scope="col">N°</th>
+                <th scope="col">Aluno</th>
+                <th scope="col">1° AVAL.<div>max. 10,0 pts</div></th>
+                <th scope="col">2° AVAL.<div>max. 2,0 pts</div></th>
+                <th scope="col">3° AVAL.<div>max. 4,0 pts</div></th>
+                <th scope="col">4° AVAL.<div>max. 3,0 pts</div></th>
+                <th scope="col">MÉDIA<div>max. 10,0 pts</div></th>
+              </tr>
+            </thead>
+            <tbody class="tBody">
+              <tr>
+                <th scope="row">1</th>
+                <td><p>João de Oliveira da Silva Santos</p></td>
+                <td><div>6/10</div></td>
+                <td><div>6/10</div></td>
+                <td><div>6/10</div></td>
+                <td><div>6/10</div></td>
+                <td><div>6/10</div></td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>João de Oliveira da Silva Santos</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">5</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">6</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">7</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">8</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">9</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">10</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">11</th>
+                <td>Larry</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+<!-- >>>>>>> pr/3 -->
+    </section>
 
-              <table class="table table-striped" id="notes" hidden>
-                <thead>
-                  <tr class="tHead">
-                    <th scope="col">N°</th>
-                    <th scope="col">Aluno</th>
-                    <th scope="col">1° AVAL.<div>max. 10,0 pts</div></th>
-                    <th scope="col">2° AVAL.<div>max. 2,0 pts</div></th>
-                    <th scope="col">3° AVAL.<div>max. 4,0 pts</div></th>
-                    <th scope="col">4° AVAL.<div>max. 3,0 pts</div></th>
-                    <th scope="col">MÉDIA<div>max. 10,0 pts</div></th>
-                  </tr>
-                </thead>
-                <tbody class="tBody">
-                  <tr>
-                    <th scope="row">1</th>
-                    <td><p>João de Oliveira da Silva Santos</p></td>
-                    <td><div>6/10</div></td>
-                    <td><div>6/10</div></td>
-                    <td><div>6/10</div></td>
-                    <td><div>6/10</div></td>
-                    <td><div>6/10</div></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>João de Oliveira da Silva Santos</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">6</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">7</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">8</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">9</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">10</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">11</th>
-                    <td>Larry</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
->>>>>>> pr/3
-        </section>
-
-        <div id="container" class="col-4"></div>
-      </section>
+    <!-- <div id="container" class="col-4"></div>
+    </section>
     </section>
 
     <section id="content">
@@ -1738,17 +1738,18 @@
           </tr>
         </tbody>
       </table>
-    </section>
+    </section> -->
   </main>
 
-
-  <!-- ANYCHART JS -->
+  <!-- ANYCHART JS
   <script
     src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
   <script
     src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
   <script
-    src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
+  src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script> -->
+  <!-- APEXCHARTS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <!-- DAILY JS -->
   <script src="/javascripts/daily.js"></script>
   <%- include("partials/footer.ejs") %>
