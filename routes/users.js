@@ -5,13 +5,10 @@ const UsersController = require("../controllers/UsersController");
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {
-  res.send("respond with a resource");
+  // res.send("respond with a resource");
+  res.redirect("usuario/cadastrar");
 });
 
-router.get("/register", UsersController.create);
-
-router.get('/daily-of-class', (req, res) => {
-  res.render('daily');
-});
+router.get("/cadastrar", UsersController.create);
 
 module.exports = router;

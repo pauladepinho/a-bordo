@@ -1,4 +1,5 @@
 <%- include("../partials/header.ejs", { title: "Realizar Chamada" }) %>
+</head>
 
 <div class="container-fluid">
   <header>
@@ -26,17 +27,11 @@
       <option value="2º">2ºTrimestre</option>
     </select>
 
-    <a href="Fazer chamada" class="btn btn-primary btn-attendance"
-      >Fazer chamada</a
-    >
+    <a href="Fazer chamada" class="btn btn-primary btn-attendance">Fazer chamada</a>
     <a href="Lançar notas" class="btn btn-primary">Lançar notas</a>
-    <a href="Ver diário de classe" class="btn btn-primary"
-      >Ver diário de classe</a
-    >
+    <a href="Ver diário de classe" class="btn btn-primary">Ver diário de classe</a>
     <a href="Ver estatística" class="btn btn-primary">Ver estatística</a>
-    <a href="Contatar responsáveis" class="btn btn-primary"
-      >Contatar responsáveis</a
-    >
+    <a href="Contatar responsáveis" class="btn btn-primary">Contatar responsáveis</a>
   </nav>
   <main class="attendance-content">
     <section class="attendance-selector row">
@@ -49,7 +44,8 @@
         </select>
       </div>
       <div class="observation col-sm-8">
-        <textarea placeholder="Observações" class="form-control observations" id="observations" name="observations" rows=4></textarea>
+        <textarea placeholder="Observações" class="form-control observations" id="observations" name="observations"
+          rows=4></textarea>
         <input type="checkbox">Dia de Avaliação</input>
       </div>
     </section>
@@ -68,7 +64,7 @@
             <td>
               <button class="table-button -checked">P</button>
               <button class="table-button -checked">P</button>
-              <button class="table-button -absent -checked">F</button> 
+              <button class="table-button -absent -checked">F</button>
             </td>
           </tr>
           <tr>

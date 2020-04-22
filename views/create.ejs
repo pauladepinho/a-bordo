@@ -1,4 +1,5 @@
 <%- include("partials/header.ejs", {title: "aBordo - Cadastrar"}) %>
+</head>
 
 <body>
   <header>
@@ -192,6 +193,9 @@
             </div>
 
             <div id="students-list">
+              <div>
+                <span id="student-id">Nº</span><span id="student-name">Aluno</span>
+              </div>
 
               <div class="students" id="student1">
                 <input type="number" name="class-id-student1" id="class-id-student1" value="1" />
@@ -236,7 +240,7 @@
               </div>
 
               <div class="students" id="student2">
-                <input type="number" name="class-id-student2" id="class-id-student2" value="1" />
+                <input type="number" name="class-id-student2" id="class-id-student2" value="2" />
                 <input type="text" name="name-student2" id="name-student2" placeholder="Nome do aluno" />
 
                 <label for="course-retake-checkbox-student2" class="checkbox-container">Dependência

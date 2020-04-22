@@ -578,6 +578,10 @@ div.course-retake-list button {
   margin-left: 6px;
 }
 
+div#students-list > div:first-child span#student-name {
+  margin-left: 84px; /* equals to the input[type="number"] width */
+}
+
 div#students-list div.students {
   margin-top: 12px;
   display: flex;
@@ -586,7 +590,6 @@ div#students-list div.students {
 }
 
 div#students-list input[type="number"] {
-
   width: 84px;
   margin-bottom: 0px;
   margin-right: 12px;
@@ -652,7 +655,7 @@ div.students div.course-retake-list select {
 
 /* BUTTONS, SELECTS AND INPUTS*/
 select {
-  height: 48px;
+  min-height: 48px;
 
   background-color: white;
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -679,7 +682,7 @@ input[type="number"],
 input[type="tel"],
 input[type="email"],
 input[type="password"] {
-  height: 48px;
+  min-height: 48px;
   background-color: white;
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
 
@@ -698,7 +701,7 @@ button,
   border-radius: 5px;
 
   width: 264px;
-  height: 48px;
+  min-height: 48px;
 
   color: #ffffff;
   font-size: 1.25rem;
