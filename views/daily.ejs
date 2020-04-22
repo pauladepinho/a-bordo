@@ -1,12 +1,7 @@
 <%- include("partials/header.ejs", {title: "aBordo - Diário de classe"}) %>
 <!-- DAILY STYLE -->
 <link rel="stylesheet" href="/stylesheets/styleDaily.css">
-<script
-  src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
-<script
-  src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
-<script
-  src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
+<!-- ANYCHART STYLE -->
 <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"
   type="text/css" rel="stylesheet">
 <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"
@@ -543,5 +538,15 @@
       </table>
     </section>
   </main>
-</body>
-<%- include("partials/footer.ejs") %>
+
+
+  <!-- ANYCHART JS -->
+  <script
+    src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
+  <script
+    src="https://cdn.anychart.com/releases/v8/js/anychart-ui.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
+  <script
+    src="https://cdn.anychart.com/releases/v8/js/anychart-exports.min.js?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"></script>
+  <!-- DAILY JS -->
+  <script src="/javascripts/daily.js"></script>
+  <%- include("partials/footer.ejs") %>
