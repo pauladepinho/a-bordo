@@ -25,22 +25,67 @@ header {
   height: 4rem;
   width: 100vw;
 
+  padding: 0 3rem;
+
   position: sticky;
   top: 0;
   z-index: 100;
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 h1 {
   color: #ffffff;
   font-size: 2.25rem;
   font-weight: 700;
-
-  margin-left: 3rem;
   margin-top: 8px;
 }
+
+/* HEADER TOP RIGHT MENU */
+div#top-right-menu {
+  float: right;
+  display: flex;
+  align-items: center;
+}
+
+div#notifications {
+  cursor: pointer;
+  margin-right: 2rem;
+}
+
+div#notifications img {
+  height: 2rem;
+}
+
+div#user-options {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+div#user-options img {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  margin-right: .75rem;
+}
+
+div#user-options p {
+  font-size: .75rem;
+  margin-bottom: 0;
+}
+
+div#user-options p:first-child {
+  font-weight: 600;
+}
+
+div#user-options p:last-child {
+  color: white;
+  font-weight: 700;
+}
+/* END OF HEADER TOP RIGHT MENU */
 
 /* LOGIN PAGE */
 section#about {
@@ -219,7 +264,7 @@ main#login label.checkbox-container span.checkmark:after {
 }
 
 main#login label.checkbox-container input:checked ~ .checkmark:after {
-  /* DISPLAYINH CHECKMARK */
+  /* DISPLAYING CHECKMARK */
   display: block;
 }
 /* END OF CUSTOM ESPECIFIC CHECKBOX (LOGIN AREA)*/
@@ -231,9 +276,9 @@ nav {
   box-shadow: 1px 0 6px rgba(0, 0, 0, 0.25);
 
   height: 100%;
-  width: 25vw;
+  width: 25%;
 
-  z-index: 1;
+  z-index: 50;
 
   position: fixed;
 
@@ -481,7 +526,7 @@ section#set-user ul li span {
 /* END OF SETTING USER */
 
 /* BUTTONS FOR ADDING NEW SCHOOLS AND CLASSES */
-section > div:first-child button {
+main#register-teacher section > div:first-child button {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -671,17 +716,25 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
 
-  background-image: url("../images/arrow-select-01.png");
+  background-image: url("../images/arrow-select.svg");
   background-repeat: no-repeat;
   background-position: right;
   background-size: contain;
+}
+
+select:disabled {
+  cursor: default;
+  color: black;
+  filter: contrast(30%) brightness(130%);
 }
 
 input[type="text"],
 input[type="number"],
 input[type="tel"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="date"],
+textarea {
   min-height: 48px;
   background-color: white;
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -758,31 +811,8 @@ button[disabled],
     }
 } */
 
-/* side-nav */
-.side-menu {
-  width: 336px;
-  background-color: #b6ecfd;
-  padding: 93px 36px 0 36px;
-}
 
-.side-menu select,
-.side-menu .btn {
-  width: 100%;
-}
-
-.side-menu .btn {
-  margin-bottom: 24px;
-  background-color: #30C1F9;
-  border: 1px solid #30C1F9;
-  border-radius:5px
-}
-
-/* .side-menu .btn-attendance {
-  background-color: #f95f2f;
-  border: 1px solid #f95f2f;
-  margin-top: 70px;
-  border-radius:5px;
-} */
+/* #TAKE-ATTENDANCE AND #RECORD-BOOK STYLES */
 
 nav .select {
   margin-top: 3rem;
@@ -793,54 +823,130 @@ nav .select {
   width: 100%;
 }
 
-/* attendance-selectors */
-.attendance-selector {
-  padding: 24px;
+main#take-attendance, main#record-book {
+  width: 75vw;
+  margin-top: 4rem;
 }
 
-.attendance-selector .selectors .datepicker,
-.attendance-selector .observation .observations {
-  margin-bottom: 24px;
+/* SECTION TABLE-SETTINGS */
+
+main section.table-settings {
+  background-color: white;
+  width: 75vw;
+  height: 30%;
+  margin-left: 0;
+  padding: 3rem;
+  padding-bottom: 1.5rem;
+
+  position: fixed;
+  top: 4rem;
+  z-index: 1;
+
+  display: flex;
 }
 
-.observations {
-  height: 100px;
-  border-radius:10px;
-}
-.form-control{
-  border-radius:10px;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
+/* #ATTENDANCE TABLE-SETTINGS CONTENT */
+
+div.selectors,
+div.observations {
+  display: flex;
+  flex-direction: column;
 }
 
-.attendance-table td, .attendance-table th {
-  line-height: 36px;
+div.selectors {
+  flex-grow: 1;
+  margin-right: 1.5rem;
 }
 
-.attendance-table .table-button {
+div.observations {
+  flex-grow: 4;
+}
+
+div.selectors input,
+div.observations textarea {
+  margin-bottom: 0.75rem;
+}
+
+div.observations textarea {
+  height: 6.75rem;
+  padding-top: .75rem;
+}
+
+div.observations label {
+  width: fit-content;
+}
+
+/* SECTION TABLE */
+
+main section.table {
+  margin-top: 14rem;
+  overflow: scroll;
+}
+
+section.table th {
+  font-weight: normal;
+}
+
+section.table td {
+  vertical-align: middle;
+}
+ 
+th.student-id, td.student-id {
+  padding-left: 3rem;
+  width: 6rem;
+  min-width: 6rem;
+}
+
+th.student-name, td.student-name {
+  width: 18rem;
+  min-width: 18rem;
+}
+
+/* SETTING #ATTENDANCE CHECKBOXES CONTAINERS */
+
+td.attendance-check {
+  display: flex;
+}
+
+td div.attendance-check {
+  margin-right: 2rem;
+  display: flex;
+}
+
+/* STYLING #ATTENDANCE CHECKBOXES */
+
+div.attendance-check label {
+  cursor: pointer;
+
   height: 36px;
   width: 132px;
-  font-size: 16px;
-  border-radius: 18px;
-  line-height: 36px;
-  margin-right: 12px;
-  box-shadow: none;
+  border-radius: 36px;
+
+  margin-right: 0.5rem;
+
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  font-weight: 700;
 }
 
-.table-button.-checked {
-  width: 36px;
+div.attendance-check label.present {
+  background-color: #30c1f9;
 }
 
-.table-button.-absent {
-  background-color: #FE539B;
+div.attendance-check label.absent {
+  background-color: #fe539b;
 }
 
-.table-button.-late {
-  background-color: #FDC340;
+div.attendance-check label.late {
+  background-color: #ffcc33;
 }
-.notification{
-position: absolute;
-left: 1025px;
-top: 14px;
-width: 30px;
-height: 42px;
+
+div.attendance-check label input {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
 }

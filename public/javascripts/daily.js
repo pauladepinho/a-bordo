@@ -1,66 +1,88 @@
-function mostrarChamada() {
-  let presence = document.getElementById("presence");
-  presence.hidden = false;
-  let notes = document.getElementById("notes");
-  notes.hidden = true;
-  let container = document.getElementById("chart");
-  container.hidden = true;
+const attendanceBtn = document.getElementById("chamada");
+const gradesBtn = document.getElementById("nota");
+
+function showAttendanceSheet() {
+  // switch hidden table
+  let attendance = document.getElementById("attendance-table");
+  attendance.hidden = false;
+  let grades = document.getElementById("grades-table");
+  grades.hidden = true;
+  // switch selected button
+  attendanceBtn.classList.add("selected");
+  gradesBtn.classList.remove("selected");
+  // change selects' options
+  $("option.order-attendance").removeAttr("hidden");
+  $("option.order-grades").attr("hidden", "");
+  // hide chart
+  $("#chart").css("opacity", "0");
 }
 
-function mostrarNota() {
-  let presence = document.getElementById("presence");
-  presence.hidden = true;
-  let notes = document.getElementById("notes");
-  notes.hidden = false;
-  let container = document.getElementById("chart");
-  container.hidden = false;
+function showGradebook() {
+  // switch hidden table
+  let attendance = document.getElementById("attendance-table");
+  attendance.hidden = true;
+  let grades = document.getElementById("grades-table");
+  grades.hidden = false;
+  // switch selected button
+  gradesBtn.classList.add("selected");
+  attendanceBtn.classList.remove("selected");
+  // change selects' options
+  $(".order-grades").removeAttr("hidden");
+  $(".order-attendance").attr("hidden", "");
+  // show chart
+  $("#chart").css("opacity", "1");
 }
 
-var options = {
+let options = {
   series: [
     {
-      name: "50%",
-      data: [50],
+      name: "1ª AVAL",
+      data: [50]
     },
     {
-      name: "15%",
-      data: [15],
+      name: "2ª AVAL",
+      data: [15]
     },
     {
-      name: "20%",
-      data: [20],
+      name: "3ª AVAL",
+      data: [20]
     },
     {
-      name: "15%",
-      data: [15],
+      name: "4ª AVAL",
+      data: [15]
     },
     {
-      name: "Total",
-      data: [0, 100],
-    },
+      name: "TOTAL",
+      data: [0, 100]
+    }
   ],
   chart: {
     toolbar: {
-      show: false,
+      show: false
     },
     height: 150,
     type: "bar",
     stacked: true,
-    stackType: "100%",
+    stackType: "100%"
   },
   plotOptions: {
     bar: {
-      horizontal: true,
-    },
+      horizontal: true
+    }
   },
   title: {
     text: "Composição da média",
+    style: {
+      fontSize: '10px',
+      fontWeight: "regular",
+      fontFamily: "Work Sans"
+    }
   },
   fill: {
-    opacity: 1,
+    opacity: 1
   },
   legend: {
-    position: "top",
+    position: "top"
   },
   yaxis: {
     show: false,
@@ -68,114 +90,37 @@ var options = {
     showForNullSeries: false,
     reversed: false,
     labels: {
-      show: false,
+      show: false
     },
     axisBorder: {
-      show: false,
+      show: false
     },
     crosshairs: {
-      show: false,
+      show: false
     },
     tooltip: {
-      enabled: false,
-    },
+      enabled: false
+    }
   },
   xaxis: {
     showAlways: false,
     showForNullSeries: false,
     labels: {
       show: false,
-      trim: false,
+      trim: false
     },
     axisTicks: {
-      show: false,
+      show: false
     },
     axisBorder: {
-      show: false,
+      show: false
     },
     crosshairs: {
-      show: false,
-    },
+      show: false
+    }
   },
-  colors: ["#54A2EB", "#C979FB", "#FFAC60", "#41E5AA", "#30C1F9"],
+  colors: ["#54A2EB", "#C979FB", "#FFAC60", "#41E5AA", "#30C1F9"]
 };
 
-var chart = new ApexCharts(document.querySelector("#chart"), options);
+let chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
-
-// anychart.onDocumentReady(function () {
-//     // create data set on our data
-//     var dataSet = anychart.data.set([
-//         ['', 40, 10, 20, 10, 20],
-//     ]);
-
-//     // map data for the first series, take x from the zero column and value from the first column of data set
-//     var seriesData_1 = dataSet.mapAs({ 'x': 0, 'value': 1 });
-
-//     // map data for the second series, take x from the zero column and value from the second column of data set
-//     var seriesData_2 = dataSet.mapAs({ 'x': 0, 'value': 2 });
-
-//     // map data for the second series, take x from the zero column and value from the third column of data set
-//     var seriesData_3 = dataSet.mapAs({ 'x': 0, 'value': 3 });
-
-//     // map data for the fourth series, take x from the zero column and value from the fourth column of data set
-//     var seriesData_4 = dataSet.mapAs({ 'x': 0, 'value': 4 });
-
-//     // create bar chart
-//     var chart = anychart.bar();
-
-//     // turn on chart animation
-//     chart.animation(true);
-
-//     // force chart to stack values by Y scale.
-//     chart.yScale().stackMode('percent');
-
-//     // set chart title text settings
-//     chart.title('Composição da média');
-
-//     // set yAxis labels formatting, force it to add % to values
-//     chart.yAxis(0).labels().format('{%Value}%');
-
-//     // helper function to setup label settings for all series
-//     var setupSeriesLabels = function (series, name) {
-//         series.name(name)
-//             .stroke('3 #fff 1');
-//         series.hovered().stroke('3 #fff 1');
-//     };
-
-//     // temp variable to store series instance
-//     var series;
-
-//     // create first series with mapped data
-//     series = chart.bar(seriesData_1);
-//     setupSeriesLabels(series, '1° Nota');
-
-//     // create second series with mapped data
-//     series = chart.bar(seriesData_2);
-//     setupSeriesLabels(series, '2° Nota');
-
-//     // create third series with mapped data
-//     series = chart.bar(seriesData_3);
-//     setupSeriesLabels(series, '3° Nota');
-
-//     // create fourth series with mapped data
-//     series = chart.bar(seriesData_4);
-//     setupSeriesLabels(series, '4° Nota');
-
-//     // turn on legend
-//     chart.legend()
-//         .enabled(true)
-//         .fontSize(14)
-//         .padding([0, 0, 5, 0]);
-
-//     chart.interactivity().hoverMode('by-x');
-
-//     chart.tooltip()
-//         .displayMode('union')
-//         .valuePrefix('%');
-
-//     // set container id for the chart
-//     chart.container('container');
-//     // initiate chart drawing
-//     chart.draw();
-// });

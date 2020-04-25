@@ -1,31 +1,41 @@
-<%- include("partials/header.ejs", { title: "Realizar Chamada" }) %>
+<%- include("partials/header.ejs", { title: "aBordo - Fazer chamada" }) %>
 </head>
 
-<div class="container-fluid">
+<body>
   <header>
     <h1>aBordo</h1>
 
-    <div>
-      <img class="notification" src="../../images/sino.png" alt=" ">
+    <div id="top-right-menu">
+      <div id="notifications">
+        <img src="../images/sino.png" alt=" ">
+      </div>
+
+      <div id="user-options">
+        <img src="../images/professor.png" alt="">
+        <span>
+          <p>Nome do professor</p>
+          <p>PROFESSOR</p>
+        </span>
+      </div>
     </div>
   </header>
 
   <nav>
     <div class="navbar select">
       <select name="school" id="school" required>
-        <option value="" disabled selected>Nome da escola</option>
+        <option value="" disabled selected>Escola</option>
         <option value="0">Colégio Pedro II</option>
         <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
       </select>
 
       <select name="class" id="class" required>
-        <option value="" disabled selected>Turma [nº da turma]</option>
-        <option value="0000">0000</option>
-        <option value="0001">0001</option>
+        <option value="" disabled selected>Turma</option>
+        <option value="2223">Turma 2223</option>
+        <option value="1121">Turma 1121</option>
       </select>
 
       <select id="course" name="course" required>
-        <option value="" disabled selected>Nome da disciplina</option>
+        <option value="" disabled selected>Disciplina</option>
         <option value="arts">Artes</option>
         <option value="biology">Biologia</option>
         <option value="sciences">Ciências</option>
@@ -48,12 +58,14 @@
         <option value="drama">Teatro</option>
       </select>
 
-      <select name="period" id="period" required>
-        <option value="1" selected>1º Trimestre</option>
+      <select name="term" id="term" required>
+        <option value="" disabled selected>Trimestre</option>
+        <option value="1">1º Trimestre</option>
         <option value="2">2º Trimestre</option>
         <option value="3">3º Trimestre</option>
       </select>
     </div>
+
     <div class="navbar">
       <ul class="nav">
         <li><a class="nav-link active" href="#">
@@ -75,80 +87,67 @@
     </div>
   </nav>
 
-  <main class="attendance-content">
-    <section class="attendance-selector row">
-      <div class="selectors col-sm-4">
-        <input type="date" id="data" name="data" class="form-control datepicker" />
-        <select name="tempos-aula" id="tempos-aula" class="form-control">
-          <option selected disabled>Tempos de Aula</option>
-          <option value="1º">01 Tempos de Aula</option>
-          <option value="2º">02 Tempos de Aula</option>
+  <main id="take-attendance">
+    <section class="table-settings">
+      <div class="selectors">
+        <input type="date" name="date" id="date" value=<%= new Date().toISOString().substr(0, 10) %> />
+        <select name="period" id="period" onchange="renderAttendanceSheet()">
+          <option selected disabled>Tempos de aula</option>
+          <option value="1">1 tempo de aula</option>
+          <option value="2">2 tempos de aula</option>
+          <option value="3">3 tempos de aula</option>
+          <option value="4">4 tempos de aula</option>
         </select>
       </div>
-      <div class="observation col-sm-8">
-        <textarea placeholder="Observações" class="form-control observations" id="observations" name="observations"
-          rows=4></textarea>
-        <input type="checkbox">Dia de Avaliação</input>
+
+      <div class="observations">
+        <textarea placeholder="Observações" name="observations" id="observations"></textarea>
+        <label for="evaluation-day" class="checkbox-container">Dia de avaliação
+          <input type="checkbox" name="evaluation-day" id="evaluation-day" />
+          <span class="checkmark"></span>
+        </label>
       </div>
     </section>
-    <section class="attendance-table">
+
+    <section class="table">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Nº</th>
-            <th colspan="2">ALUNO</th>
+            <th class="student-id">Nº</th>
+            <th class="student-name">ALUNO</th>
+
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>01</th>
-            <td>João de Oliveira da Silva Santos</td>
-            <td>
-              <button class="table-button -checked">P</button>
-              <button class="table-button -checked">P</button>
-              <button class="table-button -absent -checked">F</button>
+          <% for (let i = 1; i <= 50; i++) { %>
+          <tr id=<%= "student" + i %>>
+            <td class="student-id" id=<%= "student-id" + i %>><%= i %></td>
+            <td class="student-name" id=<%= "student-name" + i %>>João de Oliveira da Silva Santos</td>
+
+            <td class="attendance-check">
+              <% for (let j = 1; j <= 3; j++) { %>
+              <div class="attendance-check" id=<%= "student" + i + "-period" + j %>>
+                <label class="present" onclick="checkAttendance()" for=<%= "present-student" + i + "-period" + j %>>
+                  PRESENTE
+                  <input type="checkbox" name=<%= "attendance-student" + i + "-period" + j %>
+                    id=<%= "present-student" + i + "-period" + j %>></label>
+                <label class="absent" onclick="checkAttendance()" for=<%= "absent-student" + i + "-period" + j %>>
+                  FALTOU
+                  <input type="checkbox" name=<%= "attendance-student" + i + "-period" + j %>
+                    id=<%= "absent-student" + i + "-period" + j %>></label>
+                <label class="late" onclick="checkAttendance()" for=<%= "late-student" + i + "-period" + j %>>
+                  ATRASADO
+                  <input type="checkbox" name=<%= "attendance-student" + i + "-period" + j %>
+                    id=<%= "late-student" + i + "-period" + j %>></label>
+              </div>
+              <% } %>
             </td>
           </tr>
-          <tr>
-            <th>01</th>
-            <td>João de Oliveira da Silva Santos</td>
-            <td>
-              <button class="table-button">PRESENTE</button>
-              <button class="table-button -absent">FALTOU</button>
-              <button class="table-button -late">ATRASADO</button>
-            </td>
-          </tr>
-          <tr>
-            <th>01</th>
-            <td>João de Oliveira da Silva Santos</td>
-            <td>
-              <button class="table-button">PRESENTE</button>
-              <button class="table-button -absent">FALTOU</button>
-              <button class="table-button -late">ATRASADO</button>
-            </td>
-          </tr>
-          <tr>
-            <th>01</th>
-            <td>João de Oliveira da Silva Santos</td>
-            <td>
-              <button class="table-button">PRESENTE</button>
-              <button class="table-button -absent">FALTOU</button>
-              <button class="table-button -late">ATRASADO</button>
-            </td>
-          </tr>
-          <tr>
-            <th>01</th>
-            <td>João de Oliveira da Silva Santos</td>
-            <td>
-              <button class="table-button">PRESENTE</button>
-              <button class="table-button -absent">FALTOU</button>
-              <button class="table-button -late">ATRASADO</button>
-            </td>
-          </tr>
+          <% } %>
         </tbody>
       </table>
     </section>
   </main>
-</div>
 
-<%- include("partials/footer.ejs") %>
+  <%- include("partials/footer.ejs") %>

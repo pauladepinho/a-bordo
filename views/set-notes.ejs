@@ -1,28 +1,42 @@
-<%- include("partials/header.ejs", { title: "Lançar notas" }) %>
+<%- include("partials/header.ejs", { title: "aBordo - Lançar notas" }) %>
 <link rel='stylesheet' href='/stylesheets/set-notes.css' />
 </head>
 
 <body>
   <header>
     <h1>aBordo</h1>
+
+    <div id="top-right-menu">
+      <div id="notifications">
+        <img src="../images/sino.png" alt=" ">
+      </div>
+
+      <div id="user-options">
+        <img src="../images/professor.png" alt="">
+        <span>
+          <p>Nome do professor</p>
+          <p>PROFESSOR</p>
+        </span>
+      </div>
+    </div>
   </header>
 
   <nav>
     <div class="navbar select">
       <select name="school" id="school" required>
-        <option value="" disabled selected>Nome da escola</option>
+        <option value="" disabled selected>Escola</option>
         <option value="0">Colégio Pedro II</option>
         <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
       </select>
 
       <select name="class" id="class" required>
-        <option value="" disabled selected>Turma [nº da turma]</option>
-        <option value="0000">0000</option>
-        <option value="0001">0001</option>
+        <option value="" disabled selected>Turma</option>
+        <option value="2223">Turma 2223</option>
+        <option value="1121">Turma 1121</option>
       </select>
 
       <select id="course" name="course" required>
-        <option value="" disabled selected>Nome da disciplina</option>
+        <option value="" disabled selected>Disciplina</option>
         <option value="arts">Artes</option>
         <option value="biology">Biologia</option>
         <option value="sciences">Ciências</option>
@@ -45,12 +59,14 @@
         <option value="drama">Teatro</option>
       </select>
 
-      <select name="period" id="period" required>
-        <option value="1" selected>1º Trimestre</option>
+      <select name="term" id="term" required>
+        <option value="" disabled selected>Trimestre</option>
+        <option value="1">1º Trimestre</option>
         <option value="2">2º Trimestre</option>
         <option value="3">3º Trimestre</option>
       </select>
     </div>
+
     <div class="navbar">
       <ul class="nav">
         <li><a class="nav-link" href="http://localhost:3000/fazer-chamada">
@@ -72,7 +88,7 @@
     </div>
   </nav>
 
-  <main>
+  <main id="grade">
     <div class="select">
       <select name="evaluation" id="evaluation" onchange="enableOption()">
         <option value="1" selected>1ª Avaliação</option>
@@ -135,7 +151,10 @@
           <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
           <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
           <td>00</td>
-          <td><input type="checkbox"></td>
+          <td><label for="not-evaluated" class="checkbox-container">
+              <input type="checkbox" name="not-evaluated" id="not-evaluated" />
+              <span class="checkmark"></span>
+            </label></td>
         </tr>
         <% } %>
       </tbody>

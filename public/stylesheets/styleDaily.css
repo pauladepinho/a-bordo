@@ -1,187 +1,82 @@
-header{
-    position: fixed;
-}
-nav{
-    z-index: 3;
+/* TABLE-SETTINGS SECTION */
+
+div.switch-table {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
 }
 
-.navbar .nav .divSelect{
-    margin-top: 7vh;
-    margin-bottom: 7vh;
-}
-
-.navbar select{
+div.switch-table button {
     width: 100%;
 }
 
-.navbar li a{
-    height: 80%;
+div.switch-table button:first-child {
+    margin-bottom: .75rem;
 }
 
-main{
-    width: 75vw;
-    margin-top: 3%;
-}
-
-main li{
-    width: 200px;
-    list-style-type: none;
-    margin-top: 5px;
-}
-
-
-td div{
-    width: 90px;
+div.selectors {
+    width: 30%;
+    margin-left: 1.5rem;
     display: flex;
-    justify-content: space-around;
-    padding: 0;
+    flex-direction: column;
 }
 
-tHead th div{
-    font-size: 10px;
+div.selectors select {
+    width: 100%;
 }
 
-#search-items{
-    position: fixed;
-    width: 75vw;
-    padding: 0 30px;
-    padding-top: 45px;
-    height: 31vh;
-    z-index: 1;
-    background-color: white;
+div.chart {
+    width: 40%;
 }
 
-#notes{
-    width: 73.2vw;
+div#chart {
+    opacity: 0;
 }
 
-#notes .tBody th{
-    text-align: center;
+/* TABLE SECTION */
+
+th, td {
+    border-right: 2px solid #eaeaea;
 }
 
-#doughnut-chart{
-    width: 50px !important;
-    height: 60px !important;
+th:first-child, td:first-child {
+    border-right: none;
 }
 
-#notes .tBody tr #doughnut-chart{
-    height: 70px;
-    padding: 0px !important;
-    margin: 0 !important;
-    padding-right: 5px !important;
-    padding-top: 7px !important;
+th div{
+    font-size: .75rem;
 }
 
-#notes .tBody tr td div{
-    display: block;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 25px;
-    text-align: center;
-}
-#notes .tBody tr td{
-    height: 70px;
-    padding: 0px !important;
-    margin: 0 !important;
+td div {
+    height: 36px;
+    display: flex;
+    align-items: center;
 }
 
-#notes .tBody tr td,#notes .tBody tr th{
-    vertical-align: middle;
-    height: 70px;
+/* ATTENDANCE TABLE */
+
+div.attendance span {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 2.25rem;
+    
+    margin-right: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-weight: 700;
 }
 
-#chart{
-    height: 10vh !important;
-}
-
-#container {
-    width: 25vw;
-    height: 80%;
-    margin: 0;
-    padding: 0;
-}
-
-#chartContainer:nth-child(odd){
-    background-color: #E5E5E5;
-}
-
-#content{
-    position: absolute;
-    margin-top: 14%;
-}
-
-.table{
-    margin-bottom: 0;
-}
-
-a{
-    color: white !important;
-}
-
-.tHead th{
-    border-right: gray solid 1px;
-    font-size: 15px;
-}
-
-th{
-    font-weight: normal;
-    width: 100px;
-}
-
-.tHead th:first-child{
-    border-right: 0px;
-    text-align: center;
-}
-
-.tBody th{
-    text-align: center;
-}
-
-td{
-    border-right: gray solid 1px;
-    padding: 0px;
-}
-
-
-p{
-    margin:0px;
-}
-
-td p{
-    width: 320px;
-}
-
-th p{
-    font-size: 15px;
-}
-
-th:first-child{
-    height: 30px;
-    width: 40px;
-    text-align: center;
-    font-size: 15px;
-    vertical-align: middle;
-}
-
-.btn-circle.btn-xl{
-    width: 50px;
-    height: 50px;
-    padding: 0px 0px;
-    border-radius: 35px;
-    font-size: 24px;
-}
-
-.btn-circle {
-    width: 25px;
-    height: 25px;
-    padding: 0px 0px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bolder;
-}
-
-.btn{
+div.attendance span.present {
     background-color: #30C1F9;
-    border-color: #30C1F9;
+}
+
+div.attendance span.absent {
+    background-color: #fe539b;
+}
+
+div.attendance span.late {
+    background-color: #ffcc33;
 }

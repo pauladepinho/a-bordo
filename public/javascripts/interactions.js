@@ -1,5 +1,5 @@
 const teacherRadioContainer = document.getElementById("teacher-radio-container");
-const guardianRadioContainer = document.getElementById("guardin-radio-container");
+const guardianRadioContainer = document.getElementById("guardian-radio-container");
 
 function selectTeacher() {
   teacherRadioContainer.classList.add("selected");
@@ -58,25 +58,65 @@ function showCourseRetakeList() {
 }
 $(".course-retake-checkbox").change(showCourseRetakeList).each(showCourseRetakeList);
 
-function enableOption() {
-    let option = document.getElementById("evaluation").value;
+function checkAttendance() {
+  let labelParent = $(this).parent();
 
-    let av1 = document.querySelector('#av1');
-    av1.disabled = true
-    let av2 = document.querySelector('#av2');
-    av2.disabled = true
-    let av3 = document.querySelector('#av3');
-    av3.disabled = true
-    let av4 = document.querySelector('#av4');
-    av4.disabled = true
+  if ($(this).is(":checked")) {
+    labelParent.siblings().hide();
+    labelParent.css("width", "36px");
 
-    if (option == '1') {
-        av1.disabled = false;
-    } else if (option == '2') {
-        av2.disabled = false;
-    } else if (option == '3') {
-        av3.disabled = false;
-    } else if (option == '4') {
-        av4.disabled = false;
+    if (labelParent.hasClass("present")) {
+      labelParent.contents().filter(function () {
+        return this.nodeType === 3 && this.textContent.trim().length > 0;
+      }).replaceWith("P");
+    } else if (labelParent.hasClass("absent")) {
+      labelParent.contents().filter(function () {
+        return this.nodeType === 3 && this.textContent.trim().length > 0;
+      }).replaceWith("F");
+    } else if (labelParent.hasClass("late")) {
+      labelParent.contents().filter(function () {
+        return this.nodeType === 3 && this.textContent.trim().length > 0;
+      }).replaceWith("A");
     }
+  } else {
+    labelParent.siblings().show();
+    labelParent.css("width", "132px");
+    if (labelParent.hasClass("present")) {
+      labelParent.contents().filter(function () {
+        return this.nodeType === 3 && this.textContent.trim().length > 0;
+      }).replaceWith("PRESENTE");
+    } else if (labelParent.hasClass("absent")) {
+      labelParent.contents().filter(function () {
+        return this.nodeType === 3 && this.textContent.trim().length > 0;
+      }).replaceWith("FALTOU");
+    } else if (labelParent.hasClass("late")) {
+      labelParent.contents().filter(function () {
+        return this.nodeType === 3 && this.textContent.trim().length > 0;
+      }).replaceWith("ATRASADO");
+    }
+  }
+}
+$(".attendance-check > label > input").click(checkAttendance);
+
+function enableOption() {
+  let option = document.getElementById("evaluation").value;
+
+  let av1 = document.querySelector('#av1');
+  av1.disabled = true
+  let av2 = document.querySelector('#av2');
+  av2.disabled = true
+  let av3 = document.querySelector('#av3');
+  av3.disabled = true
+  let av4 = document.querySelector('#av4');
+  av4.disabled = true
+
+  if (option == '1') {
+    av1.disabled = false;
+  } else if (option == '2') {
+    av2.disabled = false;
+  } else if (option == '3') {
+    av3.disabled = false;
+  } else if (option == '4') {
+    av4.disabled = false;
+  }
 }
