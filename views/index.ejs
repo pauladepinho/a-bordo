@@ -1,42 +1,59 @@
 <%- include("partials/header.ejs", {title: "Bem-Vindo aBordo!"}) %>
+</head>
 
 <body>
   <header>
     <h1>aBordo</h1>
   </header>
-  <div>
-    <h3>PROFESSORES,</h3>
-    <p>este é o seu DIÁRIO ESCOLAR virtual!</p>
-    <ul>
-      <li>Faça chamadas,</li>
-      <li>lance notas,</li>
-      <li>veja estatíticas,</li>
-      <li>contate responsáveis.</li>
-    </ul>
-    <h3>RESPONSÁVEL,</h3>
-    <p>acompanhe o desempenho escolar dos seus filhos!</p>
-    <p>Receba avisos direto dos professores e não perca a data da próxima reunião de Pais e Mestres.</p>
-  </div>
-  <main>
+
+  <section id="about">
+    <article>
+      <h2>PROFESSOR,</h2>
+      <p>Este é o seu DIÁRIO ESCOLAR virtual!</p>
+      <ul>
+        <li>Faça chamadas,</li>
+        <li>lance notas,</li>
+        <li>veja estatíticas,</li>
+        <li>contate responsáveis.</li>
+      </ul>
+      <br>
+      <h2>RESPONSÁVEL,</h2>
+      <p>Acompanhe o desempenho escolar dos seus filhos!</p>
+      <p>
+        Receba avisos direto dos professores e não perca a data da próxima
+        reunião de Pais e Mestres.
+      </p>
+    </article>
+  </section>
+
+  <main id="login">
     <form action="/" method="POST" autocomplete="on">
+      <div id="user-type">
+        <label for="teacher" id="teacher-radio-container" class="user-type selected" onclick="selectTeacher()">Sou
+          PROFESSOR<input type="radio" name="userType" value="teacher" id="teacher" checked /></label>
+        <label for="guardian" id="guardian-radio-container" class="user-type" onclick="selectGuardian()">Sou
+          RESPONSÁVEL<input type="radio" name="userType" value="guardian" id="guardian" /></label>
+      </div>
 
-      <label for="teacher">Sou PROFESSOR</label>
-      <input type="radio" name="userType" value="teacher" id="teacher" checked>
-      <label for="guardian">Sou RESPONSÁVEL</label>
-      <input type="radio" name="userType" value="guardian" id="guardian">
+      <div id="main-content">
+        <input type="email" placeholder="Meu e-mail" required />
+        <div class="password">
+          <input type="password" name="password" id="password" placeholder="Minha senha" required />
+          <div class="eye-icon" id="eye-icon" onclick="toogleVisibility()"></div>
+        </div>
 
-      <input type="email" placeholder="Meu e-mail" required>
-      <input type="password" placeholder="Minha senha" required>
-      <input type="checkbox" onclick="toogleVisibility()" id="toggleVisibility">
+        <div id="remember">
+          <label for="rememberMe" class="checkbox-container"><input type="checkbox" name="rememberMe"
+              id="rememberMe" />Lembre-me
+            <span class="checkmark"></span></label>
+          <a href="#">Esqueci minha senha</a>
+        </div>
 
-      <input type="checkbox" checked="checked" name="rememberMe" id="rememberMe">
-      <label for="rememberMe">Lembre-me</label>
-      <a href="#">Esqueci minha senha</a>
-
-      <button type="submit" name="login">Entrar</button>
-      <button type="submit" name="signup">Cadastrar</button>
+        <button class="special" type="submit" name="login">Entrar</button>
+        <a href="http://localhost:3000/usuario/cadastrar"><button class="special" type="button"
+            name="signup">Cadastrar</button></a>
+      </div>
     </form>
   </main>
-</body>
 
-<%- include("partials/footer.ejs") %>
+  <%- include("partials/footer.ejs") %>

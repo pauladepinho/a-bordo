@@ -1,263 +1,295 @@
-<%- include("partials/header.ejs", {title: "aBordo - Cadastro"}) %>
+<%- include("partials/header.ejs", {title: "aBordo - Cadastrar"}) %>
+</head>
 
 <body>
-    <header>
-        <h1>aBordo</h1>
-    </header>
+  <header>
+    <h1>aBordo</h1>
+  </header>
 
-    <nav>
-        <h2>Cadastrar</h2>
-        <div class="navbar">
-            <ul class="nav">
-                <li><a class="nav-link" href="#set-user">
-                        Dados pessoais
-                    </a></li>
-                <li><a class="nav-link" href="#set-schools">
-                        Escolas
-                    </a></li>
-                <li><a class="nav-link" href="#set-classes">
-                        Turmas
-                    </a></li>
-            </ul>
-        </div>
+  <nav>
+    <h2>Cadastrar</h2>
+    <div class="navbar">
+      <ul class="nav">
+        <li>
+          <a class="nav-link" href="#set-user">
+            Dados pessoais
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="#set-schools">
+            Escolas
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="#set-classes">
+            Turmas
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-    </nav>
+  <main id="register-teacher">
+    <form id="create" action="/register" method="POST" enctype="multipart/form-data" autocomplete="on">
+      <div data-spy="scroll" data-target=".navbar" data-offset="450">
+        <section id="set-user">
+          <div class="add-pic">
+            <label for="pic-file" class="add-pic">
+              <img src="../images/silhouette.jpg" id="user-pic" width="176px" height="176px" />
+              <div id="text-on-hover"><span>Nova imagem</span></div>
+            </label>
+            <input type="file" name="pic-file" id="pic-file" onchange="addPic()" />
+          </div>
 
-    <main>
-        <form action="/register/teacher" method="POST" enctype="multipart/form-data" autocomplete="on">
-            <div data-spy="scroll" data-target=".navbar" data-offset="50">
-                <section id="set-user">
-
-                    <div id="add-pic">
-                        <input type="file" name="user-pic" id="user-pic">
-                    </div>
-                    <div id="full-name">
-                        <input type="text" name="name" id="name" placeholder="Nome" required>
-                        <span class="gap"></span>
-                        <input type="text" name="surname" id="surname" placeholder="Sobrenome" required>
-                    </div>
-                    <div id="contact-info">
-                        <input type="email" name="email" id="email" placeholder="E-mail" required>
-                        <span class="gap"></span>
-                        <input type="tel" name="phone" id="phone" placeholder="Celular" required>
-                    </div>
-                    <div id="password">
-                        <div class="new-password">
-                            <input type="password" name="password" id="password" placeholder="Senha" required>
-                            <div class="eye-icon" onclick="toogleVisibility()"></div>
-                        </div>
-                        <span class="gap"></span>
-                        <div class="new-password">
-                            <input type="password" name="confirm-password" id="confirm-password"
-                                placeholder="Confirme a senha" required>
-                            <div class="eye-icon" onclick="toogleVisibility()"></div>
-                        </div>
-                    </div>
-                    <ul id="password-strength">
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li class="dash"></li>
-                        <li>Força da senha</li>
-                    </ul>
-                    <ul>
-                        <li><span>x</span> Minúscula</li>
-                        <li><span>x</span> Maiúscula</li>
-                        <li><span>x</span> Número</li>
-                        <li><span>x</span> Símbolo</li>
-                        <li><span>x</span> 8 caracteres</li>
-                    </ul>
-
-                </section>
-
-                <section id="set-schools">
-                    <div id="new-schools">
-                        <div class="instances-list schools">
-                            <button type="button" class="selected school1" onclick="select()">Escola 1</button>
-                        </div>
-                        <button type="button" class="btn-add" id="add-school" onclick="addInstance()">+</button>
-                        <button type="button" class="btn-del" id="del-school" onclick="delInstance()"
-                            disabled>Excluir</button>
-                    </div>
-                    <div class="gray-box">
-                        <select id="school" name="school" required>
-                            <option value="" disabled selected>Nome da escola</option>
-                            <option value="0">Colégio Pedro II</option>
-                            <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
-                            </option>
-                        </select>
-
-                        <select id="grade" name="grade" required>
-                            <option value="" disabled selected>Média para aprovação</option>
-                            <option value="" disabled>Escala de 0 a 10 pontos</option>
-                            <option value="5">5,0 pontos</option>
-                            <option value="6">6,0 pontos</option>
-                            <option value="7">7,0 pontos</option>
-                            <option value="" disabled>Escala de 0 a 100 pontos</option>
-                            <option value="50">50 pontos</option>
-                            <option value="60">60 pontos</option>
-                            <option value="70">70 pontos</option>
-                        </select>
-
-                        <p>Sistema de avaliação: <span id="term"></span></p>
-                        <div class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
-                            Bimestral
-                            <input type="radio" name="term-type" id="term-type-bimonthly" required>
-                        </div>
-                        <div class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
-                            Trimestral
-                            <input type="radio" name="term-type" id="term-type-trimonthly">
-                        </div>
-                    </div>
-                </section>
-
-                <section id="set-classes">
-                    <div id="new-classes">
-                        <div class="instances-list schools">
-                            <button type="button" class="selected school1" onclick="select()">Escola 1</button>
-                        </div>
-                        <br>
-                        <div class="instances-list classes">
-                            <button type="button" class="selected" id="class0" onclick="select()">Turma 1</button>
-                        </div>
-                        <button type="button" class="btn-add" id="add-classes" onclick="addInstance()">+</button>
-                        <button type="button" id="del-class" onclick="delInstance()" disabled>Excluir</button>
-                    </div>
-
-                    <div class="gray-box">
-                        <div id="class-code">
-                            <label for="class">Turma</label>
-                            <input type="text" name="class" id="class" placeholder="Número da turma" required>
-                        </div>
-
-                        <p>Nesta turma, eu leciono...</p>
-                        <div id="new-courses">
-                            <select id="course1" name="course1" required>
-                                <option value="" disabled selected>Escolher disciplina</option>
-                                <option value="arts">Artes</option>
-                                <option value="biology">Biologia</option>
-                                <option value="sciences">Ciências</option>
-                                <option value="phys-ed">Educação Física</option>
-                                <option value="philosophy">Filosofia</option>
-                                <option value="physics">Física</option>
-                                <option value="geography">Geografia</option>
-                                <option value="geomethy">Geometria</option>
-                                <option value="history">História</option>
-                                <option value="literature">Literatura</option>
-                                <option value="math">Matemática</option>
-                                <option value="music">Música</option>
-                                <option value="spanish-lang">Língua Espanhola</option>
-                                <option value="french-lang">Língua Francesa</option>
-                                <option value="english-lang">Língua Inglesa</option>
-                                <option value="portuguese-lang">Língua Portuguesa</option>
-                                <option value="chemistry">Química</option>
-                                <option value="writing">Redação</option>
-                                <option value="sociology">Sociologia</option>
-                                <option value="drama">Teatro</option>
-                            </select>
-
-                            <div class="buttons">
-                                <button type="button" class="btn-add" id="add-course">+</button>
-                                <button type="button" class="btn-del" id="del-course" disabled>-</button>
-                            </div>
-                        </div>
-
-                        <div id="students-list">
-                            <div id="heading">
-                                <span>Nº</span>
-                                <span>Aluno</span>
-                            </div>
-                            <div class="students" id="student1">
-                                <input type="number" name="id1" value="1" id="id1">
-                                <input type="text" name="name1" id="name1" placeholder="Nome do aluno">
-
-                                <label for="dps-student1" class="checkbox-container">Dependência
-                                    <input type="checkbox" name="dps-student1" class="dps-checkbox" id="dps-student1">
-                                    <span class="checkmark"></span>
-                                </label>
-
-                                <div class="course-take" hidden>
-                                    <select name="dp1-student1" id="dp1-student1">
-                                        <option value="" disabled selected>Dependência em...</option>
-                                        <option value="arts">Artes</option>
-                                        <option value="biology">Biologia</option>
-                                        <option value="sciences">Ciências</option>
-                                        <option value="phys-ed">Educação Física</option>
-                                        <option value="philosophy">Filosofia</option>
-                                        <option value="physics">Física</option>
-                                        <option value="geography">Geografia</option>
-                                        <option value="geomethy">Geometria</option>
-                                        <option value="history">História</option>
-                                        <option value="literature">Literatura</option>
-                                        <option value="math">Matemática</option>
-                                        <option value="music">Música</option>
-                                        <option value="spanish-lang">Língua Espanhola</option>
-                                        <option value="french-lang">Língua Francesa</option>
-                                        <option value="english-lang">Língua Inglesa</option>
-                                        <option value="portuguese-lang">Língua Portuguesa</option>
-                                        <option value="chemistry">Química</option>
-                                        <option value="writing">Redação</option>
-                                        <option value="sociology">Sociologia</option>
-                                        <option value="drama">Teatro</option>
-                                    </select>
-
-                                    <button type="button" class="btn-add" id="add-dp">+</button>
-                                    <button type="button" class="btn-del" id="del-dp" disabled>-</button>
-                                </div>
-                            </div>
-
-                            <div class="students" id="student2">
-                                <input type="number" name="id2" value="2" id="id2">
-                                <input type="text" name="name2" id="name2" placeholder="Nome do aluno">
-
-                                <label for="dps-student2" class="checkbox-container">Dependência
-                                    <input type="checkbox" name="dps-student2" class="dp-checkbox" id="dps-student2">
-                                    <span class="checkmark"></span>
-                                </label>
-
-                                <div class="course-retake" hidden>
-                                    <select name="dp1-student2" id="dp1-student2">
-                                        <option value="" disabled selected>Dependência em...</option>
-                                        <option value="arts">Artes</option>
-                                        <option value="biology">Biologia</option>
-                                        <option value="sciences">Ciências</option>
-                                        <option value="phys-ed">Educação Física</option>
-                                        <option value="philosophy">Filosofia</option>
-                                        <option value="physics">Física</option>
-                                        <option value="geography">Geografia</option>
-                                        <option value="geomethy">Geometria</option>
-                                        <option value="history">História</option>
-                                        <option value="literature">Literatura</option>
-                                        <option value="math">Matemática</option>
-                                        <option value="music">Música</option>
-                                        <option value="spanish-lang">Língua Espanhola</option>
-                                        <option value="french-lang">Língua Francesa</option>
-                                        <option value="english-lang">Língua Inglesa</option>
-                                        <option value="portuguese-lang">Língua Portuguesa</option>
-                                        <option value="chemistry">Química</option>
-                                        <option value="writing">Redação</option>
-                                        <option value="sociology">Sociologia</option>
-                                        <option value="drama">Teatro</option>
-                                    </select>
-
-                                    <button type="button" class="btn-add" id="addDp">+</button>
-                                    <button type="button" class="btn-del" id="delDp" disabled>-</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="special" id="launch">Finalizar e levantar voo!</button>
-                </section>
+          <div id="full-name">
+            <input type="text" name="name" id="name" placeholder="Nome" required />
+            <span class="gap"></span>
+            <input type="text" name="surname" id="surname" placeholder="Sobrenome" required />
+          </div>
+          <div id="contact-info">
+            <input type="email" name="email" id="email" placeholder="E-mail" required />
+            <span class="gap"></span>
+            <input type="tel" name="phone" id="phone" placeholder="Celular" required />
+          </div>
+          <div id="add-password">
+            <div class="password">
+              <input type="password" name="password" id="password" placeholder="Senha" required />
+              <div class="eye-icon" id="eye-icon-1" onclick="toogleVisibility()"></div>
             </div>
-        </form>
-    </main>
-</body>
+            <span class="gap"></span>
+            <div class="password">
+              <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirme a senha"
+                required />
+              <div class="eye-icon" id="eye-icon-2" onclick="toogleVisibility()"></div>
+            </div>
+          </div>
+          <ul id="password-strength">
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li>Força da senha</li>
+          </ul>
+          <ul>
+            <li><span>x</span> Minúscula</li>
+            <li><span>x</span> Maiúscula</li>
+            <li><span>x</span> Número</li>
+            <li><span>x</span> Símbolo</li>
+            <li><span>x</span> 8 caracteres</li>
+          </ul>
+        </section>
 
-<%- include("partials/footer.ejs") %>
+        <section id="set-schools">
+          <div id="new-schools">
+            <div class="instances-list schools">
+              <button type="button" class="selected school1" onclick="select()">
+                Escola 1
+              </button>
+            </div>
+            <button type="button" class="btn-add" id="add-school" onclick="addInstance()">
+              +
+            </button>
+            <button type="button" class="btn-del" id="del-school" onclick="delInstance()" disabled>
+              Excluir
+            </button>
+          </div>
+          <div class="gray-box">
+            <select id="school" name="school" required>
+              <option value="" disabled selected>Nome da escola</option>
+              <option value="0">Colégio Pedro II</option>
+              <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
+              </option>
+            </select>
+
+            <select id="grade" name="grade" required>
+              <option value="" disabled selected>Média para aprovação</option>
+              <option value="" disabled>Escala de 0 a 10 pontos</option>
+              <option value="5">5,0 pontos</option>
+              <option value="6">6,0 pontos</option>
+              <option value="7">7,0 pontos</option>
+              <option value="" disabled>Escala de 0 a 100 pontos</option>
+              <option value="50">50 pontos</option>
+              <option value="60">60 pontos</option>
+              <option value="70">70 pontos</option>
+            </select>
+
+            <p>Sistema de avaliação: <span id="term"></span></p>
+            <div class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
+              Bimestral
+              <input type="radio" name="term-type" id="term-type-bimonthly" required />
+            </div>
+            <div class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
+              Trimestral
+              <input type="radio" name="term-type" id="term-type-trimonthly" />
+            </div>
+          </div>
+        </section>
+
+        <section id="set-classes">
+          <div id="new-classes">
+            <div class="instances-list schools">
+              <button type="button" class="selected school1" onclick="select()">
+                Escola 1
+              </button>
+            </div>
+            <br />
+            <div class="instances-list classes">
+              <button type="button" class="selected" id="class0" onclick="select()">
+                Turma 1
+              </button>
+            </div>
+            <button type="button" class="btn-add" id="add-classes" onclick="addInstance()">
+              +
+            </button>
+            <button type="button" id="del-class" onclick="delInstance()" disabled>
+              Excluir
+            </button>
+          </div>
+
+          <div class="gray-box">
+            <div id="class-code">
+              <label for="class">Turma</label>
+              <input type="text" name="class" id="class" placeholder="Número da turma" required />
+            </div>
+
+            <p>Nesta turma, eu leciono...</p>
+            <div id="new-courses">
+              <select id="course1" name="course1" required>
+                <option value="" disabled selected>Escolher disciplina</option>
+                <option value="arts">Artes</option>
+                <option value="biology">Biologia</option>
+                <option value="sciences">Ciências</option>
+                <option value="phys-ed">Educação Física</option>
+                <option value="philosophy">Filosofia</option>
+                <option value="physics">Física</option>
+                <option value="geography">Geografia</option>
+                <option value="geomethy">Geometria</option>
+                <option value="history">História</option>
+                <option value="literature">Literatura</option>
+                <option value="math">Matemática</option>
+                <option value="music">Música</option>
+                <option value="spanish-lang">Língua Espanhola</option>
+                <option value="french-lang">Língua Francesa</option>
+                <option value="english-lang">Língua Inglesa</option>
+                <option value="portuguese-lang">Língua Portuguesa</option>
+                <option value="chemistry">Química</option>
+                <option value="writing">Redação</option>
+                <option value="sociology">Sociologia</option>
+                <option value="drama">Teatro</option>
+              </select>
+
+              <div class="buttons">
+                <button type="button" class="btn-add" id="add-course">+</button>
+                <button type="button" class="btn-del" id="del-course" disabled>
+                  -
+                </button>
+              </div>
+            </div>
+
+            <div id="students-list">
+              <div>
+                <span id="student-id">Nº</span><span id="student-name">Aluno</span>
+              </div>
+
+              <div class="students" id="student1">
+                <input type="number" name="class-id-student1" id="class-id-student1" value="1" />
+                <input type="text" name="name-student1" id="name-student1" placeholder="Nome do aluno" />
+
+                <label for="course-retake-checkbox-student1" class="checkbox-container">Dependência
+                  <input type="checkbox" name="course-retake-checkbox-student1" class="course-retake-checkbox"
+                    id="course-retake-checkbox-student1" data-div-id="course-retake-student1" />
+                  <span class="checkmark"></span>
+                </label>
+
+                <div class="course-retake-list" id="course-retake-student1" hidden>
+                  <select name="course-retake-list1-student1" id="course-retake-list1-student1">
+                    <option value="" disabled selected>Dependência em...</option>
+                    <option value="arts">Artes</option>
+                    <option value="biology">Biologia</option>
+                    <option value="sciences">Ciências</option>
+                    <option value="phys-ed">Educação Física</option>
+                    <option value="philosophy">Filosofia</option>
+                    <option value="physics">Física</option>
+                    <option value="geography">Geografia</option>
+                    <option value="geomethy">Geometria</option>
+                    <option value="history">História</option>
+                    <option value="literature">Literatura</option>
+                    <option value="math">Matemática</option>
+                    <option value="music">Música</option>
+                    <option value="spanish-lang">Língua Espanhola</option>
+                    <option value="french-lang">Língua Francesa</option>
+                    <option value="english-lang">Língua Inglesa</option>
+                    <option value="portuguese-lang">Língua Portuguesa</option>
+                    <option value="chemistry">Química</option>
+                    <option value="writing">Redação</option>
+                    <option value="sociology">Sociologia</option>
+                    <option value="drama">Teatro</option>
+                  </select>
+
+                  <button type="button" class="btn-add">+</button>
+                  <button type="button" class="btn-del" disabled>
+                    -
+                  </button>
+                </div>
+              </div>
+
+              <div class="students" id="student2">
+                <input type="number" name="class-id-student2" id="class-id-student2" value="2" />
+                <input type="text" name="name-student2" id="name-student2" placeholder="Nome do aluno" />
+
+                <label for="course-retake-checkbox-student2" class="checkbox-container">Dependência
+                  <input type="checkbox" name="course-retake-checkbox-student2" class="course-retake-checkbox"
+                    id="course-retake-checkbox-student2" data-div-id="course-retake-student2" />
+                  <span class="checkmark"></span>
+                </label>
+
+                <div class="course-retake-list" id="course-retake-student2" hidden>
+                  <select name="course-retake-list1-student2" id="course-retake-list1-student2">
+                    <option value="" disabled selected>Dependência em...</option>
+                    <option value="arts">Artes</option>
+                    <option value="biology">Biologia</option>
+                    <option value="sciences">Ciências</option>
+                    <option value="phys-ed">Educação Física</option>
+                    <option value="philosophy">Filosofia</option>
+                    <option value="physics">Física</option>
+                    <option value="geography">Geografia</option>
+                    <option value="geomethy">Geometria</option>
+                    <option value="history">História</option>
+                    <option value="literature">Literatura</option>
+                    <option value="math">Matemática</option>
+                    <option value="music">Música</option>
+                    <option value="spanish-lang">Língua Espanhola</option>
+                    <option value="french-lang">Língua Francesa</option>
+                    <option value="english-lang">Língua Inglesa</option>
+                    <option value="portuguese-lang">Língua Portuguesa</option>
+                    <option value="chemistry">Química</option>
+                    <option value="writing">Redação</option>
+                    <option value="sociology">Sociologia</option>
+                    <option value="drama">Teatro</option>
+                  </select>
+
+                  <button type="button" class="btn-add">+</button>
+                  <button type="button" class="btn-del" disabled>
+                    -
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <a href="http://localhost:3000/fazer-chamada"><button type="button" class="special" id="launch">
+              Finalizar e levantar voo!
+            </button></a>
+        </section>
+      </div>
+    </form>
+  </main>
+
+  <%- include("partials/footer.ejs") %>
