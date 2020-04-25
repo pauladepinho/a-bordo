@@ -1,0 +1,82 @@
+/* TABLE-SETTINGS SECTION */
+
+div.switch-table {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+}
+
+div.switch-table button {
+    width: 100%;
+}
+
+div.switch-table button:first-child {
+    margin-bottom: .75rem;
+}
+
+div.selectors {
+    width: 30%;
+    margin-left: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+div.selectors select {
+    width: 100%;
+}
+
+div.chart {
+    width: 40%;
+}
+
+div#chart {
+    opacity: 0;
+}
+
+/* TABLE SECTION */
+
+th, td {
+    border-right: 2px solid #eaeaea;
+}
+
+th:first-child, td:first-child {
+    border-right: none;
+}
+
+th div{
+    font-size: .75rem;
+}
+
+td div {
+    height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+/* ATTENDANCE TABLE */
+
+div.attendance span {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 2.25rem;
+    
+    margin-right: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    font-weight: 700;
+}
+
+div.attendance span.present {
+    background-color: #30C1F9;
+}
+
+div.attendance span.absent {
+    background-color: #fe539b;
+}
+
+div.attendance span.late {
+    background-color: #ffcc33;
+}

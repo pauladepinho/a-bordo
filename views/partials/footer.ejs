@@ -1,14 +1,96 @@
+<!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script> -->
-<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script> -->
-
+<!-- BOOTSTRAP JS -->
 <script src="/javascripts/bootstrap.min.js"></script>
+<!-- CUSTOM JS -->
 <script src="/javascripts/interactions.js"></script>
 
+<!-- CHART CONFIG -->
+
+<!-- <script>
+   var options = {
+       series: [{
+                name: '50%',
+                data: [50]
+            }, {
+                name: '15%',
+                data: [15]
+            }, {
+            name: '20%',
+            data: [20]
+            }, {
+            name: '15%',
+            data: [15]
+            }, {
+                name: 'Total',
+                data: [0,100]
+            }],
+            chart: {
+                toolbar: {
+                    show: false
+                },
+                height: 150,
+                type: 'bar',
+                stacked: true,
+                stackType: '100%'
+            },
+            plotOptions: {
+            bar: {
+                horizontal: true,
+            },
+            },
+            title: {
+            text: 'Composição da média'
+            },
+            fill: {
+            opacity: 1
+            },
+            legend: {
+            position: 'top'
+            },
+            yaxis: {
+                show: false,
+                showAlways: false,
+                showForNullSeries: false,
+                reversed: false,
+                labels: {
+                    show: false
+                },
+                axisBorder: {
+                    show: false,
+                },
+                crosshairs: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            },
+            xaxis: {
+                showAlways: false,
+                showForNullSeries: false,
+                labels: {
+                    show: false,
+                    trim: false,
+                },
+                axisTicks: {
+                    show: false,
+                },
+                axisBorder: {
+                    show: false
+                },
+                crosshairs: {
+                    show: false
+                }
+            },
+            colors: ['#54A2EB', '#C979FB', '#FFAC60', '#41E5AA', '#30C1F9']
+    };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+</script> -->
+
+</body>
 </html>
