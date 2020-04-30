@@ -71,10 +71,10 @@
         <li><a class="nav-link active" href="#">
             Fazer chamada
           </a></li>
-        <li><a class="nav-link" href="http://localhost:3000/lancar-notas">
+        <li><a class="nav-link" href="/lancar-notas">
             Lançar notas
           </a></li>
-        <li><a class="nav-link" href="http://localhost:3000/ver-diario-de-classe">
+        <li><a class="nav-link" href="/ver-diario-de-classe">
             Diário de classe
           </a></li>
         <li><a class="nav-link" href="#">
@@ -124,7 +124,6 @@
           <tr id=<%= "student" + i %>>
             <td class="student-id" id=<%= "student-id" + i %>><%= i %></td>
             <td class="student-name" id=<%= "student-name" + i %>>João de Oliveira da Silva Santos</td>
-
             <td class="attendance-check">
               <% for (let j = 1; j <= 3; j++) { %>
               <div class="attendance-check" id=<%= "student" + i + "-period" + j %>>

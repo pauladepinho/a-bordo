@@ -33,23 +33,35 @@ function showGradebook() {
   $("#chart").css("opacity", "1");
 }
 
+let val1 = 25;
+let val2 = 17;
+let val3 = 33;
+let val4 = 25;
+
 let options = {
+  title: {
+    text: "Composição da média",
+    style: {
+      fontWeight: 400,
+      fontFamily: "Work Sans"
+    }
+  },
   series: [
     {
       name: "1ª AVAL",
-      data: [50]
+      data: [val1]
     },
     {
       name: "2ª AVAL",
-      data: [15]
+      data: [val2]
     },
     {
       name: "3ª AVAL",
-      data: [20]
+      data: [val3]
     },
     {
       name: "4ª AVAL",
-      data: [15]
+      data: [val4]
     },
     {
       name: "TOTAL",
@@ -57,26 +69,24 @@ let options = {
     }
   ],
   chart: {
+    type: "bar",
+    height: "100%",
+    stacked: true, // align bars
+    stackType: "100%", // shows percentage
+    fontFamily: "Work Sans",
+    foreColor: "black",
     toolbar: {
       show: false
-    },
-    height: 150,
-    type: "bar",
-    stacked: true,
-    stackType: "100%"
+    }
   },
   plotOptions: {
     bar: {
-      horizontal: true
+      horizontal: true,
+      barHeight: '50%'
     }
   },
-  title: {
-    text: "Composição da média",
-    style: {
-      fontSize: '10px',
-      fontWeight: "regular",
-      fontFamily: "Work Sans"
-    }
+  grid: {
+    show: false
   },
   fill: {
     opacity: 1
@@ -84,38 +94,25 @@ let options = {
   legend: {
     position: "top"
   },
+  dataLabels: {
+    enabled: true,
+    style: {
+      fontWeight: 500
+    }
+  },
   yaxis: {
-    show: false,
-    showAlways: false,
-    showForNullSeries: false,
-    reversed: false,
     labels: {
       show: false
-    },
-    axisBorder: {
-      show: false
-    },
-    crosshairs: {
-      show: false
-    },
-    tooltip: {
-      enabled: false
     }
   },
   xaxis: {
-    showAlways: false,
-    showForNullSeries: false,
     labels: {
-      show: false,
-      trim: false
-    },
-    axisTicks: {
       show: false
     },
     axisBorder: {
       show: false
     },
-    crosshairs: {
+    axisTicks: {
       show: false
     }
   },
