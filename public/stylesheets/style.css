@@ -325,7 +325,7 @@ main { margin-left: 25%; /* same as nav width */ }
 /* SETTING SCROLL SNAPING */
 form#create > div {
   height: 90vh;
-  overflow: scroll;
+  overflow: auto;
 
   scroll-snap-type: y mandatory;
 
@@ -338,7 +338,7 @@ form#create > div {
 
 main form#create div section {
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
 
   scroll-snap-stop: always;
   scroll-snap-align: center;
@@ -365,7 +365,7 @@ section div.gray-box {
   padding: 3.5rem;
 
   height: 55vh;
-  overflow: scroll;
+  overflow: auto;
   margin-bottom: 3rem;
 }
 
@@ -824,7 +824,7 @@ div.observations label { width: fit-content; }
 
 main section.table {
   margin-top: 14rem;
-  overflow: scroll;
+  overflow: auto;
 }
 
 section.table th { font-weight: normal; }
