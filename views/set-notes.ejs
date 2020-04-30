@@ -69,13 +69,13 @@
 
     <div class="navbar">
       <ul class="nav">
-        <li><a class="nav-link" href="http://localhost:3000/fazer-chamada">
+        <li><a class="nav-link" href="/fazer-chamada">
             Fazer chamada
           </a></li>
         <li><a class="nav-link active" href="#">
             Lançar notas
           </a></li>
-        <li><a class="nav-link" href="http://localhost:3000/ver-diario-de-classe">
+        <li><a class="nav-link" href="/ver-diario-de-classe">
             Diário de classe
           </a></li>
         <li><a class="nav-link" href="#">
@@ -89,76 +89,65 @@
   </nav>
 
   <main id="grade">
-    <div class="select">
-      <select name="evaluation" id="evaluation" onchange="enableOption()">
-        <option value="1" selected>1ª Avaliação</option>
-        <option value="2">2ª Avaliação</option>
-        <option value="3">3ª Avaliação</option>
-        <option value="4">4ª Avaliação</option>
-      </select>
-      <select name="max" id="max" disabled>
-        <option value="2">Valor máximo:</option>
-      </select>
-    </div>
+    <section class="table-settings">
 
-    <table class="compose">
-      <thead>
-        <th class="title">
-          Compor média:
-        </th>
-        <tr>
-          <th scope="col">1ª AVAL.</th>
-          <th scope="col">2ª AVAL.</th>
-          <th scope="col">3ª AVAL.</th>
-          <th scope="col">4ª AVAL.</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><label for="av1"></label><input id="av1" type="number" max="10" min="0" step="0.5" placeholder="Peso">
-          </td>
-          <td><label for="av2"></label><input id="av2" type="number" max="10" min="0" step="0.5" placeholder="Peso"
-              disabled></td>
-          <td><label for="av3"></label><input id="av3" type="number" max="10" min="0" step="0.5" placeholder="Peso"
-              disabled></td>
-          <td><label for="av4"></label><input id="av4" type="number" max="10" min="0" step="0.5" placeholder="Peso"
-              disabled></td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="selectors">
+        <p>Quantidade de avaliações <br> neste trimestre:</p>
+        <select name="qnt-bars" id="qnt-bars">
+          <option value="1">1 avaliação</option>
+          <option value="2">2 avaliações</option>
+          <option value="3">3 avaliações</option>
+          <option value="4">4 avaliações</option>
+          <option value="5">5 avaliações</option>
+          <option value="6">6 avaliações</option>
+        </select>
+      </div>
 
+      <div class="chart">
+        <div id="instructions">
+          <p>Valor de cada avaliação:</p>
+          <div id="disclaimer"></div>
+        </div>
+        <div id="input-fields"></div>
+        <div id="container"></div>
+        <div id="disclaimer"></div>
+      </div>
 
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Nº</th>
-          <th scope="col">ALUNO</th>
-          <th scope="col">1ª AVAL.</th>
-          <th scope="col">2ª AVAL.</th>
-          <th scope="col">3ª AVAL.</th>
-          <th scope="col">4ª AVAL.</th>
-          <th scope="col">MÉDIA</th>
-          <th scope="col">NÃO AVALIADO</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (let i = 1; i <= 10; i++) { %>
-        <tr>
-          <th scope="row"><%= i %></th>
-          <td>João de Oliveira da Silva Santos</td>
-          <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-          <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-          <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-          <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-          <td>00</td>
-          <td><label for="not-evaluated" class="checkbox-container">
-              <input type="checkbox" name="not-evaluated" id="not-evaluated" />
-              <span class="checkmark"></span>
-            </label></td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
+    </section>
+
+    <section class="table">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th class="student-id">Nº</th>
+            <th class="student-name">ALUNO</th>
+            <th>AVAL. 1</th>
+            <th>AVAL. 2</th>
+            <th>AVAL. 3</th>
+            <th>AVAL. 4</th>
+            <th class="not-evaluated">N/A</th>
+            <th class="avg">MÉDIA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 1; i <= 10; i++) { %>
+          <tr>
+            <td class="student-id"><%= i %></th>
+            <td class="student-name">João de Oliveira da Silva Santos</td>
+            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
+            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
+            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
+            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
+            <td class="not-evaluated"><label for="not-evaluated" class="checkbox-container">
+                <input type="checkbox" name="not-evaluated" id="not-evaluated" />
+                <span class="checkmark"></span>
+              </label></td>
+            <td class="avg">0.0</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </section>
   </main>
 
   <%- include("partials/footer.ejs") %>
