@@ -31,12 +31,21 @@ header {
   justify-content: space-between;
 }
 
-h1 {
+div#logo {
+  display: flex;
+  align-items: center;
+}
+
+h1.logo {
   color: #ffffff;
   font-size: 2.25rem;
   font-weight: 700;
   margin-top: 8px;
+
+  margin-left: .75rem;
 }
+
+img.logo { height: 2.25rem; }
 
 /* HEADER TOP RIGHT MENU */
 div#top-right-menu {
@@ -318,6 +327,7 @@ a.active {
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
   color: #ffffff;
 }
+
 /* END OF NAVIGATION BAR STYLES */
 
 main { margin-left: 25%; /* same as nav width */ }
