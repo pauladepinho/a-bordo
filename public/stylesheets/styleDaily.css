@@ -6,13 +6,8 @@ div.switch-table {
     flex-direction: column;
 }
 
-div.switch-table button {
-    width: 100%;
-}
-
-div.switch-table button:first-child {
-    margin-bottom: .75rem;
-}
+div.switch-table button { width: 100%; }
+div.switch-table button:first-child { margin-bottom: .75rem; }
 
 div.selectors {
     width: 30%;
@@ -21,39 +16,28 @@ div.selectors {
     flex-direction: column;
 }
 
-div.selectors select {
-    width: 100%;
-}
+div.selectors select { width: 100%; }
 
-div.chart {
-    width: 40%;
-}
-
-div#chart {
-    opacity: 0;
-}
+div.chart { width: 40%; }
+div#chart { opacity: 0; }
 
 /* TABLE SECTION */
 
-th, td {
-    border-right: 2px solid #eaeaea;
-}
+/* CREATE VERTICAL LINES */
+th, td { border-right: 2px solid #eaeaea; }
+th:first-child, td:first-child { border-right: none; }
 
-th:first-child, td:first-child {
-    border-right: none;
-}
+/* GRADE TABLE */
 
-th div{
-    font-size: .75rem;
-}
+th div{ font-size: .75rem; }
 
-td div {
+/* ATTENDANCE TABLE */
+
+td div.attendance {
     height: 36px;
     display: flex;
     align-items: center;
 }
-
-/* ATTENDANCE TABLE */
 
 div.attendance span {
     min-width: 2.25rem;
@@ -69,14 +53,6 @@ div.attendance span {
     font-weight: 700;
 }
 
-div.attendance span.present {
-    background-color: #30C1F9;
-}
-
-div.attendance span.absent {
-    background-color: #fe539b;
-}
-
-div.attendance span.late {
-    background-color: #ffcc33;
-}
+div.attendance span.present { background-color: #30C1F9; }
+div.attendance span.absent { background-color: #fe539b; }
+div.attendance span.late { background-color: #ffcc33; }

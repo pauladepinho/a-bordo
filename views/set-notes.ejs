@@ -89,11 +89,13 @@
     </div>
   </nav>
 
+  <% var students = [{id: 0, name: "Andeilso Alves", number: 1}, {id: 1, name: "Patrícia Felix", number: 2}, {id: 2, name: "Paula de Pinho Monteiro", number: 3}, {id: 3, name: "João de Oliveira da Silva Santos", number: 7}];
+    var evaluations = [{id: 0, student_id: null, grade: null}, {id: 1, student_id: null, grade: null}, {id: 2, student_id: null, grade: null}, {id: 3, student_id: null, grade: null}, {id: 4, student_id: null, grade: null}, {id: 6, student_id: null, grade: null}]; %>
   <main id="grade">
     <section class="table-settings">
 
       <div class="selectors">
-        <p>Quantidade de avaliações <br> neste trimestre:</p>
+        <p>Quantidade de avaliações <br> no <span id="#this-term">1º</span> trimestre:</p>
         <select name="qnt-bars" id="qnt-bars">
           <option value="1">1 avaliação</option>
           <option value="2">2 avaliações</option>
@@ -111,41 +113,60 @@
         </div>
         <div id="input-fields"></div>
         <div id="container"></div>
-        <div id="disclaimer"></div>
       </div>
-
     </section>
 
     <section class="table">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="student-id">Nº</th>
+            <th class="student-number">Nº</th>
             <th class="student-name">ALUNO</th>
-            <th>AVAL. 1</th>
-            <th>AVAL. 2</th>
-            <th>AVAL. 3</th>
-            <th>AVAL. 4</th>
-            <th class="not-evaluated">N/A</th>
-            <th class="avg">MÉDIA</th>
+
+            <th class="evaluation evaluation1"><label class="text blue">AVAL. 1</label></th>
+            <th class="evaluation evaluation2" hidden><label class="text pink">AVAL. 2</label></th>
+            <th class="evaluation evaluation3" hidden><label class="text yellow">AVAL. 3</label></th>
+            <th class="evaluation evaluation4" hidden><label class="text violet">AVAL. 4</label></th>
+            <th class="evaluation evaluation5" hidden><label class="text orange">AVAL. 5</label></th>
+            <th class="evaluation evaluation6" hidden><label class="text green">AVAL. 6</label></th>
+
+            <th class="not-evaluated" id="not-evaluated-header">N/A</th>
+            <th class="term-final-grade">MÉDIA</th>
           </tr>
         </thead>
         <tbody>
-          <% for (let i = 1; i <= 10; i++) { %>
+          <% students.forEach( (student) => { %>
           <tr>
-            <td class="student-id"><%= i %></th>
-            <td class="student-name">João de Oliveira da Silva Santos</td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-            <td class="not-evaluated"><label for="not-evaluated" class="checkbox-container">
+            <td class="student-number" id=<%= "student-number" + student.id %>><%= student.number %></th>
+            <td class="student-name" id=<%= "student-name" + student.id %>><%= student.name %></td>
+
+            <td class="evaluation evaluation1">
+              <input type="number" name=<%= "grade-student" + student.id + "-evaluation1" %> max="10" min="0" step="0.5"
+                placeholder="Nota"></td>
+            <td class="evaluation evaluation2" hidden>
+              <input type="number" name=<%= "grade-student" + student.id + "-evaluation2" %> max="10" min="0" step="0.5"
+                placeholder="Nota" disabled></td>
+            <td class="evaluation evaluation3" hidden>
+              <input type="number" name=<%= "grade-student" + student.id + "-evaluation3" %> max="10" min="0" step="0.5"
+                placeholder="Nota" disabled></td>
+            <td class="evaluation evaluation4" hidden>
+              <input type="number" name=<%= "grade-student" + student.id + "-evaluation4" %> max="10" min="0" step="0.5"
+                placeholder="Nota" disabled></td>
+            <td class="evaluation evaluation5" hidden>
+              <input type="number" name=<%= "grade-student" + student.id + "-evaluation5" %> max="10" min="0" step="0.5"
+                placeholder="Nota" disabled></td>
+            <td class="evaluation evaluation6" hidden>
+              <input type="number" name=<%= "grade-student" + student.id + "-evaluation6" %> max="10" min="0" step="0.5"
+                placeholder="Nota" disabled></td>
+
+            <td class="not-evaluated" id=<%= "student" + student.id + "not-evaluated-check" %>><label
+                for="not-evaluated" class="checkbox-container">
                 <input type="checkbox" name="not-evaluated" id="not-evaluated" />
                 <span class="checkmark"></span>
               </label></td>
-            <td class="avg">0.0</td>
+            <td class="term-final-grade" id=<%= "student" + student.id + "-term-final-grade" %>>0.0</td>
           </tr>
-          <% } %>
+          <% }) %>
         </tbody>
       </table>
     </section>

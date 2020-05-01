@@ -10,9 +10,12 @@ router.get("/fazer-chamada", (req, res) => {
   res.render("attendance");
 });
 
-router.get('/lancar-notas', function (req, res) {
+router.get('/lancar-notas', (req, res) => {
   res.render('set-notes');
 });
+router.post('/lançar-notas', (req, res) => {
+
+})
 
 router.get('/ver-diario-de-classe', (req, res) => {
   res.render('daily');
