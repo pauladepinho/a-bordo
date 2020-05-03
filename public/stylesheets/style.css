@@ -665,7 +665,7 @@ select {
   border-radius: 10px;
 
   margin-bottom: 12px;
-  padding: 0 60px 0 24px;
+  padding: 0 3rem 0 1rem;
 
   cursor: pointer;
 
@@ -698,7 +698,7 @@ textarea {
   border: 1px solid;
   border-radius: 10px;
 
-  padding: 0 24px;
+  padding: 0 1rem;
   font-size: 16px;
 }
 
