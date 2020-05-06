@@ -115,16 +115,16 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="student-id">Nº</th>
+            <th class="student-number">Nº</th>
             <th class="student-name">ALUNO</th>
 
-            <th></th>
+            <th class="attendance-check"></th>
           </tr>
         </thead>
         <tbody>
           <% for (let i = 1; i <= 50; i++) { %>
           <tr id=<%= "student" + i %>>
-            <td class="student-id" id=<%= "student-id" + i %>><%= i %></td>
+            <td class="student-number" id=<%= "student-number" + i %>><%= i %></td>
             <td class="student-name" id=<%= "student-name" + i %>>João de Oliveira da Silva Santos</td>
             <td class="attendance-check">
               <% for (let j = 1; j <= 3; j++) { %>

@@ -665,7 +665,7 @@ select {
   border-radius: 10px;
 
   margin-bottom: 12px;
-  padding: 0 60px 0 24px;
+  padding: 0 3rem 0 1rem;
 
   cursor: pointer;
 
@@ -698,7 +698,7 @@ textarea {
   border: 1px solid;
   border-radius: 10px;
 
-  padding: 0 24px;
+  padding: 0 1rem;
   font-size: 16px;
 }
 
@@ -830,7 +830,7 @@ div.observations textarea {
 
 div.observations label { width: fit-content; }
 
-/* SECTION TABLE */
+/* GENERAL SECTION TABLE */
 
 main section.table {
   margin-top: 14rem;
@@ -840,7 +840,7 @@ main section.table {
 section.table th { font-weight: normal; }
 section.table td { vertical-align: middle; }
  
-th.student-id, td.student-id {
+th.student-number, td.student-number {
   padding-left: 3rem;
   width: 6rem;
   min-width: 6rem;
@@ -851,7 +851,7 @@ th.student-name, td.student-name {
   min-width: 18rem;
 }
 
-/* SETTING #ATTENDANCE CHECKBOXES CONTAINERS */
+/* SETTING TAKE ATTENDANCE CHECKBOXES CONTAINERS */
 
 td.attendance-check { display: flex; }
 
@@ -860,7 +860,7 @@ td div.attendance-check {
   display: flex;
 }
 
-/* STYLING CHECKBOXES FOR TAKING ATTENDANCE */
+/* STYLING TAKE ATTENDANCE CHECKBOXES */
 
 div.attendance-check label {
   cursor: pointer;
@@ -890,24 +890,37 @@ div.attendance-check label input {
   cursor: pointer;
 }
 
-/* SETTING #GRADE "AVERAGE" FIELDS AND "NOT EVALUATED" CHECKBOXES */
+/* SETTING GRADE INPUTS */
+
+#grade td.evaluation, #grade th.evaluation {
+  width: 7rem;
+}
+
+#grade td.evaluation:last-of-type, #grade th.evaluation:last-of-type {
+  width: 8rem;
+}
+
+/* SETTING #GRADE "NOT EVALUATED" CHECKBOXES */
 
 td.not-evaluated {
-  width: 4rem;
+  width: 4.5rem;
+  height: 4.5rem;
   position: relative;
 }
 
-td.not-evaluated label { 
+td.not-evaluated label {
   position: absolute;
-  top: 24px; 
+  top: 1.5rem;
 }
+
+/* SETTING "AVERAGE" FIELDS */
 
 td.avg {
-  width: 7rem;
   font-weight: 600;
+  padding: 1.5rem;
 }
 
-/* SETTING CHART */
+/* SETTING GRADE CHART */
 
 main#grade section.table-settings .selectors { width: 25%; }
 
@@ -915,12 +928,12 @@ main#grade section.table-settings select { width: 100%; }
 
 .chart { width: 75%; }
 
-#instructions {
-  display: flex;
-}
+#instructions { display: flex; }
 
-main#grade .table-settings p {
-  margin-bottom: .5rem;
+main#grade div.selectors p { margin-bottom: .5rem; }
+
+div#instructions p {
+  margin-bottom: 0;
 }
 
 #disclaimer {
@@ -934,14 +947,29 @@ main#grade .table-settings p {
   display: flex;
 }
 
-#input-fields label {
-  width: 20%;
+#input-fields div {
+  width: 100%;
+
+  margin: 0 .5rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-#input-fields input { width: 95%; }
+#input-fields label.text { margin-bottom: .5rem; }
+
+.text { font-weight: 600; }
+
+.text.blue { color: #54A2EB; }
+.text.pink { color: #ff92aa; }
+.text.yellow { color: #fae155; }
+.text.violet { color: #C979FB; }
+.text.orange { color: #FFAC60; }
+.text.green { color: #41E5AA; }
+
+
+#input-fields input {
+  width: 100%;
+}
 
 #container {
   width: 100%;
@@ -965,11 +993,9 @@ main#grade .table-settings p {
   border-bottom-right-radius: 12px; 
 }
 
-#blue-bar { background-color: #54A2EB; }
-#pink-bar { background-color: #ff92aa; }
-#yellow-bar { background-color: #fae155; }
-#violet-bar { background-color: #C979FB; }
-#orange-bar { background-color: #FFAC60; }
-#green-bar { background-color: #41E5AA; }
-
-
+.bar.blue { background-color: #54A2EB; }
+.bar.pink { background-color: #ff92aa; }
+.bar.yellow { background-color: #fae155; }
+.bar.violet { background-color: #C979FB; }
+.bar.orange { background-color: #FFAC60; }
+.bar.green { background-color: #41E5AA; }

@@ -89,18 +89,42 @@
     </div>
   </nav>
 
+  <% 
+    var students = [
+      {id: 0, name: "Andeilso Alves", number: 1}, 
+      {id: 1, name: "Patrícia Felix", number: 2}, 
+      {id: 2, name: "Paula de Pinho Monteiro", number: 3}, 
+      {id: 3, name: "João de Oliveira da Silva Santos", number: 7}
+    ];
+    var evaluations = [
+      { number: 1, date: null, maxGrade: 10, grade: 5, title: "AVAL. 1", color: "#54A2EB", student_id: null },
+      { number: 2, date: null, maxGrade: 10, grade: 2, title: "AVAL. 2", color: "#ff92aa", student_id: null },      
+      { number: 3, date: null, maxGrade: 10, grade: 3, title: "AVAL. 3", color: "#fae155", student_id: null },      
+      { number: 4, date: null, maxGrade: 10, grade: 10, title: "AVAL. 4", color: "#C979FB", student_id: null }, 
+      { number: 5, date: null, maxGrade: 10, grade: null, title: "AVAL. 5", color: "#FFAC60", student_id: null }, 
+      { number: 6, date: null, maxGrade: 10, grade: null, title: "AVAL. 6", color: "#41E5AA", student_id: null }
+    ]; 
+  %>
+
+  <% 
+    let possibleTotalPoints = 0;
+    evaluations.forEach(evaluation => {
+      possibleTotalPoints += Number(evaluation.maxGrade);
+    });
+  %>
+
   <main id="grade">
     <section class="table-settings">
-
       <div class="selectors">
-        <p>Quantidade de avaliações <br> neste trimestre:</p>
-        <select name="qnt-bars" id="qnt-bars">
-          <option value="1">1 avaliação</option>
-          <option value="2">2 avaliações</option>
-          <option value="3">3 avaliações</option>
-          <option value="4">4 avaliações</option>
-          <option value="5">5 avaliações</option>
-          <option value="6">6 avaliações</option>
+        <select name="evaluation" id="qnt-bars">
+          <option value="" selected disabled>Selecione uma avaliação</option>
+          <% evaluations.forEach(evaluation => { %>
+          <option value=<%= evaluation.number %>>
+            <%= evaluation.title %>
+          </option>
+          <% }) %>
+          <option value="+">Adicionar uma nova avaliação</option>
+          <option value="-" disabled>Excluir avaliação selecionada</option>
         </select>
       </div>
 
@@ -109,43 +133,81 @@
           <p>Valor de cada avaliação:</p>
           <div id="disclaimer"></div>
         </div>
-        <div id="input-fields"></div>
-        <div id="container"></div>
-        <div id="disclaimer"></div>
+        <div id="input-fields">
+          <% evaluations.forEach(evaluation => { %>
+          <div>
+            <label class="title" style=<%= "color:" + evaluation.color %>> <%= evaluation.title %>
+            </label>
+            <input class="<%= 'max-grade evaluation' + evaluation.number %>" type='number'
+              value="<%= evaluation.maxGrade.toFixed(1) %>" step='0.5' min='0' max='10'
+              name=<%= "max-grade-evaluation" + evaluation.number %>>
+          </div>
+          <% }) %>
+        </div>
+        <div id="container">
+          <% evaluations.forEach(evaluation => { %>
+          <div class="<%= 'bar evaluation' + evaluation.number %>"
+            style="<%= 'width:' + Math.round(100 * (evaluation.maxGrade / possibleTotalPoints)) + '%; background-color:' + evaluation.color %>">
+          </div>
+          <% }) %>
+        </div>
       </div>
-
     </section>
 
     <section class="table">
       <table class="table table-striped">
         <thead>
           <tr>
-            <th class="student-id">Nº</th>
+            <th class="student-number">Nº</th>
             <th class="student-name">ALUNO</th>
-            <th>AVAL. 1</th>
-            <th>AVAL. 2</th>
-            <th>AVAL. 3</th>
-            <th>AVAL. 4</th>
-            <th class="not-evaluated">N/A</th>
-            <th class="avg">MÉDIA</th>
+
+            <% evaluations.forEach(evaluation => { %>
+            <th class="<%= 'evaluation evaluation' + evaluation.id %>"><label class="title"
+                style=<%= 'color:' + evaluation.color %>><%= evaluation.title %></label></th>
+            <% }) %>
+
+            <th class="not-evaluated" id="not-evaluated-header">N/A</th>
+            <th class="term-final-grade">MÉDIA</th>
           </tr>
         </thead>
         <tbody>
-          <% for (let i = 1; i <= 10; i++) { %>
+          <% students.forEach(student => { %>
           <tr>
-            <td class="student-id"><%= i %></th>
-            <td class="student-name">João de Oliveira da Silva Santos</td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-            <td><input type="number" max="10" min="0" step="0.5" placeholder="Nota" disabled></td>
-            <td class="not-evaluated"><label for="not-evaluated" class="checkbox-container">
+            <td class="student-number"><%= student.number %></th>
+            <td class="student-name"><%= student.name %></td>
+
+
+            <% evaluations.forEach(evaluation => { 
+              this.student_id = student.id;
+            %>
+
+            <td class="<%= 'evaluation evaluation' + evaluation.id %>" %>>
+              <input type="number" name=<%= "student" + student.id + "-grades[]" %> max="10" min="0" step="0.5"
+                value="<%= evaluation.grade %>" placeholder="Nota" disabled></td>
+
+            <% }) %>
+
+
+            <td class="not-evaluated" id=<%= "student" + student.id + "not-evaluated-check" %>><label
+                for="not-evaluated" class="checkbox-container">
                 <input type="checkbox" name="not-evaluated" id="not-evaluated" />
                 <span class="checkmark"></span>
               </label></td>
-            <td class="avg">0.0</td>
+
+            <% 
+              let totalPoints = 0;
+              let gradedEvaluations = 0;
+              evaluations.forEach(evaluation => {
+                if(evaluation.grade != null) {
+                  totalPoints += Number(evaluation.grade);
+                  gradedEvaluations++;
+                }
+              });
+            %>
+            <td class="term-final-grade" id=<%= "student" + student.id + "-term-final-grade" %>>
+              <%= Math.round(totalPoints / gradedEvaluations).toFixed(1) %> </td>
           </tr>
-          <% } %>
+          <% }) %>
         </tbody>
       </table>
     </section>

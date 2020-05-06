@@ -98,6 +98,30 @@ function checkAttendance() {
 }
 $(".attendance-check > label > input").click(checkAttendance);
 
+function changeBarWidth() {
+  if ($(this).val() > 0) {
+    console.log("changing...");
+    // RESET FRACTION DENOMINATOR
+    totalPoints = 0;
+    $("input.max-grade").each(function () {
+      totalPoints += Number($(this).val());
+    });
+    // REDEFINE BARS WIDTHS
+    let i = 1;
+    $("input.max-grade").each(function () {
+      let width = Number($(this).val()) / totalPoints;
+      $(".bar.evaluation" + i).animate({ width: `${width * 100}%` }, 500);
+      i++;
+    });
+  } else {
+    $("#disclaimer").prepend("<p>Digite um número maior que zero!</p>");
+    $("#disclaimer p").fadeOut(4000, function () {
+      $(this).remove();
+    });
+  }
+}
+$(document).on("change", "input.max-grade", changeBarWidth);
+
 function enableOption() {
   let option = document.getElementById("evaluation").value;
 
