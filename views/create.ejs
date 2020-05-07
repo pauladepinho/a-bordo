@@ -103,14 +103,24 @@
             </button>
           </div>
           <div class="gray-box">
-            <select id="school" name="school[0][name]" required>
-              <option value="" disabled selected>Nome da escola</option>
+            <div class="school-location">
+              <select name="" id="">
+                <option disabled selected>UF</option>
+              </select>
+
+              <select name="" id="">
+                <option disabled selected>Município</option>
+              </select>
+            </div>
+
+            <select name="school[0][name]" required>
+              <option disabled selected>Nome da escola</option>
               <option value="0">Colégio Pedro II</option>
               <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
               </option>
             </select>
 
-            <select id="grade" name="school[0][passingGrade]" required>
+            <select name="school[0][passingGrade]" required>
               <option disabled selected>Média para aprovação</option>
               <option disabled>Escala de 0 a 10 pontos</option>
               <option value="5">5,0 pontos</option>
@@ -123,14 +133,14 @@
             </select>
 
             <p>Sistema de avaliação: <span id="term"></span></p>
-            <div class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
+            <label class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
               Bimestral
               <input type="radio" name="school[0][term-type]" required />
-            </div>
-            <div class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
+            </label>
+            <label class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
               Trimestral
               <input type="radio" name="school[0][term-type]" />
-            </div>
+            </label>
           </div>
         </section>
 
