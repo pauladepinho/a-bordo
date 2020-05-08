@@ -134,13 +134,13 @@ main#login {
   justify-content: center;
 }
 
-main#login form {
+main#login #login-box {
   width: 60%;
   margin-top: 10%;
 }
 
 /* SELECT USER TEACHER VS GUARDIAN */
-form div#user-type {
+div#user-type {
   border-bottom: 12px solid #f95f2f;
 
   display: flex;
@@ -148,7 +148,7 @@ form div#user-type {
   justify-content: space-between;
 }
 
-form div#user-type label {
+div#user-type label {
   background-color: #b6ecfd;
   box-shadow: none;
   border-top-left-radius: 12px;
@@ -168,16 +168,16 @@ form div#user-type label {
   cursor: pointer;
 }
 
-form div#user-type label.selected {background-color: #f95f2f; }
-form div#user-type label:hover { background-color: #f95f2f; }
+div#user-type label.selected {background-color: #f95f2f; }
+div#user-type label:hover { background-color: #f95f2f; }
 
-form div#user-type input {
+div#user-type input {
   opacity: 0;
   position: absolute;
 }
 /* END OF SELECT USER TEACHER VS GUARDIAN */
 
-form div#main-content {
+div#main-content {
   background-color: #30c1f9;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
@@ -190,16 +190,16 @@ form div#main-content {
   justify-content: space-between;
 }
 
-form div#main-content input[type=email],
-form div#main-content input[type=password],
-form div#main-content input[type=text],
-form div#main-content button  {
+div#main-content input[type=email],
+div#main-content input[type=password],
+div#main-content input[type=text],
+div#main-content button  {
   height: 48px;
   width: 100%;
   margin-bottom: 12px;
 }
 
-form div#main-content div#remember { margin-bottom: 24px; }
+div#main-content div#remember { margin-bottom: 24px; }
 
 div#remember {
   display: flex;
@@ -389,8 +389,7 @@ section#set-user > div {
 }
 
 section#set-user div input { width: inherit; }
-
-span.gap { min-width: 12px; }
+section#set-user div *:first-child { margin-right: .75rem; }
 
 section#set-user div.add-pic {
   max-width: 11rem;

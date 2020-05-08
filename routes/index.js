@@ -6,6 +6,11 @@ router.get('/', function (req, res, next) {
   res.render('index');
 });
 
+
+router.get("/cadastrar", (req, res) => {
+  req.query.usuario == "professor" ? res.render("register-teacher") : res.render("register-guardian");
+})
+
 router.get("/fazer-chamada", (req, res) => {
   res.render("attendance");
 });
@@ -13,9 +18,6 @@ router.get("/fazer-chamada", (req, res) => {
 router.get('/lancar-notas', (req, res) => {
   res.render('set-notes');
 });
-router.post('/lançar-notas', (req, res) => {
-
-})
 
 router.get('/ver-diario-de-classe', (req, res) => {
   res.render('daily');
