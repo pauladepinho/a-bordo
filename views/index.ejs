@@ -31,19 +31,24 @@
 
   <main id="login">
     <div id="login-box">
+
       <form action="/cadastrar" method="GET" id="signup">
         <div id="user-type">
-          <label for="teacher" id="teacher-radio-container" class="user-type selected" onclick="selectTeacher()">Sou
-            PROFESSOR<input type="radio" name="usuario" value="professor" id="teacher" checked /></label>
-          <label for="guardian" id="guardian-radio-container" class="user-type" onclick="selectGuardian()">Sou
-            RESPONSÁVEL<input type="radio" name="usuario" value="responsavel" id="guardian" /></label>
+          <label for="teacher" class="selected">Sou PROFESSOR<input type="radio" name="usuario" value="professor"
+              id="teacher" checked /></label>
+          <label for="guardian">Sou RESPONSÁVEL<input type="radio" name="usuario" value="responsavel"
+              id="guardian" /></label>
         </div>
       </form>
-      <form action="/" method="POST" autocomplete="on">
-        <input type="radio" name="usuario" value="professor" id="teacher" checked hidden />
-        <input type="radio" name="usuario" value="responsavel" id="guardian" hidden />
+
+      <form action="/login" method="POST" autocomplete="on">
+
+        <input type="radio" name="userType" value="teacher" id="teacher-login" checked hidden />
+        <input type="radio" name="userType" value="guardian" id="guardian-login" hidden />
+
         <div id="main-content">
-          <input type="email" placeholder="Meu e-mail" required />
+          <input type="email" name="email" placeholder="Meu e-mail" required />
+
           <div class="password">
             <input type="password" name="password" id="password" placeholder="Minha senha" required />
             <div class="eye-icon" id="eye-icon" onclick="toogleVisibility()"></div>
