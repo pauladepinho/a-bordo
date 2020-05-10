@@ -1,0 +1,74 @@
+<%- include("partials/header.ejs", { title: "aBordo - Fazer chamada" }) %>
+</head>
+
+<body>
+    <header>
+        <div id="logo">
+            <img class="logo" src="../images/airplane.svg" alt="">
+            <h1 class="logo">aBordo</h1>
+        </div>
+        <div id="top-right-menu">
+            <div id="notifications">
+                <img src="../images/sino.png" alt=" ">
+            </div>
+
+            <div id="user-options">
+                <img src="../images/professor.png" alt="">
+                <span>
+                    <p>Nome do professor</p>
+                    <p>RESPONSÁVEL</p>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="navbar select">
+            <select name="school" id="school" required>
+                <option disabled selected>Aluno</option>
+                <option value="0">123 de Oliveira 4</option>
+            </select>
+
+            <select name="school" id="school" required>
+                <option disabled selected>Ano letivo</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+            </select>
+
+            <select name="school" id="school" required>
+                <option disabled selected>Escola</option>
+                <option value="0">Colégio Pedro II</option>
+                <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá</option>
+            </select>
+
+            <select name="class" id="class" required>
+                <option value="" disabled selected>Turma</option>
+                <option value="2223">Turma 2223</option>
+                <option value="1121">Turma 1121</option>
+            </select>
+
+            <select name="term" id="term" required>
+                <option value="all" selected>Todos os trimestres</option>
+                <option value="1">1º Trimestre</option>
+                <option value="2">2º Trimestre</option>
+                <option value="3">3º Trimestre</option>
+            </select>
+        </div>
+
+        <div class="navbar">
+            <ul class="nav">
+                <li><a class="nav-link" href="#">
+                        Contatar responsáveis
+                    </a></li>
+                <li><a class="nav-link" href="#">
+                        Justificar faltas
+                    </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="">
+        Home do responsável/Boletim escolar
+    </main>
+
+    <%- include("partials/footer.ejs") %>
