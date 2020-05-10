@@ -8,18 +8,20 @@ router.get('/', IndexController.showLogin);
 router.get('/login', IndexController.showLogin);
 router.post("/login", IndexController.login);
 
+router.get("/professor/home", VerifyLoggedInUser, IndexController.showTeacherHome);
+router.get("/responsavel/home", VerifyLoggedInUser, IndexController.showGuardianHome);
+
 router.get("/cadastrar", IndexController.showRegistrationForm);
-// OPTION 1
-// router.post("/cadastrar", IndexController.registerUser);
-// OPTION 2
 router.post("/professor/cadastrar", IndexController.registerTeacher);
 router.post("/responsavel/cadastrar", IndexController.registerGuardian);
 
-// OPTION 1
-// router.get("/home", VerifyLoggedInUser, IndexController.showHome);
-// OPTION 2
-router.get("/professor/home", VerifyLoggedInUser, IndexController.showTeacherHome)
-router.get("/responsavel/home", VerifyLoggedInUser, IndexController.showGuardianHome)
+router.get("/professor/atualizar", IndexController.showTeacherUpdateForm);
+router.put("/professor/atualizar", IndexController.updateTeacher);
+router.get("/responsavel/atualizar", IndexController.showGuardianUpdateForm);
+router.put("/responsavel/atualizar", IndexController.updateGuardian);
+
+router.delete("/professor/deletar", IndexController.deleteTeacher);
+router.delete("/responsavel/deletar", IndexController.deleteGuardian);
 
 router.get("/fazer-chamada", IndexController.showAttendanceSheet);
 router.post("/fazer-chamada", IndexController.recordAttendances);
