@@ -33,7 +33,7 @@
   </nav>
 
   <main id="register-teacher">
-    <form id="create" action="/register" method="POST" enctype="multipart/form-data" autocomplete="on">
+    <form id="create" action="/professor/cadastrar" method="POST" enctype="multipart/form-data" autocomplete="on">
       <div data-spy="scroll" data-target=".navbar" data-offset="450">
         <section id="set-user">
           <div class="add-pic">
@@ -41,28 +41,27 @@
               <img src="../images/silhouette.jpg" id="user-pic" width="176px" height="176px" />
               <div id="text-on-hover"><span>Nova imagem</span></div>
             </label>
-            <input type="file" name="pic-file" id="pic-file" onchange="addPic()" />
+            <input type="file" name="picture" id="pic-file" onchange="addPic()" />
           </div>
 
           <div id="full-name">
-            <input type="text" name="name" id="name" placeholder="Nome" required />
-            <span class="gap"></span>
-            <input type="text" name="surname" id="surname" placeholder="Sobrenome" required />
+            <input type="text" name="forename" id="name" placeholder="Nome" />
+
+            <input type="text" name="surname" id="surname" placeholder="Sobrenome" />
           </div>
           <div id="contact-info">
-            <input type="email" name="email" id="email" placeholder="E-mail" required />
-            <span class="gap"></span>
-            <input type="tel" name="phone" id="phone" placeholder="Celular" required />
+            <input type="email" name="email" id="email" placeholder="E-mail" />
+
+            <input type="text" name="phone" id="phone" placeholder="Celular" />
           </div>
           <div id="add-password">
             <div class="password">
-              <input type="password" name="password" id="password" placeholder="Senha" required />
+              <input type="password" name="password" id="password" placeholder="Senha" />
               <div class="eye-icon" id="eye-icon-1" onclick="toogleVisibility()"></div>
             </div>
-            <span class="gap"></span>
+
             <div class="password">
-              <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirme a senha"
-                required />
+              <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirme a senha" />
               <div class="eye-icon" id="eye-icon-2" onclick="toogleVisibility()"></div>
             </div>
           </div>
@@ -113,14 +112,14 @@
               </select>
             </div>
 
-            <select name="school[0][name]" required>
+            <select name="school[0][name]">
               <option disabled selected>Nome da escola</option>
               <option value="0">Colégio Pedro II</option>
               <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
               </option>
             </select>
 
-            <select name="school[0][passingGrade]" required>
+            <select name="school[0][passingGrade]">
               <option disabled selected>Média para aprovação</option>
               <option disabled>Escala de 0 a 10 pontos</option>
               <option value="5">5,0 pontos</option>
@@ -135,7 +134,7 @@
             <p>Sistema de avaliação: <span id="term"></span></p>
             <label class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
               Bimestral
-              <input type="radio" name="school[0][term-type]" required />
+              <input type="radio" name="school[0][term-type]" />
             </label>
             <label class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
               Trimestral
@@ -168,12 +167,12 @@
           <div class="gray-box">
             <div id="class-code">
               <label for="class">Turma</label>
-              <input type="text" name="class" id="class" placeholder="Número da turma" required />
+              <input type="text" name="class" id="class" placeholder="Número da turma" />
             </div>
 
             <p>Nesta turma, eu leciono...</p>
             <div id="new-courses">
-              <select id="course1" name="course1" required>
+              <select id="course1" name="course1">
                 <option value="" disabled selected>Escolher disciplina</option>
                 <option value="arts">Artes</option>
                 <option value="biology">Biologia</option>
@@ -297,9 +296,7 @@
             </div>
           </div>
 
-          <a href="/fazer-chamada"><button type="button" class="special" id="launch">
-              Finalizar e levantar voo!
-            </button></a>
+          <button type="submit" class="special">Finalizar e levantar voo!</button>
         </section>
       </div>
     </form>
