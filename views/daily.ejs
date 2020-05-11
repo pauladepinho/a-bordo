@@ -10,8 +10,10 @@
 
 <body>
   <header>
-    <h1>aBordo</h1>
-
+    <div id="logo">
+      <img class="logo" src="../images/airplane.svg" alt="">
+      <h1 class="logo">aBordo</h1>
+    </div>
     <div id="top-right-menu">
       <div id="notifications">
         <img src="../images/sino.png" alt=" ">
@@ -133,10 +135,10 @@
     </section>
 
     <section class="table">
-      <table class="table table-striped" id="attendance-table">
+      <table class="table-striped" id="attendance-table">
         <thead>
           <tr>
-            <th class="student-id">Nº</th>
+            <th class="student-number">Nº</th>
             <th class="student-name">ALUNO</th>
 
             <th>Seg. 04/05</th>
@@ -154,7 +156,7 @@
         <tbody>
           <% for (let i = 1; i <= 10; i++) { %>
           <tr>
-            <td class="student-id"><%= i %></td>
+            <td class="student-number"><%= i %></td>
             <td class="student-name">João de Oliveira da Silva Santos</td>
             <% for (let j = 1; j <= 10; j++) { %>
             <td>
@@ -174,7 +176,7 @@
       <table class="table table-striped" id="grades-table" hidden>
         <thead>
           <tr>
-            <th class="student-id">Nº</th>
+            <th class="student-number">Nº</th>
             <th class="student-name">ALUNO</th>
 
             <th>1ª AVAL.<div>max. 10,0 pts</div>
@@ -192,7 +194,7 @@
         <tbody>
           <% for (let i = 1; i <= 10; i++) { %>
           <tr>
-            <td class="student-id"><%= i %></td>
+            <td class="student-number"><%= i %></td>
             <td class="student-name">João de Oliveira da Silva Santos</td>
             <% for (let j = 1; j <= 5; j++) { %>
             <td>

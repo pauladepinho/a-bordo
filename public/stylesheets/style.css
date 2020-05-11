@@ -31,12 +31,21 @@ header {
   justify-content: space-between;
 }
 
-h1 {
+div#logo {
+  display: flex;
+  align-items: center;
+}
+
+h1.logo {
   color: #ffffff;
   font-size: 2.25rem;
   font-weight: 700;
   margin-top: 8px;
+
+  margin-left: .75rem;
 }
+
+img.logo { height: 2.25rem; }
 
 /* HEADER TOP RIGHT MENU */
 div#top-right-menu {
@@ -125,13 +134,13 @@ main#login {
   justify-content: center;
 }
 
-main#login form {
+main#login #login-box {
   width: 60%;
   margin-top: 10%;
 }
 
 /* SELECT USER TEACHER VS GUARDIAN */
-form div#user-type {
+div#user-type {
   border-bottom: 12px solid #f95f2f;
 
   display: flex;
@@ -139,7 +148,7 @@ form div#user-type {
   justify-content: space-between;
 }
 
-form div#user-type label {
+div#user-type label {
   background-color: #b6ecfd;
   box-shadow: none;
   border-top-left-radius: 12px;
@@ -159,16 +168,16 @@ form div#user-type label {
   cursor: pointer;
 }
 
-form div#user-type label.selected {background-color: #f95f2f; }
-form div#user-type label:hover { background-color: #f95f2f; }
+div#user-type label.selected {background-color: #f95f2f; }
+div#user-type label:hover { background-color: #f95f2f; }
 
-form div#user-type input {
+div#user-type input {
   opacity: 0;
   position: absolute;
 }
 /* END OF SELECT USER TEACHER VS GUARDIAN */
 
-form div#main-content {
+div#main-content {
   background-color: #30c1f9;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
@@ -181,16 +190,16 @@ form div#main-content {
   justify-content: space-between;
 }
 
-form div#main-content input[type=email],
-form div#main-content input[type=password],
-form div#main-content input[type=text],
-form div#main-content button  {
+div#main-content input[type=email],
+div#main-content input[type=password],
+div#main-content input[type=text],
+div#main-content button  {
   height: 48px;
   width: 100%;
   margin-bottom: 12px;
 }
 
-form div#main-content div#remember { margin-bottom: 24px; }
+div#main-content div#remember { margin-bottom: 24px; }
 
 div#remember {
   display: flex;
@@ -318,6 +327,7 @@ a.active {
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
   color: #ffffff;
 }
+
 /* END OF NAVIGATION BAR STYLES */
 
 main { margin-left: 25%; /* same as nav width */ }
@@ -345,7 +355,7 @@ main form#create div section {
   flex: none;
   /* END OF SETTING SCROLL SNAPING */
 
-  padding: 4.5rem 3.5rem;
+  padding: 4.5rem 3.5rem 0 3.5rem;
 }
 
 form#create div section#set-classes { padding-top: 1rem; }
@@ -369,7 +379,7 @@ section div.gray-box {
   margin-bottom: 3rem;
 }
 
-section#set-schools div.gray-box { overflow: visible; }
+section#set-schools div.gray-box { height: 60vh; }
 
 /* SETTING USER */
 section#set-user > div {
@@ -379,8 +389,7 @@ section#set-user > div {
 }
 
 section#set-user div input { width: inherit; }
-
-span.gap { min-width: 12px; }
+section#set-user div *:first-child { margin-right: .75rem; }
 
 section#set-user div.add-pic {
   max-width: 11rem;
@@ -523,6 +532,8 @@ button#del-class[disabled] {
 /* END OF BUTTONS FOR ADDING NEW SCHOOLS AND CLASSES */
 
 /* SCHOOLS SETTING */
+div.school-location { display: flex; }
+.school-location select:first-child { margin-right: .75rem; }
 #set-schools select { width: 100%; }
 #set-schools p { margin-top: 12px; }
 #set-schools span#term { font-weight: 700; }
@@ -655,7 +666,7 @@ select {
   border-radius: 10px;
 
   margin-bottom: 12px;
-  padding: 0 60px 0 24px;
+  padding: 0 3rem 0 1rem;
 
   cursor: pointer;
 
@@ -688,7 +699,7 @@ textarea {
   border: 1px solid;
   border-radius: 10px;
 
-  padding: 0 24px;
+  padding: 0 1rem;
   font-size: 16px;
 }
 
@@ -820,7 +831,7 @@ div.observations textarea {
 
 div.observations label { width: fit-content; }
 
-/* SECTION TABLE */
+/* GENERAL SECTION TABLE */
 
 main section.table {
   margin-top: 14rem;
@@ -830,7 +841,7 @@ main section.table {
 section.table th { font-weight: normal; }
 section.table td { vertical-align: middle; }
  
-th.student-id, td.student-id {
+th.student-number, td.student-number {
   padding-left: 3rem;
   width: 6rem;
   min-width: 6rem;
@@ -841,7 +852,7 @@ th.student-name, td.student-name {
   min-width: 18rem;
 }
 
-/* SETTING #ATTENDANCE CHECKBOXES CONTAINERS */
+/* SETTING TAKE ATTENDANCE CHECKBOXES CONTAINERS */
 
 td.attendance-check { display: flex; }
 
@@ -850,7 +861,7 @@ td div.attendance-check {
   display: flex;
 }
 
-/* STYLING CHECKBOXES FOR TAKING ATTENDANCE */
+/* STYLING TAKE ATTENDANCE CHECKBOXES */
 
 div.attendance-check label {
   cursor: pointer;
@@ -880,24 +891,37 @@ div.attendance-check label input {
   cursor: pointer;
 }
 
-/* SETTING #GRADE "AVERAGE" FIELDS AND "NOT EVALUATED" CHECKBOXES */
+/* SETTING GRADE INPUTS */
+
+#grade td.evaluation, #grade th.evaluation {
+  width: 7rem;
+}
+
+#grade td.evaluation:last-of-type, #grade th.evaluation:last-of-type {
+  width: 8rem;
+}
+
+/* SETTING #GRADE "NOT EVALUATED" CHECKBOXES */
 
 td.not-evaluated {
-  width: 4rem;
+  width: 4.5rem;
+  height: 4.5rem;
   position: relative;
 }
 
-td.not-evaluated label { 
+td.not-evaluated label {
   position: absolute;
-  top: 24px; 
+  top: 1.5rem;
 }
+
+/* SETTING "AVERAGE" FIELDS */
 
 td.avg {
-  width: 7rem;
   font-weight: 600;
+  padding: 1.5rem;
 }
 
-/* SETTING CHART */
+/* SETTING GRADE CHART */
 
 main#grade section.table-settings .selectors { width: 25%; }
 
@@ -905,12 +929,12 @@ main#grade section.table-settings select { width: 100%; }
 
 .chart { width: 75%; }
 
-#instructions {
-  display: flex;
-}
+#instructions { display: flex; }
 
-main#grade .table-settings p {
-  margin-bottom: .5rem;
+main#grade div.selectors p { margin-bottom: .5rem; }
+
+div#instructions p {
+  margin-bottom: 0;
 }
 
 #disclaimer {
@@ -924,14 +948,29 @@ main#grade .table-settings p {
   display: flex;
 }
 
-#input-fields label {
-  width: 20%;
+#input-fields div {
+  width: 100%;
+
+  margin: 0 .5rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-#input-fields input { width: 95%; }
+#input-fields label.text { margin-bottom: .5rem; }
+
+.text { font-weight: 600; }
+
+.text.blue { color: #54A2EB; }
+.text.pink { color: #ff92aa; }
+.text.yellow { color: #fae155; }
+.text.violet { color: #C979FB; }
+.text.orange { color: #FFAC60; }
+.text.green { color: #41E5AA; }
+
+
+#input-fields input {
+  width: 100%;
+}
 
 #container {
   width: 100%;
@@ -955,11 +994,9 @@ main#grade .table-settings p {
   border-bottom-right-radius: 12px; 
 }
 
-#blue-bar { background-color: #54A2EB; }
-#pink-bar { background-color: #ff92aa; }
-#yellow-bar { background-color: #fae155; }
-#violet-bar { background-color: #C979FB; }
-#orange-bar { background-color: #FFAC60; }
-#green-bar { background-color: #41E5AA; }
-
-
+.bar.blue { background-color: #54A2EB; }
+.bar.pink { background-color: #ff92aa; }
+.bar.yellow { background-color: #fae155; }
+.bar.violet { background-color: #C979FB; }
+.bar.orange { background-color: #FFAC60; }
+.bar.green { background-color: #41E5AA; }
