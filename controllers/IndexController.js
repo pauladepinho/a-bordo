@@ -138,6 +138,18 @@ module.exports = {
         //     }
         // );
     },
+    deleteGuardian: async (req, res) => {
+        // RETRIEVE USER ID,
+        // AND DELETE ONLY GUARDIAN USER TYPE
+        // OR DELETE USER FROM DB
+        // const result = await User.destroy(
+        //     {
+        //         where: {
+
+        //         }
+        //     }
+        // );
+    },
     showGradeBook: (req, res) => {
         return res.render("set-notes");
     },
