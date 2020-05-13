@@ -2,29 +2,33 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users_schools', { 
+    return queryInterface.createTable('users_schools', {
       id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true, 
+        type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
-        autoIncrement: true
-      }, 
+        autoIncrement: true,
+        primaryKey: true
+      },
       users_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: 'users',
-          key: 'id'
-        }
+          model: "users",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
       schools_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: 'schools',
-          key: 'id'
-        }
-      },
+          model: "schools",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+      }
     });
   },
   down: (queryInterface, Sequelize) => {

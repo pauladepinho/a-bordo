@@ -2,41 +2,59 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('attendances', { 
+    return queryInterface.createTable('attendances', {
       id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true, 
+        type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
-        autoIncrement: true
-      }, 
+        autoIncrement: true,
+        primaryKey: true
+      },
+      type: {
+        type: Sequelize.STRING(8),
+        allowNull: false
+      },
+      evaluation_day: {
+        type: Sequelize.TINYINT,
+        allowNull: false
+      },
+      date: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      academic_term: {
+        type: Sequelize.INT(1),
+        allowNull: false
+      },
       users_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: 'users',
-          key: 'id'
-        }
+          model: "users",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
       classes_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: 'classes_courses',
-          key: 'classes_id'
-        }
+          model: "classes",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
       courses_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false ,
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false,
         references: {
-          model: 'classes_courses',
-          key: 'courses_id'
-        }      
-      },
-      type: Sequelize.STRING(45),
-      evaluation_day: Sequelize.INTEGER(1),
-      date: Sequelize.DATE,
-      academic_term: Sequelize.INTEGER,
+          model: "courses",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+      }
     });
   },
   down: (queryInterface, Sequelize) => {
