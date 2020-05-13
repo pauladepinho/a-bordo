@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false
       },
       academic_term: {
-        type: Sequelize.INT(1),
+        type: Sequelize.INTEGER(1),
         allowNull: false
       },
       users_id: {
