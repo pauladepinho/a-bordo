@@ -13,18 +13,6 @@ module.exports = {
         type: Sequelize.STRING(8),
         allowNull: false
       },
-      evaluation_day: {
-        type: Sequelize.TINYINT,
-        allowNull: false
-      },
-      date: {
-        type: Sequelize.DATE,
-        allowNull: false
-      },
-      academic_term: {
-        type: Sequelize.INTEGER(1),
-        allowNull: false
-      },
       users_id: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
@@ -35,21 +23,11 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
       },
-      classes_id: {
+      lessons_id: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: "classes",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE"
-      },
-      courses_id: {
-        type: Sequelize.INTEGER.UNSIGNED,
-        allowNull: false,
-        references: {
-          model: "courses",
+          model: "lessons",
           key: "id",
         },
         onUpdate: "CASCADE",

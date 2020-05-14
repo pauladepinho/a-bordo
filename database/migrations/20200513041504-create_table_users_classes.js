@@ -10,8 +10,7 @@ module.exports = {
         primaryKey: true
       },
       student_number: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+        type: Sequelize.INTEGER
       },
       users_id: {
         type: Sequelize.INTEGER.UNSIGNED,

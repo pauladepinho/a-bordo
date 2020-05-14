@@ -9,8 +9,9 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
-      type: {
-        type: Sequelize.STRING(20)
+      evaluation_number: {
+        type: Sequelize.INTEGER(1),
+        allowNull: false
       },
       max_grade: {
         type: Sequelize.DECIMAL(5, 2),
@@ -24,23 +25,15 @@ module.exports = {
         type: Sequelize.STRING(7),
         allowNull: false
       },
-      date: {
-        type: Sequelize.DATE,
+      type: {
+        type: Sequelize.STRING(20),
         allowNull: false
       },
-      academic_term: {
-        type: Sequelize.INTEGER(1),
-        allowNull: false
-      },
-      evaluation_number: {
-        type: Sequelize.INTEGER(1),
-        allowNull: false
-      },
-      classes_courses_id: {
+      lessons_id: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: "classes_courses",
+          model: "lessons",
           key: "id",
         },
         onUpdate: "CASCADE",

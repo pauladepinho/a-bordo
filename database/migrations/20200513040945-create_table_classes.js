@@ -13,9 +13,30 @@ module.exports = {
         type: Sequelize.STRING(10),
         allowNull: false
       },
-      number_of_students: Sequelize.INTEGER.UNSIGNED,
-      number_of_courses: Sequelize.INTEGER.UNSIGNED,
-      number_of_teachers: Sequelize.INTEGER.UNSIGNED,
+      level_of_education: {
+        type: Sequelize.STRING(25),
+        allowNull: false
+      },
+      grade: {
+        type: Sequelize.INTEGER(2),
+        allowNull: false
+      },
+      year: {
+        type: Sequelize.STRING(4),
+        allowNull: false
+      },
+      number_of_students: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false
+      },
+      number_of_subjects: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false
+      },
+      number_of_teachers: {
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false
+      },
       schools_id: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
