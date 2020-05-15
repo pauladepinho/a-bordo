@@ -1,26 +1,26 @@
 module.exports = (sequelize, DataTypes) => {
-    let user = sequelize.define(
+    let User = sequelize.define(
         "user",
         {
             forename: {
-                type: Sequelize.STRING(50),
+                type: DataTypes.STRING(50),
                 allowNull: false
             },
             surname: {
-                type: Sequelize.STRING(50),
+                type: DataTypes.STRING(50),
                 allowNull: false
             },
-            phone: Sequelize.STRING(17),
+            phone: DataTypes.STRING(17),
             email: {
-                type: Sequelize.STRING(50),
+                type: DataTypes.STRING(50),
                 allowNull: false,
                 unique: true
             },
             password: {
-                type: Sequelize.STRING(256),
+                type: DataTypes.STRING(256),
                 allowNull: false
             },
-            picture: Sequelize.BLOB
+            picture: DataTypes.BLOB
         },
         {
             tableName: "users",
@@ -28,38 +28,38 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    user.associate = (models) => {
-        user.belongsToMany(models.userTypes, {
+    User.associate = (models) => {
+        User.belongsToMany(models.userTypes, {
             foreignKey: "userTypes_id",
             as: "userTypes",
             through: models.users_userTypes
         });
-        user.belongsToMany(models.schools, {
+        User.belongsToMany(models.schools, {
             foreignKey: "schools_id",
             as: "schools",
             through: models.users_schools
         });
-        user.belongsToMany(models.subjects, {
+        User.belongsToMany(models.subjects, {
             foreignKey: "subjects_id",
             as: "subjects",
             through: models.users_subjects
         });
-        user.belongsToMany(models.classes, {
+        User.belongsToMany(models.classes, {
             foreignKey: "classes_id",
             as: "classes",
             through: models.users_classes
         });
-        user.belongsToMany(models.lessons, {
+        User.belongsToMany(models.lessons, {
             foreignKey: "lessons_id",
             as: "lessons",
             through: models.attendances
         });
-        user.belongsToMany(models.evaluations, {
+        User.belongsToMany(models.evaluations, {
             foreignKey: "evaluations_id",
             as: "evaluations",
             through: models.evaluations_users
         });
     };
 
-    return user;
+    return User;
 };

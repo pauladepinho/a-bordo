@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-    let user_subject = sequelize.define(
+    let User_Subject = sequelize.define(
         "user_subject",
         {
             users_id: {
-                type: Sequelize.INTEGER.UNSIGNED,
+                type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: false,
                 // references: {
                 //     model: "users",
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
                 onDelete: "CASCADE"
             },
             subjects_id: {
-                type: Sequelize.INTEGER.UNSIGNED,
+                type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: false,
                 // references: {
                 //     model: "subjects",
@@ -29,5 +29,5 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    return user_subject;
+    return User_Subject;
 };

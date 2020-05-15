@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-    let userType = sequelize.define(
+    let UserType = sequelize.define(
         "userType",
         {
             type: {
-                type: Sequelize.STRING(20),
+                type: DataTypes.STRING(20),
                 allowNull: false,
                 unique: true
             }
@@ -14,13 +14,13 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    userType.associate = (models) => {
-        userType.belongsToMany(models.users, {
+    UserType.associate = (models) => {
+        UserType.belongsToMany(models.users, {
             foreignKey: "users_id",
             as: "users",
             through: models.users_userTypes
         });
     };
 
-    return userType;
+    return UserType;
 };

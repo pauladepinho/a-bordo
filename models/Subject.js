@@ -1,9 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-    let subject = sequelize.define(
+    let Subject = sequelize.define(
         "subject",
         {
             name: {
-                type: Sequelize.STRING(50),
+                type: DataTypes.STRING(50),
                 allowNull: false,
                 unique: true
             }
@@ -14,21 +14,21 @@ module.exports = (sequelize, DataTypes) => {
         }
     );
 
-    subject.associate = (models) => {
-        subject.belongsToMany(models.users, {
+    Subject.associate = (models) => {
+        Subject.belongsToMany(models.users, {
             foreignKey: "users_id",
             as: "users",
             through: models.users_subjects
         });
-        subject.belongsToMany(models.classes, {
+        Subject.belongsToMany(models.classes, {
             foreignKey: "classes_id",
             as: "classes",
             through: models.lessons
         });
-        subject.hasMany(models.lessons, {
+        Subject.hasMany(models.lessons, {
             as: "lessons"
         });
     };
 
-    return subject;
+    return Subject;
 };
