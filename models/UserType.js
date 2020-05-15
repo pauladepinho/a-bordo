@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     UserType.associate = (models) => {
-        UserType.belongsToMany(models.users, {
+        UserType.belongsToMany(models.user, {
             foreignKey: "users_id",
             as: "users",
-            through: models.users_userTypes
+            through: models.user_userType
         });
     };
 

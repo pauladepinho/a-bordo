@@ -43,22 +43,22 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Lesson.associate = (models) => {
-        Lesson.belongsToMany(models.users, {
+        Lesson.belongsToMany(models.user, {
             foreignKey: "users_id",
             as: "users",
-            through: models.attendances
+            through: models.attendance
         });
-        Lesson.hasMany(models.attendances, {
+        Lesson.hasMany(models.attendance, {
             as: "attendances"
         });
-        Lesson.hasMany(models.evaluations, {
+        Lesson.hasMany(models.evaluation, {
             as: "evaluations"
         });
-        Lesson.belongsTo(models.subjects, {
+        Lesson.belongsTo(models.subject, {
             foreignKey: "subjects_id",
             as: "subjects"
         });
-        Lesson.belongsTo(models.classes, {
+        Lesson.belongsTo(models.class, {
             foreignKey: "classes_id",
             as: "classes"
         });

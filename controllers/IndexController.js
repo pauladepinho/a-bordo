@@ -1,3 +1,4 @@
+const { User, UserType, User_UserType, School, User_School, Subject, User_Subject, Class, User_Class, Lesson, Attendance, Evaluation, Evaluation_User } = require("../models");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 

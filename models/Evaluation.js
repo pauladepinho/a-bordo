@@ -40,15 +40,15 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Evaluation.associate = (models) => {
-        Evaluation.belongsToMany(models.users, {
+        Evaluation.belongsToMany(models.user, {
             foreignKey: "users_id",
             as: "users",
-            through: models.evaluations_users
+            through: models.evaluation_user
         });
-        Evaluation.hasMany(models.evaluations_users, {
+        Evaluation.hasMany(models.evaluation_user, {
             as: "student_grades"
         });
-        Evaluation.belongsTo(models.lessons, {
+        Evaluation.belongsTo(models.lesson, {
             foreignKey: "lessons_id",
             as: "lessons"
         });

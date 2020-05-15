@@ -33,11 +33,11 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     User_Class.associate = (models) => {
-        User_Class.belongsTo(models.users, {
+        User_Class.belongsTo(models.user, {
             foreignKey: "users_id",
             as: "users"
         });
-        User_Class.belongsTo(models.classes, {
+        User_Class.belongsTo(models.class, {
             foreignKey: "classes_id",
             as: "classes"
         });

@@ -29,43 +29,43 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     User.associate = (models) => {
-        User.belongsToMany(models.userTypes, {
+        User.belongsToMany(models.userType, {
             foreignKey: "userTypes_id",
             as: "userTypes",
-            through: models.users_userTypes
+            through: models.user_userType
         });
-        User.belongsToMany(models.schools, {
+        User.belongsToMany(models.school, {
             foreignKey: "schools_id",
             as: "schools",
-            through: models.users_schools
+            through: models.user_school
         });
-        User.belongsToMany(models.subjects, {
+        User.belongsToMany(models.subject, {
             foreignKey: "subjects_id",
             as: "subjects",
-            through: models.users_subjects
+            through: models.user_subject
         });
-        User.belongsToMany(models.classes, {
+        User.belongsToMany(models.class, {
             foreignKey: "classes_id",
             as: "classes",
-            through: models.users_classes
+            through: models.user_class
         });
-        User.hasMany(models.users_classes, {
+        User.hasMany(models.user_class, {
             as: "student_numbers"
         });
-        User.belongsToMany(models.lessons, {
+        User.belongsToMany(models.lesson, {
             foreignKey: "lessons_id",
             as: "lessons",
-            through: models.attendances
+            through: models.attendance
         });
-        User.hasMany(models.attendances, {
+        User.hasMany(models.attendance, {
             as: "attendances"
         });
-        User.belongsToMany(models.evaluations, {
+        User.belongsToMany(models.evaluation, {
             foreignKey: "evaluations_id",
             as: "evaluations",
-            through: models.evaluations_users
+            through: models.evaluation_user
         });
-        User.hasMany(models.evaluations_users, {
+        User.hasMany(models.evaluation_user, {
             as: "student_grades"
         });
     };

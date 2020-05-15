@@ -38,11 +38,11 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Evaluation_User.associate = (models) => {
-        Evaluation_User.belongsTo(models.users, {
+        Evaluation_User.belongsTo(models.user, {
             foreignKey: "users_id",
             as: "users"
         });
-        Evaluation_User.belongsTo(models.evaluations, {
+        Evaluation_User.belongsTo(models.evaluation, {
             foreignKey: "evaluations_id",
             as: "evaluations"
         });

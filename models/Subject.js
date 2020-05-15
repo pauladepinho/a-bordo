@@ -15,17 +15,17 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Subject.associate = (models) => {
-        Subject.belongsToMany(models.users, {
+        Subject.belongsToMany(models.user, {
             foreignKey: "users_id",
             as: "users",
-            through: models.users_subjects
+            through: models.user_subject
         });
-        Subject.belongsToMany(models.classes, {
+        Subject.belongsToMany(models.class, {
             foreignKey: "classes_id",
             as: "classes",
-            through: models.lessons
+            through: models.lesson
         });
-        Subject.hasMany(models.lessons, {
+        Subject.hasMany(models.lesson, {
             as: "lessons"
         });
     };
