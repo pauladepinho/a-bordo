@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let UserType = sequelize.define(
-        "userType",
+        "UserType",
         {
             type: {
                 type: DataTypes.STRING(20),
@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     UserType.associate = (models) => {
-        UserType.belongsToMany(models.user, {
+        UserType.belongsToMany(models.User, {
             foreignKey: "users_id",
             as: "users",
-            through: models.user_userType
+            through: models.User_UserType
         });
     };
 

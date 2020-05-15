@@ -9,29 +9,31 @@ module.exports = {
     login: async (req, res) => {
         // READ INFOS FROM REQ.BODY
         let { userType, email, password } = req.body;
-        return userType == "teacher" ? res.render("teacher-home") : res.render("guardian-home");
-
-        // TRY AND LOAD A USER FROM DB WHOSE EMAIL == REQ.BODY.EMAIL
-        const user = await User.findOne({ where: { email } });
-        // IF THAT USER DOES NOT EXIST IN DB, REDIRECT TO LOGIN
-        if (!user) {
-            res.redirect("/login?error=1");
-        }
-        // IF USER EXISTS, COMPARE REQ.BODY.PASSWORD WITH USER PASSWORD IN DB
-        // AND IF THEY DON'T MATCH, REDIRECT TO LOGIN ALSO
-        if (!bcrypt.compareSync(password, user.password)) {
-            res.redirect("/login?error=1");
-        }
-        // IF PASSWORDS MATCH, SET A SESSION FOR THE USER
-        req.session.user = user;
-        // AND FINALLY, MANAGE REDIRECTIONS
-        // IF REQ.BODY.USERTYPE MATCHES THE ONE FROM DB,
-        // THEN SHOW REQ.BODY.USERTYPE HOME
-        // ELSE, IGNORE REQ.BODY.USERTYPE AND SHOW THE ONE THAT EXISTS IN DB
-        // USERTYPE == TEACHER ?
-        res.redirect("/professor/home");
-        // USERTYPE == GUARDIAN ?
-        res.redirect("/responsavel/home");
+        // return userType == "teacher" ? res.render("teacher-home") : res.render("guardian-home");
+        let user = await User.findAll();
+        return console.log(user);
+        // // TRY AND LOAD A USER FROM DB WHOSE EMAIL == REQ.BODY.EMAIL
+        // const user = await User.findOne({ where: { email } });
+        // // IF THAT USER DOES NOT EXIST IN DB, REDIRECT TO LOGIN
+        // if (!user) {
+        //     res.redirect("/login?error=1");
+        // }
+        // // IF USER EXISTS, COMPARE REQ.BODY.PASSWORD WITH USER PASSWORD IN DB
+        // // AND IF THEY DON'T MATCH, REDIRECT TO LOGIN ALSO
+        // if (!bcrypt.compareSync(password, user.password)) {
+        //     res.redirect("/login?error=1");
+        // }
+        // // IF PASSWORDS MATCH, SET A SESSION FOR THE USER
+        // req.session.user = user;
+        // // AND FINALLY, MANAGE REDIRECTIONS
+        // // IF REQ.BODY.USERTYPE MATCHES THE ONE FROM DB,
+        // // THEN SHOW REQ.BODY.USERTYPE HOME
+        // console.log(user.userTypes.type)
+        // // ELSE, IGNORE REQ.BODY.USERTYPE AND SHOW THE ONE THAT EXISTS IN DB
+        // // USERTYPE == TEACHER ?
+        // res.redirect("/professor/home");
+        // // USERTYPE == GUARDIAN ?
+        // res.redirect("/responsavel/home");
     },
     showTeacherHome: async (req, res) => {
         // GET TEACHER DATA FROM DB,

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let Evaluation_User = sequelize.define(
-        "evaluation_user",
+        "Evaluation_User",
         {
             evaluated: {
                 type: DataTypes.TINYINT,
@@ -38,11 +38,11 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Evaluation_User.associate = (models) => {
-        Evaluation_User.belongsTo(models.user, {
+        Evaluation_User.belongsTo(models.User, {
             foreignKey: "users_id",
             as: "users"
         });
-        Evaluation_User.belongsTo(models.evaluation, {
+        Evaluation_User.belongsTo(models.Evaluation, {
             foreignKey: "evaluations_id",
             as: "evaluations"
         });

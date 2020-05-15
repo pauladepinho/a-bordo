@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let School = sequelize.define(
-        "school",
+        "School",
         {
             name: {
                 type: DataTypes.STRING(70),
@@ -30,12 +30,12 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     School.associate = (models) => {
-        School.belongsToMany(models.user, {
+        School.belongsToMany(models.User, {
             foreignKey: "users_id",
             as: "users",
-            through: models.user_school
+            through: models.User_School
         });
-        School.hasMany(models.class, {
+        School.hasMany(models.Class, {
             as: "classes"
         });
     };

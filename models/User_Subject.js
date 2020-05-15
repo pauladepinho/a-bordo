@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let User_Subject = sequelize.define(
-        "user_subject",
+        "User_Subject",
         {
             users_id: {
                 type: DataTypes.INTEGER.UNSIGNED,

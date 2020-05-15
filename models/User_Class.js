@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let User_Class = sequelize.define(
-        "user_class",
+        "User_Class",
         {
             student_number: {
                 type: DataTypes.INTEGER
@@ -33,11 +33,11 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     User_Class.associate = (models) => {
-        User_Class.belongsTo(models.user, {
+        User_Class.belongsTo(models.User, {
             foreignKey: "users_id",
             as: "users"
         });
-        User_Class.belongsTo(models.class, {
+        User_Class.belongsTo(models.Class, {
             foreignKey: "classes_id",
             as: "classes"
         });

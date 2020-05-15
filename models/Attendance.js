@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let Attendance = sequelize.define(
-        "attendance",
+        "Attendance",
         {
             type: {
                 type: DataTypes.STRING(8),
@@ -34,11 +34,11 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Attendance.associate = (models) => {
-        Attendance.belongsTo(models.user, {
+        Attendance.belongsTo(models.User, {
             foreignKey: "users_id",
             as: "users"
         });
-        Attendance.belongsTo(models.lesson, {
+        Attendance.belongsTo(models.Lesson, {
             foreignKey: "lessons_id",
             as: "lessons"
         });

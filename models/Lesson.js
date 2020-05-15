@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let Lesson = sequelize.define(
-        "lesson",
+        "Lesson",
         {
             date: {
                 type: DataTypes.DATEONLY,
@@ -43,22 +43,22 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Lesson.associate = (models) => {
-        Lesson.belongsToMany(models.user, {
+        Lesson.belongsToMany(models.User, {
             foreignKey: "users_id",
             as: "users",
-            through: models.attendance
+            through: models.Attendance
         });
-        Lesson.hasMany(models.attendance, {
+        Lesson.hasMany(models.Attendance, {
             as: "attendances"
         });
-        Lesson.hasMany(models.evaluation, {
+        Lesson.hasMany(models.Evaluation, {
             as: "evaluations"
         });
-        Lesson.belongsTo(models.subject, {
+        Lesson.belongsTo(models.Subject, {
             foreignKey: "subjects_id",
             as: "subjects"
         });
-        Lesson.belongsTo(models.class, {
+        Lesson.belongsTo(models.Class, {
             foreignKey: "classes_id",
             as: "classes"
         });

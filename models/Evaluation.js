@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let Evaluation = sequelize.define(
-        "evaluation",
+        "Evaluation",
         {
             evaluation_number: {
                 type: DataTypes.INTEGER(1),
@@ -40,15 +40,15 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Evaluation.associate = (models) => {
-        Evaluation.belongsToMany(models.user, {
+        Evaluation.belongsToMany(models.User, {
             foreignKey: "users_id",
             as: "users",
-            through: models.evaluation_user
+            through: models.Evaluation_User
         });
-        Evaluation.hasMany(models.evaluation_user, {
+        Evaluation.hasMany(models.Evaluation_User, {
             as: "student_grades"
         });
-        Evaluation.belongsTo(models.lesson, {
+        Evaluation.belongsTo(models.Lesson, {
             foreignKey: "lessons_id",
             as: "lessons"
         });

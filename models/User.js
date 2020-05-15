@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let User = sequelize.define(
-        "user",
+        "User",
         {
             forename: {
                 type: DataTypes.STRING(50),
@@ -29,43 +29,43 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     User.associate = (models) => {
-        User.belongsToMany(models.userType, {
+        User.belongsToMany(models.UserType, {
             foreignKey: "userTypes_id",
             as: "userTypes",
-            through: models.user_userType
+            through: models.User_UserType
         });
-        User.belongsToMany(models.school, {
+        User.belongsToMany(models.School, {
             foreignKey: "schools_id",
             as: "schools",
-            through: models.user_school
+            through: models.User_School
         });
-        User.belongsToMany(models.subject, {
+        User.belongsToMany(models.Subject, {
             foreignKey: "subjects_id",
             as: "subjects",
-            through: models.user_subject
+            through: models.User_Subject
         });
-        User.belongsToMany(models.class, {
+        User.belongsToMany(models.Class, {
             foreignKey: "classes_id",
             as: "classes",
-            through: models.user_class
+            through: models.User_Class
         });
-        User.hasMany(models.user_class, {
+        User.hasMany(models.User_Class, {
             as: "student_numbers"
         });
-        User.belongsToMany(models.lesson, {
+        User.belongsToMany(models.Lesson, {
             foreignKey: "lessons_id",
             as: "lessons",
-            through: models.attendance
+            through: models.Attendance
         });
-        User.hasMany(models.attendance, {
+        User.hasMany(models.Attendance, {
             as: "attendances"
         });
-        User.belongsToMany(models.evaluation, {
+        User.belongsToMany(models.Evaluation, {
             foreignKey: "evaluations_id",
             as: "evaluations",
-            through: models.evaluation_user
+            through: models.Evaluation_User
         });
-        User.hasMany(models.evaluation_user, {
+        User.hasMany(models.Evaluation_User, {
             as: "student_grades"
         });
     };

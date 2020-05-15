@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     let Subject = sequelize.define(
-        "subject",
+        "Subject",
         {
             name: {
                 type: DataTypes.STRING(50),
@@ -15,17 +15,17 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Subject.associate = (models) => {
-        Subject.belongsToMany(models.user, {
+        Subject.belongsToMany(models.User, {
             foreignKey: "users_id",
             as: "users",
-            through: models.user_subject
+            through: models.User_Subject
         });
-        Subject.belongsToMany(models.class, {
+        Subject.belongsToMany(models.Class, {
             foreignKey: "classes_id",
             as: "classes",
-            through: models.lesson
+            through: models.Lesson
         });
-        Subject.hasMany(models.lesson, {
+        Subject.hasMany(models.Lesson, {
             as: "lessons"
         });
     };
