@@ -11,9 +11,7 @@ module.exports = (sequelize, DataTypes) => {
                 // references: {
                 //     model: "users",
                 //     key: "id",
-                // },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // }
             },
             classes_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
@@ -21,9 +19,7 @@ module.exports = (sequelize, DataTypes) => {
                 // references: {
                 //     model: "userTypes",
                 //     key: "id",
-                // },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // }
             }
         },
         {
@@ -34,12 +30,12 @@ module.exports = (sequelize, DataTypes) => {
 
     User_Class.associate = (models) => {
         User_Class.belongsTo(models.User, {
-            foreignKey: "users_id",
-            as: "users"
+            as: "users",
+            foreignKey: "users_id"
         });
         User_Class.belongsTo(models.Class, {
-            foreignKey: "classes_id",
-            as: "classes"
+            as: "classes",
+            foreignKey: "classes_id"
         });
     };
 

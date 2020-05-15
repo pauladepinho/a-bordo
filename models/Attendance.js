@@ -9,22 +9,18 @@ module.exports = (sequelize, DataTypes) => {
             users_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: false,
-                references: {
-                    model: "users",
-                    key: "id",
-                },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // references: {
+                //     model: "users",
+                //     key: "id",
+                // }
             },
             lessons_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: false,
-                references: {
-                    model: "lessons",
-                    key: "id",
-                },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // references: {
+                //     model: "lessons",
+                //     key: "id",
+                // }
             }
         },
         {
@@ -35,12 +31,12 @@ module.exports = (sequelize, DataTypes) => {
 
     Attendance.associate = (models) => {
         Attendance.belongsTo(models.User, {
-            foreignKey: "users_id",
-            as: "users"
+            as: "users",
+            foreignKey: "users_id"
         });
         Attendance.belongsTo(models.Lesson, {
-            foreignKey: "lessons_id",
-            as: "lessons"
+            as: "lessons",
+            foreignKey: "lessons_id"
         });
     };
 

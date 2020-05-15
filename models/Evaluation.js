@@ -28,9 +28,7 @@ module.exports = (sequelize, DataTypes) => {
                 // references: {
                 //     model: "lessons",
                 //     key: "id",
-                // },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // }
             }
         },
         {
@@ -41,16 +39,16 @@ module.exports = (sequelize, DataTypes) => {
 
     Evaluation.associate = (models) => {
         Evaluation.belongsToMany(models.User, {
-            foreignKey: "users_id",
             as: "users",
+            foreignKey: "evaluations_id",
             through: models.Evaluation_User
         });
         Evaluation.hasMany(models.Evaluation_User, {
             as: "student_grades"
         });
         Evaluation.belongsTo(models.Lesson, {
-            foreignKey: "lessons_id",
-            as: "lessons"
+            as: "lessons",
+            foreignKey: "lessons_id"
         });
     };
 

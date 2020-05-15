@@ -36,9 +36,7 @@ module.exports = (sequelize, DataTypes) => {
                 // references: {
                 //     model: "schools",
                 //     key: "id",
-                // },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // }
             }
         },
         {
@@ -49,20 +47,20 @@ module.exports = (sequelize, DataTypes) => {
 
     Class.associate = (models) => {
         Class.belongsTo(models.School, {
-            foreignKey: "schools_id",
-            as: "schools"
+            as: "schools",
+            foreignKey: "schools_id"
         });
         Class.belongsToMany(models.User, {
-            foreignKey: "users_id",
             as: "users",
+            foreignKey: "classes_id",
             through: models.User_Class
         });
         Class.hasMany(models.User_Class, {
             as: "student_numbers"
         });
         Class.belongsToMany(models.Subject, {
-            foreignKey: "subjects_id",
             as: "subjects",
+            foreignKey: "classes_id",
             through: models.Lesson
         });
         Class.hasMany(models.Lesson, {

@@ -21,9 +21,7 @@ module.exports = (sequelize, DataTypes) => {
                 // references: {
                 //     model: "classes",
                 //     key: "id",
-                // },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // }
             },
             subjects_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
@@ -31,9 +29,7 @@ module.exports = (sequelize, DataTypes) => {
                 // references: {
                 //     model: "subjects",
                 //     key: "id",
-                // },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // }
             }
         },
         {
@@ -44,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
 
     Lesson.associate = (models) => {
         Lesson.belongsToMany(models.User, {
-            foreignKey: "users_id",
             as: "users",
+            foreignKey: "lessons_id",
             through: models.Attendance
         });
         Lesson.hasMany(models.Attendance, {
@@ -55,12 +51,12 @@ module.exports = (sequelize, DataTypes) => {
             as: "evaluations"
         });
         Lesson.belongsTo(models.Subject, {
-            foreignKey: "subjects_id",
-            as: "subjects"
+            as: "subjects",
+            foreignKey: "subjects_id"
         });
         Lesson.belongsTo(models.Class, {
-            foreignKey: "classes_id",
-            as: "classes"
+            as: "classes",
+            foreignKey: "classes_id"
         });
     };
 

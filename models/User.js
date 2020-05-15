@@ -30,39 +30,39 @@ module.exports = (sequelize, DataTypes) => {
 
     User.associate = (models) => {
         User.belongsToMany(models.UserType, {
-            foreignKey: "userTypes_id",
             as: "userTypes",
+            foreignKey: "users_id",
             through: models.User_UserType
         });
         User.belongsToMany(models.School, {
-            foreignKey: "schools_id",
             as: "schools",
+            foreignKey: "users_id",
             through: models.User_School
         });
         User.belongsToMany(models.Subject, {
-            foreignKey: "subjects_id",
             as: "subjects",
+            foreignKey: "users_id",
             through: models.User_Subject
         });
         User.belongsToMany(models.Class, {
-            foreignKey: "classes_id",
             as: "classes",
+            foreignKey: "users_id",
             through: models.User_Class
         });
         User.hasMany(models.User_Class, {
             as: "student_numbers"
         });
         User.belongsToMany(models.Lesson, {
-            foreignKey: "lessons_id",
             as: "lessons",
+            foreignKey: "users_id",
             through: models.Attendance
         });
         User.hasMany(models.Attendance, {
             as: "attendances"
         });
         User.belongsToMany(models.Evaluation, {
-            foreignKey: "evaluations_id",
             as: "evaluations",
+            foreignKey: "users_id",
             through: models.Evaluation_User
         });
         User.hasMany(models.Evaluation_User, {

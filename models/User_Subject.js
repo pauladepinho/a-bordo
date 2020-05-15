@@ -8,9 +8,7 @@ module.exports = (sequelize, DataTypes) => {
                 // references: {
                 //     model: "users",
                 //     key: "id",
-                // },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // }
             },
             subjects_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
@@ -18,9 +16,7 @@ module.exports = (sequelize, DataTypes) => {
                 // references: {
                 //     model: "subjects",
                 //     key: "id",
-                // },
-                onUpdate: "CASCADE",
-                onDelete: "CASCADE"
+                // }
             }
         },
         {

@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
 
     UserType.associate = (models) => {
         UserType.belongsToMany(models.User, {
-            foreignKey: "users_id",
             as: "users",
+            foreignKey: "userTypes_id",
             through: models.User_UserType
         });
     };
