@@ -49,15 +49,24 @@ module.exports = (sequelize, DataTypes) => {
             as: "classes",
             through: models.users_classes
         });
+        User.hasMany(models.users_classes, {
+            as: "student_numbers"
+        });
         User.belongsToMany(models.lessons, {
             foreignKey: "lessons_id",
             as: "lessons",
             through: models.attendances
         });
+        User.hasMany(models.attendances, {
+            as: "attendances"
+        });
         User.belongsToMany(models.evaluations, {
             foreignKey: "evaluations_id",
             as: "evaluations",
             through: models.evaluations_users
+        });
+        User.hasMany(models.evaluations_users, {
+            as: "student_grades"
         });
     };
 
