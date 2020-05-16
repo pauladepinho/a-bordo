@@ -7,7 +7,7 @@ module.exports = {
         type: "professor",
       },
       {
-        type: "responsável",
+        type: "responsavel",
       },
       {
         type: "aluno",

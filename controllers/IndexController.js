@@ -9,43 +9,36 @@ module.exports = {
     login: async (req, res) => {
         // READ INFOS FROM REQ.BODY
         let { userType, email, password } = req.body;
-        // return userType == "teacher" ? res.render("teacher-home") : res.render("guardian-home");
-
-        let userTypeId = User_UserType.userTypes_id;
         // TRY AND LOAD A USER FROM DB WHOSE EMAIL == REQ.BODY.EMAIL
         const user = await User.findOne({
             where: { email },
-            include: [
-                {
-                    model: UserType,
-                    as: "userTypes",
-                    through: {
-                        attributes: []
-                    }
-                }
-            ]
+            include: [{
+                model: UserType,
+                as: "userTypes",
+                through: { attributes: [] }
+            }]
         });
         // IF THAT USER DOES NOT EXIST IN DB, REDIRECT TO LOGIN
         if (!user) {
             return res.redirect("/login?error=1");
         }
-        // IF USER EXISTS, COMPARE REQ.BODY.PASSWORD WITH USER PASSWORD IN DB
+        // IF USER EXISTS, COMPARE REQ.BODY.PASSWORD WITH DB PASSWORD
         // AND IF THEY DON'T MATCH, REDIRECT TO LOGIN ALSO
         if (!bcrypt.compareSync(password, user.password)) {
             return res.redirect("/login?error=1");
         }
-
-        return res.send(user);
-        // // IF PASSWORDS MATCH, SET A SESSION FOR THE USER
-        // req.session.user = user;
-        // // AND FINALLY, MANAGE REDIRECTIONS
-        // // IF REQ.BODY.USERTYPE MATCHES THE ONE FROM DB,
-        // // THEN SHOW REQ.BODY.USERTYPE HOME
-        // // ELSE, IGNORE REQ.BODY.USERTYPE AND SHOW THE ONE THAT EXISTS IN DB
-        // // USERTYPE == TEACHER ?
-        // res.redirect("/professor/home");
-        // // USERTYPE == GUARDIAN ?
-        // res.redirect("/responsavel/home");
+        // IF PASSWORDS MATCH, SET A SESSION FOR THE USER
+        req.session.user = user;
+        // FINALLY, MANAGE REDIRECTIONS
+        // REQ.BODY.USERTYPE == DB USERTYPE ? REDIRECT TO USERTYPE HOME
+        const thisUserTypes = user.userTypes; // array with this user's userTypes
+        thisUserTypes.forEach(thisUserType => {
+            if (thisUserType.type == userType) {
+                return res.redirect(`/${userType}/home`);
+            }
+        });
+        // REQ.BODY.USERTYPE != DB USERTYPE, LOG WITH THE FIRST USERTYPE OF THE ARRAY
+        return res.redirect(`/${thisUserTypes[0].type}/home`);
     },
     showTeacherHome: async (req, res) => {
         // GET TEACHER DATA FROM DB,
