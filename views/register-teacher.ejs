@@ -33,7 +33,8 @@
   </nav>
 
   <main id="register-teacher">
-    <form id="create" action="/professor/cadastrar" method="POST" enctype="multipart/form-data" autocomplete="on">
+    <form id="create" action="/professor/cadastrar" method="POST" autocomplete="on">
+      <!-- enctype="multipart/form-data"  -->
       <div data-spy="scroll" data-target=".navbar" data-offset="450">
         <section id="set-user">
           <div class="add-pic">
@@ -41,7 +42,7 @@
               <img src="../images/silhouette.jpg" id="user-pic" width="176px" height="176px" />
               <div id="text-on-hover"><span>Nova imagem</span></div>
             </label>
-            <input type="file" name="picture" id="pic-file" onchange="addPic()" />
+            <!-- <input type="file" name="picture" id="pic-file" onchange="addPic()" /> -->
           </div>
 
           <div id="full-name">
@@ -61,7 +62,7 @@
             </div>
 
             <div class="password">
-              <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirme a senha" />
+              <input type="password" id="confirm-password" placeholder="Confirme a senha" />
               <div class="eye-icon" id="eye-icon-2" onclick="toogleVisibility()"></div>
             </div>
           </div>
@@ -103,23 +104,52 @@
           </div>
           <div class="gray-box">
             <div class="school-location">
-              <select name="" id="">
+              <select name="school1[]" id="">
                 <option disabled selected>UF</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
               </select>
 
-              <select name="" id="">
+              <select name="school1[]" id="">
                 <option disabled selected>Município</option>
+                <option value="Rio de Janeiro">Rio de Janeiro</option>
               </select>
             </div>
 
-            <select name="school[0][name]">
+            <select name="school1[]">
               <option disabled selected>Nome da escola</option>
-              <option value="0">Colégio Pedro II</option>
-              <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
+              <option value="Colégio Pedro II">Colégio Pedro II</option>
+              <option value="ETE Ensino Fundamental Visconde de Mauá">Escola Técnica Estadual do Ensino Fundamental
+                Visconde de Mauá
               </option>
             </select>
 
-            <select name="school[0][passingGrade]">
+            <select name="school1[]">
               <option disabled selected>Média para aprovação</option>
               <option disabled>Escala de 0 a 10 pontos</option>
               <option value="5">5,0 pontos</option>
@@ -134,11 +164,11 @@
             <p>Sistema de avaliação: <span id="term"></span></p>
             <label class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
               Bimestral
-              <input type="radio" name="school[0][term-type]" />
+              <input type="radio" name="school1[]" value="4" />
             </label>
             <label class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
               Trimestral
-              <input type="radio" name="school[0][term-type]" />
+              <input type="radio" name="school1[]" value="3" />
             </label>
           </div>
         </section>
@@ -167,12 +197,12 @@
           <div class="gray-box">
             <div id="class-code">
               <label for="class">Turma</label>
-              <input type="text" name="class" id="class" placeholder="Número da turma" />
+              <input type="text" name="class1[]" id="class" placeholder="Número da turma" />
             </div>
 
             <p>Nesta turma, eu leciono...</p>
             <div id="new-courses">
-              <select id="course1" name="course1">
+              <select id="course1" name="class1-subject1">
                 <option value="" disabled selected>Escolher disciplina</option>
                 <option value="arts">Artes</option>
                 <option value="biology">Biologia</option>

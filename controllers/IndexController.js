@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = {
-    showLogin: (req, res) => {
+    renderLogin: (req, res) => {
         return res.render('index');
     },
     login: async (req, res) => {
@@ -30,7 +30,7 @@ module.exports = {
         // IF PASSWORDS MATCH, SET A SESSION FOR THE USER
         req.session.user = user;
         // FINALLY, MANAGE REDIRECTIONS
-        // REQ.BODY.USERTYPE == DB USERTYPE ? REDIRECT TO USERTYPE HOME
+        // REQ.BODY.USERTYPE == ANY DB USERTYPE ? REDIRECT TO USERTYPE HOME
         const thisUserTypes = user.userTypes; // array with this user's userTypes
         thisUserTypes.forEach(thisUserType => {
             if (thisUserType.type == userType) {
@@ -40,68 +40,68 @@ module.exports = {
         // REQ.BODY.USERTYPE != DB USERTYPE, LOG WITH THE FIRST USERTYPE OF THE ARRAY
         return res.redirect(`/${thisUserTypes[0].type}/home`);
     },
-    showTeacherHome: async (req, res) => {
+    renderTeacherHome: async (req, res) => {
         // GET TEACHER DATA FROM DB,
         // AND THEN...
         return res.render("teacher-home");
     },
-    showGuardianHome: async (req, res) => {
+    renderGuardianHome: async (req, res) => {
         // GET GUARDIAN DATA FROM DB,
         // AND THEN...
         return res.render("guardian-home");
     },
-    showRegistrationForm: (req, res) => {
-        return req.query.usuario == "professor" ? res.render("register-teacher") : res.render("register-guardian");
+    redirectToRegistrationForm: (req, res) => {
+        return req.query.usuario == "professor" ?
+            res.redirect("/professor/cadastrar") :
+            res.redirect("/responsavel/cadastrar");
+    },
+    renderTeacherRegistrationForm: (req, res) => {
+        res.render("register-teacher");
+    },
+    renderGuardianRegistrationForm: (req, res) => {
+        res.render("register-guardian");
     },
     registerTeacher: async (req, res) => {
-        // GET ALL REQ.BODY DATA,
-        // ENCRYPT PASSWORD,
-        // SAVE DATA IN DB,
-        // SET A SESSION,
-        // AND THEN...
-        return res.redirect("/professor/home");
+        // GET ALL REQ.BODY DATA
+        // USER DATA:
+        const { picture, forename, surname, email, phone } = req.body;
+        let { password } = req.body;
 
-        ///////////////-------EXAMPLES-------/////////////////
+        // SCHOOLS DATA:
+        const schools = Object.keys(req.body).filter(
+            key => key.substr(0, 6) == "school"
+        );
+        let schoolsList = [];
+        for (school of schools) {
+            schoolsList.push({
+                name: req.body[school][2],
+                passing_grade: req.body[school][3],
+                academic_terms: req.body[school][4],
+                state: req.body[school][0],
+                municipality: req.body[school][1]
+            });
+        };
+        // CLASSES DATA
 
-        // ENCRYPT PASSWORD
-        // bcrypt.hash(password, saltRounds).then(hash => {
-        //     // Store hash in your password DB.
-        // });
+        // STUDENTS DATA
 
-        // ADD NEW ROW IN DB DUE TABLES
-        // User.create(
-        //     forename,
-        //     surname,
-        //     email,
-        //     phone,
-        //     password,
-        //     picture
-        // );
+        // SAVE DATA IN DB
+        User.create({
+            forename,
+            surname,
+            email,
+            phone,
+            password: bcrypt.hashSync(password, saltRounds),
+            picture
+        });
+        School.bulkCreate(schoolsList);
 
-        // EXAMPLE OF REQ.BODY.SCHOOL DATA STRUCTURE
-        // var arrs = [
-        //     [1, 2],
-        //     [3, 4],
-        //     [5, 6],
-        //     [7, 8]
-        // ];
-
-        // TURNING THE ABOVE MATRIX INTO AN ARRAY OF OBJECTS
-        // var objs = arrs.map(function(x) { 
-        //   return { 
-        //     lat: x[0], 
-        //     lng: x[1] 
-        //   }; 
-        // });
-        // console.log(objs);
-
-        // SAVING IT IN THE DB
-        // School.bulkCreate(objs);
+        return res.redirect(`/professor/cadastrar`);
 
         // SET A SESSION FOR THE USER
+        // let user = await User.findOne({ where: { email } })
         // req.session.user = user;
-
-        // AND FINALLY
+        // AND THEN...
         // return res.redirect("/professor/home");
     },
     registerGuardian: async (req, res) => {
@@ -111,12 +111,12 @@ module.exports = {
         // AND THEN...
         return res.redirect("/responsavel/home");
     },
-    showTeacherUpdateForm: async (req, res) => {
+    renderTeacherUpdateForm: async (req, res) => {
         // LOAD USER FROM DB
         // PASS OBJECT USER INTO RENDER METHOD
         return res.render("update-teacher");
     },
-    showGuardianUpdateForm: async (req, res) => {
+    renderGuardianUpdateForm: async (req, res) => {
 
     },
     updateTeacher: async (req, res) => {
@@ -158,19 +158,19 @@ module.exports = {
         //     }
         // );
     },
-    showGradeBook: (req, res) => {
+    renderGradeBook: (req, res) => {
         return res.render("set-notes");
     },
     recordGrades: (req, res) => {
 
     },
-    showAttendanceSheet: (req, res) => {
+    renderAttendanceSheet: (req, res) => {
         return res.render("attendance");
     },
     recordAttendances: (req, res) => {
 
     },
-    showRecordBook: (req, res) => {
+    renderRecordBook: (req, res) => {
         return res.render('daily');
     }
 };
