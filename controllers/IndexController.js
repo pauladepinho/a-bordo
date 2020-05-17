@@ -61,12 +61,13 @@ module.exports = {
     renderGuardianRegistrationForm: (req, res) => {
         res.render("register-guardian");
     },
-    registerTeacher: async (req, res) => {
+    registerTeacher: async (req, res, next) => {
         // GET ALL REQ.BODY DATA
         // USER DATA:
-        const { picture, forename, surname, email, phone } = req.body;
-        let { password } = req.body;
+        const { forename, surname, email, phone, password } = req.body;
+        // const { picture } = req.file;
 
+        // return res.send(req.file);
         // SCHOOLS DATA:
         const schools = Object.keys(req.body).filter(
             key => key.substr(0, 6) == "school"
@@ -92,7 +93,7 @@ module.exports = {
             email,
             phone,
             password: bcrypt.hashSync(password, saltRounds),
-            picture
+            picture: req.file.filename
         });
         School.bulkCreate(schoolsList);
 
@@ -104,7 +105,7 @@ module.exports = {
         // AND THEN...
         // return res.redirect("/professor/home");
     },
-    registerGuardian: async (req, res) => {
+    registerGuardian: async (req, res, next) => {
         // ENCRYPT PASSWORD,
         // SAVE DATA IN DB,
         // SET A SESSION,
@@ -119,7 +120,7 @@ module.exports = {
     renderGuardianUpdateForm: async (req, res) => {
 
     },
-    updateTeacher: async (req, res) => {
+    updateTeacher: async (req, res, next) => {
         // GET REQ.BODY CONTENT
         // AND UPDATE DATA IN DB
         // const result = await User.update({
@@ -131,7 +132,7 @@ module.exports = {
         //     }
         // });
     },
-    updateGuardian: async (req, res) => {
+    updateGuardian: async (req, res, next) => {
 
     },
     deleteTeacher: async (req, res) => {

@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const multer = require("multer");
+let upload = multer({ dest: 'uploads/' });
 
 const IndexController = require("../controllers/IndexController");
 const VerifyLoggedInUser = require("../middlewares/VerifyLoggedInUser");
@@ -11,9 +13,9 @@ router.post("/login", IndexController.login);
 router.get("/cadastrar", IndexController.redirectToRegistrationForm);
 
 router.get("/professor/cadastrar", IndexController.renderTeacherRegistrationForm)
-router.post("/professor/cadastrar", IndexController.registerTeacher);
+router.post("/professor/cadastrar", upload.single("picture"), IndexController.registerTeacher);
 router.get("/responsavel/cadastrar", IndexController.renderGuardianRegistrationForm)
-router.post("/responsavel/cadastrar", IndexController.registerGuardian);
+router.post("/responsavel/cadastrar", upload.single("picture"), IndexController.registerGuardian);
 
 router.get("/professor/home", VerifyLoggedInUser, IndexController.renderTeacherHome);
 router.get("/responsavel/home", VerifyLoggedInUser, IndexController.renderGuardianHome);
@@ -21,9 +23,9 @@ router.get("/responsavel/home", VerifyLoggedInUser, IndexController.renderGuardi
 
 
 router.get("/professor/atualizar", IndexController.renderTeacherUpdateForm);
-router.put("/professor/atualizar", IndexController.updateTeacher);
+router.put("/professor/atualizar", upload.single("picture"), IndexController.updateTeacher);
 router.get("/responsavel/atualizar", IndexController.renderGuardianUpdateForm);
-router.put("/responsavel/atualizar", IndexController.updateGuardian);
+router.put("/responsavel/atualizar", upload.single("picture"), IndexController.updateGuardian);
 
 router.delete("/professor/deletar", IndexController.deleteTeacher);
 router.delete("/responsavel/deletar", IndexController.deleteGuardian);
