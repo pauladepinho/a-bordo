@@ -2,34 +2,22 @@ module.exports = (sequelize, DataTypes) => {
     let Lesson = sequelize.define(
         "Lesson",
         {
+            academic_term: {
+                type: DataTypes.INTEGER(1),
+                allowNull: false
+            },
             date: {
                 type: DataTypes.DATEONLY,
                 allowNull: false
             },
-            academic_term: {
-                type: DataTypes.INTEGER(1),
+            periods: {
+                type: DataTypes.INTEGER(2),
                 allowNull: false
             },
             observations: DataTypes.STRING,
             evaluation_day: {
                 type: DataTypes.TINYINT,
                 allowNull: false
-            },
-            classes_id: {
-                type: DataTypes.INTEGER.UNSIGNED,
-                allowNull: false,
-                // references: {
-                //     model: "classes",
-                //     key: "id",
-                // }
-            },
-            subjects_id: {
-                type: DataTypes.INTEGER.UNSIGNED,
-                allowNull: false,
-                // references: {
-                //     model: "subjects",
-                //     key: "id",
-                // }
             }
         },
         {
@@ -39,24 +27,13 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Lesson.associate = (models) => {
-        Lesson.belongsToMany(models.User, {
-            as: "users",
+        Lesson.hasMany(models.Class_Lesson, {
+            as: "classes_lessons"
+        });
+        Lesson.belongsToMany(models.User_Class, {
+            as: "users_classes",
             foreignKey: "lessons_id",
-            through: models.Attendance
-        });
-        Lesson.hasMany(models.Attendance, {
-            as: "attendances"
-        });
-        Lesson.hasMany(models.Evaluation, {
-            as: "evaluations"
-        });
-        Lesson.belongsTo(models.Subject, {
-            as: "subjects",
-            foreignKey: "subjects_id"
-        });
-        Lesson.belongsTo(models.Class, {
-            as: "classes",
-            foreignKey: "classes_id"
+            through: models.Class_Lesson
         });
     };
 

@@ -1,4 +1,4 @@
-const { User, UserType, User_UserType, School, User_School, Subject, User_Subject, Class, User_Class, Lesson, Attendance, Evaluation, Evaluation_User } = require("../models");
+const { User, Category, User_Category, School, Class, User_Class, Class_Lesson, Lesson, Attendance, Evaluation, Evaluation_User } = require("../models");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -10,14 +10,16 @@ module.exports = {
         // READ INFOS FROM REQ.BODY
         let { userType, email, password } = req.body;
         // TRY AND LOAD A USER FROM DB WHOSE EMAIL == REQ.BODY.EMAIL
-        const user = await User.findOne({
-            where: { email },
-            include: [{
-                model: UserType,
-                as: "userTypes",
-                through: { attributes: [] }
-            }]
-        });
+        const user = await User.findOne(
+            {
+                where: { email },
+                include: [{
+                    model: Category,
+                    as: "categories",
+                    through: { attributes: [] }
+                }]
+            }
+        );
         // IF THAT USER DOES NOT EXIST IN DB, REDIRECT TO LOGIN
         if (!user) {
             return res.redirect("/login?error=1");
@@ -31,14 +33,14 @@ module.exports = {
         req.session.user = user;
         // FINALLY, MANAGE REDIRECTIONS
         // REQ.BODY.USERTYPE == ANY DB USERTYPE ? REDIRECT TO USERTYPE HOME
-        const thisUserTypes = user.userTypes; // array with this user's userTypes
-        thisUserTypes.forEach(thisUserType => {
-            if (thisUserType.type == userType) {
+        const userCategories = user.categories; // array with this user's userTypes
+        userCategories.forEach(userCategory => {
+            if (userCategory.name == userType) {
                 return res.redirect(`/${userType}/home`);
             }
         });
         // REQ.BODY.USERTYPE != DB USERTYPE, LOG WITH THE FIRST USERTYPE OF THE ARRAY
-        return res.redirect(`/${thisUserTypes[0].type}/home`);
+        return res.redirect(`/${userCategories[0].name}/home`);
     },
     renderTeacherHome: async (req, res) => {
         // GET TEACHER DATA FROM DB,
@@ -65,9 +67,6 @@ module.exports = {
         // GET ALL REQ.BODY DATA
         // USER DATA:
         const { forename, surname, email, phone, password } = req.body;
-        // const { picture } = req.file;
-
-        // return res.send(req.file);
         // SCHOOLS DATA:
         const schools = Object.keys(req.body).filter(
             key => key.substr(0, 6) == "school"
@@ -82,12 +81,52 @@ module.exports = {
                 municipality: req.body[school][1]
             });
         };
+
         // CLASSES DATA
+
+
+        // for (school of schools) {
+        //     schoolsList.push({
+        //         name: req.body[school][2],
+        //         passing_grade: req.body[school][3],
+        //         academic_terms: req.body[school][4],
+        //         state: req.body[school][0],
+        //         municipality: req.body[school][1],
+        //         classes: [
+        //             {
+        //                 code,
+        //                 level_of_education,
+        //                 grade,
+        //                 year,
+        //                 number_of_students,
+        //                 number_of_subjects,
+        //                 number_of_teachers
+        //                 // schools_id
+        //             }, {
+        //                 code,
+        //                 level_of_education,
+        //                 grade,
+        //                 year,
+        //                 number_of_students,
+        //                 number_of_subjects,
+        //                 number_of_teachers
+        //                 // schools_id
+        //             }
+
+        //         ]
+        //     }, {
+        //         include: [{ association: Class, as: "classes" }]
+        //     });
+        // };
 
         // STUDENTS DATA
 
+        // SUBJECTS DATA
+        // compare the ones from req.body to the ones in db
+        // to associate with the users (teacher and students)
+
         // SAVE DATA IN DB
-        User.create({
+        await User.create({
             forename,
             surname,
             email,
@@ -95,7 +134,12 @@ module.exports = {
             password: bcrypt.hashSync(password, saltRounds),
             picture: req.file.filename
         });
-        School.bulkCreate(schoolsList);
+        await School.bulkCreate(schoolsList);
+
+        // ASSOCIATE TABLES
+        // await User_UserType.create([
+        //     { user_id: user.id, userTypes_id: 1 }
+        //   ]);
 
         return res.redirect(`/professor/cadastrar`);
 

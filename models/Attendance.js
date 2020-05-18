@@ -2,25 +2,17 @@ module.exports = (sequelize, DataTypes) => {
     let Attendance = sequelize.define(
         "Attendance",
         {
-            type: {
-                type: DataTypes.STRING(8),
+            mark: {
+                type: DataTypes.STRING(10),
                 allowNull: false
             },
-            users_id: {
-                type: DataTypes.INTEGER.UNSIGNED,
-                allowNull: false,
-                // references: {
-                //     model: "users",
-                //     key: "id",
-                // }
+            period: {
+                type: DataTypes.INTEGER(2),
+                allowNull: false
             },
-            lessons_id: {
+            classes_lessons_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
-                allowNull: false,
-                // references: {
-                //     model: "lessons",
-                //     key: "id",
-                // }
+                allowNull: false
             }
         },
         {
@@ -30,13 +22,9 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Attendance.associate = (models) => {
-        Attendance.belongsTo(models.User, {
-            as: "users",
-            foreignKey: "users_id"
-        });
-        Attendance.belongsTo(models.Lesson, {
-            as: "lessons",
-            foreignKey: "lessons_id"
+        Attendance.belongsTo(models.Class_Lesson, {
+            as: "classes_lessons",
+            foreignKey: "classes_lessons_id"
         });
     };
 

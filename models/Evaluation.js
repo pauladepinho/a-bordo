@@ -2,10 +2,6 @@ module.exports = (sequelize, DataTypes) => {
     let Evaluation = sequelize.define(
         "Evaluation",
         {
-            evaluation_number: {
-                type: DataTypes.INTEGER(1),
-                allowNull: false
-            },
             max_grade: {
                 type: DataTypes.DECIMAL(5, 2),
                 allowNull: false
@@ -21,14 +17,6 @@ module.exports = (sequelize, DataTypes) => {
             type: {
                 type: DataTypes.STRING(20),
                 allowNull: false
-            },
-            lessons_id: {
-                type: DataTypes.INTEGER.UNSIGNED,
-                allowNull: false,
-                // references: {
-                //     model: "lessons",
-                //     key: "id",
-                // }
             }
         },
         {
@@ -38,18 +26,15 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     Evaluation.associate = (models) => {
-        Evaluation.belongsToMany(models.User, {
-            as: "users",
+        Evaluation.hasMany(models.Student_Evaluation, {
+            as: "students_evaluations"
+        });
+        Evaluation.belongsToMany(models.Class_Lesson, {
+            as: "classes_lessons",
             foreignKey: "evaluations_id",
-            through: models.Evaluation_User
+            through: models.Student_Evaluation
         });
-        Evaluation.hasMany(models.Evaluation_User, {
-            as: "student_grades"
-        });
-        Evaluation.belongsTo(models.Lesson, {
-            as: "lessons",
-            foreignKey: "lessons_id"
-        });
+
     };
 
     return Evaluation;

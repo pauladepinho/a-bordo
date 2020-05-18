@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users_userTypes', {
+    return queryInterface.createTable('users_categories', {
       id: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
@@ -19,11 +19,11 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
       },
-      userTypes_id: {
+      categories_id: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         references: {
-          model: "userTypes",
+          model: "categories",
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -32,6 +32,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('users_userTypes');
+    return queryInterface.dropTable('users_categories');
   }
 };

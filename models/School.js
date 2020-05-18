@@ -30,11 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     );
 
     School.associate = (models) => {
-        School.belongsToMany(models.User, {
-            as: "users",
-            foreignKey: "schools_id",
-            through: models.User_School
-        });
         School.hasMany(models.Class, {
             as: "classes"
         });
