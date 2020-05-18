@@ -16,6 +16,9 @@ module.exports = {
       student_number: {
         type: Sequelize.INTEGER
       },
+      repeater: {
+        type: Sequelize.TINYINT
+      },
       users_categories_id: {
         type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,

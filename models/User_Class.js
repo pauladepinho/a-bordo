@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
             student_number: {
                 type: DataTypes.INTEGER
             },
+            repeater: {
+                type: DataTypes.TINYINT
+            },
             users_categories_id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 allowNull: false
