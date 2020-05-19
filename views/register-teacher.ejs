@@ -103,7 +103,7 @@
           </div>
           <div class="gray-box">
             <div class="school-location">
-              <select name="school1[]" id="">
+              <select name="school1[]">
                 <option disabled selected>UF</option>
                 <option value="AC">Acre</option>
                 <option value="AL">Alagoas</option>
@@ -134,7 +134,7 @@
                 <option value="TO">Tocantins</option>
               </select>
 
-              <select name="school1[]" id="">
+              <select name="school1[]">
                 <option disabled selected>Município</option>
                 <option value="Rio de Janeiro">Rio de Janeiro</option>
               </select>
@@ -173,7 +173,7 @@
 
 
             <div class="school-location">
-              <select name="school2[]" id="">
+              <select name="school2[]">
                 <option disabled selected>UF</option>
                 <option value="AC">Acre</option>
                 <option value="AL">Alagoas</option>
@@ -204,7 +204,7 @@
                 <option value="TO">Tocantins</option>
               </select>
 
-              <select name="school2[]" id="">
+              <select name="school2[]">
                 <option disabled selected>Município</option>
                 <option value="Rio de Janeiro">Rio de Janeiro</option>
               </select>
@@ -270,7 +270,7 @@
               <label for="">Ano
                 <input type="text" name="class1-school1[]" value="2020">
               </label>
-              <select name="class1-school1[]" id="">
+              <select name="class1-school1[]">
                 <option selected disabled>Série/Ano</option>
                 <option disabled>Ensino Fundamental</option>
                 <option value="Ensino Fundamental-1">1º ano</option>
@@ -291,7 +291,7 @@
 
             <p>Nesta turma, eu leciono...</p>
             <div id="new-courses">
-              <select id="course1" name="subject1">
+              <select name="subjects-class1-school1[]">
                 <option value="" disabled selected>Escolher disciplina</option>
                 <option value="arts">Artes</option>
                 <option value="biology">Biologia</option>
@@ -328,12 +328,12 @@
                 <span id="student-number">Nº</span><span id="student-name">Aluno</span>
               </div>
 
-              <div class="students" id="student1">
-                <input type="number" name="student1[]" id="class-id-student1" value="1" />
-                <input type="text" name="student1[]" id="name-student1" placeholder="Nome do aluno" />
+              <div class="students">
+                <input type="number" name="student1[]" value="1" />
+                <input type="text" name="student1[]" placeholder="Nome do aluno" />
 
                 <label for="course-retake-checkbox-student1" class="checkbox-container">Dependência
-                  <input type="checkbox" name="course-retake-checkbox-student1" class="course-retake-checkbox"
+                  <input type="checkbox" name="student1[]" class="course-retake-checkbox"
                     id="course-retake-checkbox-student1" data-div-id="course-retake-student1" />
                   <span class="checkmark"></span>
                 </label>
@@ -370,12 +370,12 @@
                 </div>
               </div>
 
-              <div class="students" id="student2">
-                <input type="number" name="student2[]" id="class-id-student2" value="2" />
-                <input type="text" name="student2[]" id="name-student2" placeholder="Nome do aluno" />
+              <div class="students">
+                <input type="number" name="student2[]" value="2" />
+                <input type="text" name="student2[]" placeholder="Nome do aluno" />
 
                 <label for="course-retake-checkbox-student2" class="checkbox-container">Dependência
-                  <input type="checkbox" name="course-retake-checkbox-student2" class="course-retake-checkbox"
+                  <input type="checkbox" name="student2[]" class="course-retake-checkbox"
                     id="course-retake-checkbox-student2" data-div-id="course-retake-student2" />
                   <span class="checkmark"></span>
                 </label>

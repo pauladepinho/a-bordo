@@ -64,12 +64,12 @@ module.exports = {
         res.render("register-guardian");
     },
     registerTeacher: async (req, res, next) => {
-        // CREATE USER
+        // CREATE USER - OK
         const { forename, surname, email, phone, password } = req.body;
         let picture;
         req.file ? picture = req.file.filename : picture = null;
 
-        let user = await User.create(
+        const user = await User.create(
             {
                 forename,
                 surname,
@@ -79,15 +79,17 @@ module.exports = {
                 picture
             }
         );
-        let category = await Category.findByPk(1);
-        user.setCategories(category);
 
-        // CREATE SCHOOLS
-        let schools = Object.keys(req.body).filter(
+        // ASSOCIATE USER TO A CATEGORY - OK
+        const category = await Category.findByPk(1); // CATEGORY PROFESSOR
+        await user.setCategories(category);
+
+        // CREATE SCHOOLS - OK
+        const objKeysSchool = Object.keys(req.body).filter(
             key => key.substr(0, 6) == "school"
         );
         let schoolsList = [];
-        for (school of schools) {
+        for (school of objKeysSchool) {
             schoolsList.push(
                 {
                     name: req.body[school][2],
@@ -98,66 +100,78 @@ module.exports = {
                 }
             );
         };
-        schools = await School.bulkCreate(schoolsList);
+        const schools = await School.bulkCreate(schoolsList);
 
-        {
-            // const totalOfSchoolsAttributes = 5; // name, passing_grade, academic_terms, state, municipality
-            // const listOfKeysWithSchoolString = Object.keys(req.body).filter(
-            //     key => key.substr(0, 6) == "school"
-            // );
-            // const totalOfSchools = listOfKeysWithSchoolString.length / totalOfSchoolsAttributes;
-
-            // let schoolsList = [];
-            // for (let i = 1; i <= totalOfSchools; i++) {
-            //     schoolsList.push(
-            //         {
-            //             name: req.body[`school${i}_name`],
-            //             passing_grade: req.body[`school${i}_passing_grade`],
-            //             academic_terms: req.body[`school${i}_academic_terms`],
-            //             state: req.body[`school${i}_state`],
-            //             municipality: req.body[`school${i}_municipality`]
-            //         }
-            //     );
-            // };
-            // schools = await School.bulkCreate(schoolsList);
-        }
-
-        // CREATE CLASSES
-        let classes = Object.keys(req.body).filter(
+        // CREATE CLASSES - OK
+        const objKeysClass = Object.keys(req.body).filter( // ex. return [ "class1-school1", "class2-school1", "class1-school2" ]
             key => key.substr(0, 5) == "class"
-        ); // return ex.: [ "class1-school1", "class2-school1", "class1-school2" ]
-
+        );
         let classesList = [];
         for (let i = 1; i <= schools.length; i++) {
-            let thisSchoolClasses = classes.filter(
+            let thisSchoolClasses = objKeysClass.filter(
                 thisClass => thisClass.includes(`school${i}`)
             );
             for (aClass of thisSchoolClasses) {
-                let grade = req.body[aClass][2].split("-"); // return ex.: ["Ensino Fundamental", "6"]
+                let grade = req.body[aClass][2].split("-"); // ex. return [ "Ensino Fundamental", "6" ]
                 classesList.push(
                     {
                         code: req.body[aClass][0],
                         year: req.body[aClass][1],
                         level_of_education: grade[0],
                         grade: grade[1],
-                        schools_id: schools[i - 1].id
+                        schools_id: schools[i - 1].id // ASSOCIATE CLASSES TO A SCHOOL
                     }
                 );
             };
         };
-        classes = await Class.bulkCreate(classesList);
-
-        return res.send(classes);
+        const classes = await Class.bulkCreate(classesList);
 
 
-        return res.redirect("/professor/cadastrar");
+
+        // ASSOCIATE USER TO CLASSES (THROUGH USER_CATEGORY)
+        const userCategory = await User_Category.findOne({
+            where: { users_id: user.id }
+        });
+        await userCategory.setClasses(classes);
+
+        // USERS_CLASSES TABLE
+        let userClasses = await User_Class.findAll();
+
+        return res.send(userClasses);
+        // return res.redirect("/professor/cadastrar");
 
 
-        // STUDENTS DATA
 
-        // SUBJECTS DATA
-        // compare the ones from req.body to the ones in db
-        // to associate with the users (teacher and students)
+
+        // CREATE STUDENTS
+        let objKeysStudent = Object.keys(req.body).filter(
+            key => key.substr(0, 7) == "student"
+        );
+        let studentsList = [];
+        for (student of students) {
+            studentsList.push(
+                {
+                    name: req.body[student][1]
+                }
+            );
+            // let student_number = req.body[student][0];
+            // let repeater = req.body[student].length > 2;
+        };
+        // students = await Student.bulkCreate(studentsList);
+
+        // CREATE SUBJECTS
+        const objKeysSubjects = Object.keys(req.body).filter( // ex. return [ "subjects-class1-school1", "subjects-class2-school1", "subjects-class1-school2" ]
+            key => key.substr(0, 8) == "subjects"
+        );
+        let subjectsList = []; // may have repeated strings
+        for (subject of objKeysSubjects) {
+            subjectsList.push(
+                req.body[subject]
+            );
+        };
+
+
+
 
 
         // SET A SESSION FOR THE USER
