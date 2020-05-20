@@ -67,11 +67,9 @@ module.exports = {
         req.file ? picture = req.file.filename : picture = null;
 
         let invalidEmail = await User.findOne({ where: { email } });
-
         if (invalidEmail) {
             return res.send(`O email ${email} já está cadastrado!`)
         }
-
         const user = await User.create(
             {
                 forename,
@@ -84,12 +82,6 @@ module.exports = {
         );
         // MAKE THE USER A TEACHER
         const teacher = await Teacher.create({ userId: user.id });
-
-
-        console.log("user", user);
-
-        console.log("teacher", teacher);
-
 
         // CREATE SCHOOLS
         const objKeysSchool = Object.keys(req.body).filter(
@@ -108,10 +100,6 @@ module.exports = {
             );
         };
         const schools = await School.bulkCreate(schoolsList);
-
-
-        console.log("schools", schools);
-
 
         // CREATE CLASSES
         const objKeysClass = Object.keys(req.body).filter( // ex. return [ "class1-school1", "class2-school1", "class1-school2" ]
@@ -137,10 +125,6 @@ module.exports = {
         };
         const classes = await Class.bulkCreate(classesList);
 
-
-        console.log("classes", classes);
-
-
         // GET SUBJECTS
         const objKeysSubjects = Object.keys(req.body).filter( // ex. return [ "subjects-class1-school1", "subjects-class2-school1", "subjects-class1-school2" ]
             key => key.substr(0, 8) == "subjects"
@@ -158,65 +142,58 @@ module.exports = {
                     }
                 });
 
-
-                console.log("dbSubject", dbSubject);
-
-
                 // CREATE COURSES
                 let course = await Course.create({
                     teacherId: teacher.id,
                     subjectId: dbSubject.id,
                     classId: classes[i].id
                 });
-
-
-                console.log("course", course);
-
             }
         }
 
         // CREATE STUDENTS
-        // const objKeysStudent = Object.keys(req.body).filter( // ex. return [ "student1-class1-school1", "student2-class1-school1", "student1-class2-school1" ]
-        //     key => key.substr(0, 7) == "student"
-        // );
-        // for (let i = 0; i < classes.length; i++) {
-        //     let thisClassStudentsKeys = objKeysStudent.filter(
-        //         student => student.includes(objKeysClass[i])
-        //     );
-        //     let thisClassStudents = []; // array of arrays
-        //     for (key of thisClassStudentsKeys) {
-        //         thisClassStudents.push(req.body[key]);
-        //     }
-        //     for (student of thisClassStudents) {
-        //         let newStudent = await Student.create(
-        //             {
-        //                 name: student[1]
-        //             }
-        //         );
-        //         let repeater;
-        //         student[3] ? repeater = true : repeater = false
-
-        //         console.log("student", newStudent);
+        const objKeysStudent = Object.keys(req.body).filter( // ex. return [ "student1-class1-school1", "student2-class1-school1", "student1-class2-school1" ]
+            key => key.substr(0, 7) == "student"
+        );
+        for (let i = 0; i < classes.length; i++) {
+            let thisClassStudentsKeys = objKeysStudent.filter(
+                student => student.includes(objKeysClass[i])
+            );
+            let thisClassStudents = []; // array of arrays with infos about students of one class
+            for (key of thisClassStudentsKeys) {
+                thisClassStudents.push(req.body[key]);
+            }
+            for (student of thisClassStudents) {
+                let newStudent = await Student.create(
+                    {
+                        name: student[1].trim()
+                    }
+                );
+                let repeater = false;
+                if (student[2] == "on") { repeater = true }
 
 
-        //         // CREATE CLASS_STUDENT
-        //         let classStudent = await Class_Student.create(
-        //             {
-        //                 classId: classes[i],
-        //                 studentId: newStudent.id,
-        //                 number: student[0],
-        //                 repeater
-        //             }
-        //         )
+                console.log("newStudent", newStudent);
 
-        //         if (repeater) {
 
-        //         }
+                // CREATE CLASS_STUDENT
+                let classStudent = await Class_Student.create(
+                    {
+                        classId: classes[i].id,
+                        studentId: newStudent.id,
+                        number: student[0],
+                        repeater
+                    }
+                )
 
-        //         console.log("classStudent", classStudent);
-        //     }
+                // if (repeater) {
 
-        // }
+                // }
+
+                console.log("classStudent", classStudent);
+            }
+
+        }
 
 
         return res.redirect("/professor/cadastrar");
