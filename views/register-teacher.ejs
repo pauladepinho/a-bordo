@@ -103,7 +103,7 @@
           </div>
           <div class="gray-box">
             <div class="school-location">
-              <select name="school1[]" id="">
+              <select name="school1[]">
                 <option disabled selected>UF</option>
                 <option value="AC">Acre</option>
                 <option value="AL">Alagoas</option>
@@ -134,7 +134,7 @@
                 <option value="TO">Tocantins</option>
               </select>
 
-              <select name="school1[]" id="">
+              <select name="school1[]">
                 <option disabled selected>Município</option>
                 <option value="Rio de Janeiro">Rio de Janeiro</option>
               </select>
@@ -169,6 +169,76 @@
               Trimestral
               <input type="radio" name="school1[]" value="3" />
             </label>
+
+
+
+            <div class="school-location">
+              <select name="school2[]">
+                <option disabled selected>UF</option>
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select>
+
+              <select name="school2[]">
+                <option disabled selected>Município</option>
+                <option value="Rio de Janeiro">Rio de Janeiro</option>
+              </select>
+            </div>
+
+            <select name="school2[]">
+              <option disabled selected>Nome da escola</option>
+              <option value="Colégio Pedro II">Colégio Pedro II</option>
+              <option value="ETE Ensino Fundamental Visconde de Mauá">Escola Técnica Estadual do Ensino Fundamental
+                Visconde de Mauá
+              </option>
+            </select>
+
+            <select name="school2[]">
+              <option disabled selected>Média para aprovação</option>
+              <option disabled>Escala de 0 a 10 pontos</option>
+              <option value="5">5,0 pontos</option>
+              <option value="6">6,0 pontos</option>
+              <option value="7">7,0 pontos</option>
+              <option disabled>Escala de 0 a 100 pontos</option>
+              <option value="50">50 pontos</option>
+              <option value="60">60 pontos</option>
+              <option value="70">70 pontos</option>
+            </select>
+
+            <p>Sistema de avaliação: <span id="term"></span></p>
+            <label class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
+              Bimestral
+              <input type="radio" name="school2[]" value="4" />
+            </label>
+            <label class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
+              Trimestral
+              <input type="radio" name="school2[]" value="3" />
+            </label>
           </div>
         </section>
 
@@ -196,12 +266,32 @@
           <div class="gray-box">
             <div id="class-code">
               <label for="class">Turma</label>
-              <input type="text" name="class1[]" id="class" placeholder="Número da turma" />
+              <input type="text" name="class1-school1[]" id="class" placeholder="Número da turma" />
+              <label for="">Ano
+                <input type="text" name="class1-school1[]" value="2020">
+              </label>
+              <select name="class1-school1[]">
+                <option selected disabled>Série/Ano</option>
+                <option disabled>Ensino Fundamental</option>
+                <option value="Ensino Fundamental-1">1º ano</option>
+                <option value="Ensino Fundamental-2">2º ano</option>
+                <option value="Ensino Fundamental-3">3º ano</option>
+                <option value="Ensino Fundamental-4">4º ano</option>
+                <option value="Ensino Fundamental-5">5º ano</option>
+                <option value="Ensino Fundamental-6">6º ano</option>
+                <option value="Ensino Fundamental-7">7º ano</option>
+                <option value="Ensino Fundamental-8">8º ano</option>
+                <option value="Ensino Fundamental-9">9º ano</option>
+                <option disabled>Ensino Médio</option>
+                <option value="Ensino Medio-1">1ª série</option>
+                <option value="Ensino Medio-2">2ª série</option>
+                <option value="Ensino Medio-3">3ª série</option>
+              </select>
             </div>
 
             <p>Nesta turma, eu leciono...</p>
             <div id="new-courses">
-              <select id="course1" name="class1-subject1">
+              <select name="subjects-class1-school1[]">
                 <option value="" disabled selected>Escolher disciplina</option>
                 <option value="arts">Artes</option>
                 <option value="biology">Biologia</option>
@@ -212,6 +302,7 @@
                 <option value="geography">Geografia</option>
                 <option value="geomethy">Geometria</option>
                 <option value="history">História</option>
+                <option value="informatics">Informática</option>
                 <option value="literature">Literatura</option>
                 <option value="math">Matemática</option>
                 <option value="music">Música</option>
@@ -238,12 +329,12 @@
                 <span id="student-number">Nº</span><span id="student-name">Aluno</span>
               </div>
 
-              <div class="students" id="student1">
-                <input type="number" name="class-id-student1" id="class-id-student1" value="1" />
-                <input type="text" name="name-student1" id="name-student1" placeholder="Nome do aluno" />
+              <div class="students">
+                <input type="number" name="student1[]" value="1" />
+                <input type="text" name="student1[]" placeholder="Nome do aluno" />
 
                 <label for="course-retake-checkbox-student1" class="checkbox-container">Dependência
-                  <input type="checkbox" name="course-retake-checkbox-student1" class="course-retake-checkbox"
+                  <input type="checkbox" name="student1[]" class="course-retake-checkbox"
                     id="course-retake-checkbox-student1" data-div-id="course-retake-student1" />
                   <span class="checkmark"></span>
                 </label>
@@ -280,12 +371,12 @@
                 </div>
               </div>
 
-              <div class="students" id="student2">
-                <input type="number" name="class-id-student2" id="class-id-student2" value="2" />
-                <input type="text" name="name-student2" id="name-student2" placeholder="Nome do aluno" />
+              <div class="students">
+                <input type="number" name="student2[]" value="2" />
+                <input type="text" name="student2[]" placeholder="Nome do aluno" />
 
                 <label for="course-retake-checkbox-student2" class="checkbox-container">Dependência
-                  <input type="checkbox" name="course-retake-checkbox-student2" class="course-retake-checkbox"
+                  <input type="checkbox" name="student2[]" class="course-retake-checkbox"
                     id="course-retake-checkbox-student2" data-div-id="course-retake-student2" />
                   <span class="checkmark"></span>
                 </label>

@@ -1,32 +1,38 @@
 'use strict';
-
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users_classes', {
+    return queryInterface.createTable('Courses', {
       id: {
-        type: Sequelize.INTEGER.UNSIGNED,
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true
-      },
-      student_number: {
+        primaryKey: true,
         type: Sequelize.INTEGER
       },
-      users_id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+      teacherId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "users",
+          model: "Users",
           key: "id",
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
       },
-      classes_id: {
-        type: Sequelize.INTEGER.UNSIGNED,
+      subjectId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "classes",
+          model: "Subjects",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+      },
+      classId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Classes",
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -35,6 +41,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('users_classes');
+    return queryInterface.dropTable('Courses');
   }
 };
