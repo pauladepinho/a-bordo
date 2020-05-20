@@ -1,4 +1,4 @@
-const { User, Category, User_Category, School, Class, User_Class, Class_Lesson, Lesson, Attendance, Evaluation, Evaluation_User } = require("../models");
+const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Student_Guardian, Class_Student, Lesson, Attendance, Evaluation, Student_Evaluation } = require("../models");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -12,12 +12,7 @@ module.exports = {
         // TRY AND LOAD A USER FROM DB WHOSE EMAIL == REQ.BODY.EMAIL
         const user = await User.findOne(
             {
-                where: { email },
-                include: [{
-                    model: Category,
-                    as: "categories",
-                    through: { attributes: [] }
-                }]
+                where: { email }
             }
         );
         // IF THAT USER DOES NOT EXIST IN DB, REDIRECT TO LOGIN
@@ -32,15 +27,16 @@ module.exports = {
         // IF PASSWORDS MATCH, SET A SESSION FOR THE USER
         req.session.user = user;
         // FINALLY, MANAGE REDIRECTIONS
-        // REQ.BODY.USERTYPE == ANY DB USERTYPE ? REDIRECT TO USERTYPE HOME
-        const userCategories = user.categories; // array with this user's userTypes
-        userCategories.forEach(userCategory => {
-            if (userCategory.name == userType) {
-                return res.redirect(`/${userType}/home`);
-            }
-        });
-        // REQ.BODY.USERTYPE != DB USERTYPE, LOG WITH THE FIRST USERTYPE OF THE ARRAY
-        return res.redirect(`/${userCategories[0].name}/home`);
+        const isTeacher = await Teacher.findOne({ where: { userId: user.id } });
+        const isGuardian = await Guardian.findOne({ where: { userId: user.id } });
+
+        if (isTeacher && isGuardian) {
+            return res.redirect(`/${userType}/home`);
+        } else if (isTeacher) {
+            return res.redirect(`/professor/home`);
+        } else {
+            return res.redirect(`/responsavel/home`);
+        }
     },
     renderTeacherHome: async (req, res) => {
         // GET TEACHER DATA FROM DB,
