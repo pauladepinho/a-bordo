@@ -1,4 +1,4 @@
-const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Student_Guardian, Class_Student, Lesson, Attendance, Evaluation, Student_Evaluation } = require("../models");
+const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Student_Guardian, Class_Student, Lesson, Attendance, Evaluation, Student_Evaluation, Repeater } = require("../models");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -125,29 +125,26 @@ module.exports = {
         };
         const classes = await Class.bulkCreate(classesList);
 
-        // GET SUBJECTS
+        // CREATE COURSES
         const objKeysSubjects = Object.keys(req.body).filter( // ex. return [ "subjects-class1-school1", "subjects-class2-school1", "subjects-class1-school2" ]
             key => key.substr(0, 8) == "subjects"
         );
+        let coursesList = [];
         for (let i = 0; i < classes.length; i++) {
             let thisClassSubjectsKey = objKeysSubjects.filter(
                 subjects => subjects.includes(`class${i + 1}`)
             );
-            let thisClassSubjects = req.body[thisClassSubjectsKey]; // array of subjects of one class
+            let thisClassSubjects = req.body[thisClassSubjectsKey]; // array containing the subjects ids of only one class
 
-            for (subject of thisClassSubjects) {
-                let dbSubject = await Subject.findOne({
-                    where: {
-                        name: subject
+            for (subjectId of thisClassSubjects) {
+                let course = await Course.create(
+                    {
+                        teacherId: teacher.id,
+                        subjectId,
+                        classId: classes[i].id
                     }
-                });
-
-                // CREATE COURSES
-                let course = await Course.create({
-                    teacherId: teacher.id,
-                    subjectId: dbSubject.id,
-                    classId: classes[i].id
-                });
+                );
+                coursesList.push(course);
             }
         }
 
@@ -159,52 +156,59 @@ module.exports = {
             let thisClassStudentsKeys = objKeysStudent.filter(
                 student => student.includes(objKeysClass[i])
             );
-            let thisClassStudents = []; // array of arrays with infos about students of one class
+            let thisClassStudents = []; // array of arrays like ["student class number", "student name", "checkbox on", "retaken course subjectId"]
             for (key of thisClassStudentsKeys) {
                 thisClassStudents.push(req.body[key]);
             }
-            for (student of thisClassStudents) {
+            for (student of thisClassStudents) { // array of arrays
                 let newStudent = await Student.create(
                     {
                         name: student[1].trim()
                     }
                 );
-                let repeater = false;
-                if (student[2] == "on") { repeater = true }
 
-
-                console.log("newStudent", newStudent);
-
-
-                // CREATE CLASS_STUDENT
-                let classStudent = await Class_Student.create(
+                // ASSOCIATE STUDENT TO CLASS
+                await Class_Student.create(
                     {
                         classId: classes[i].id,
                         studentId: newStudent.id,
-                        number: student[0],
-                        repeater
+                        number: student[0]
                     }
-                )
+                );
 
-                // if (repeater) {
+                // CREATE REPEATER
+                let repeater = false;
+                if (student[2] == "on") { repeater = true; } // checkbox checked
 
-                // }
+                if (repeater) {
+                    let thisClassCourses = coursesList.filter(
+                        course => course.classId == classes[i].id
+                    );
+                    let coursesIdsList = [];
 
-                console.log("classStudent", classStudent);
+                    for (let j = 3; j < student.length; j++) { // from student[3], there's a list of subjects ids the student is repeating
+
+                        for (course of thisClassCourses) {
+                            if (course.subjectId == student[j]) {
+                                coursesIdsList.push(course.id);
+                            }
+                        }
+                    }
+                    for (courseId of coursesIdsList) {
+                        await Repeater.create(
+                            {
+                                studentId: newStudent.id,
+                                courseId
+                            }
+                        );
+                    }
+                }
             }
-
         }
-
-
-        return res.redirect("/professor/cadastrar");
-
-
-
         // SET A SESSION FOR THE USER
-        // let user = await User.findOne({ where: { email } })
-        // req.session.user = user;
-        // AND THEN...
-        // return res.redirect("/professor/home");
+        req.session.user = user;
+        // AND REDIRECT HOME
+        return res.redirect("/professor/home");
     },
     registerGuardian: async (req, res, next) => {
         // ENCRYPT PASSWORD,

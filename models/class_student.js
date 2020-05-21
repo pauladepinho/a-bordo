@@ -4,8 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       classId: { type: DataTypes.INTEGER, allowNull: false },
       studentId: { type: DataTypes.INTEGER, allowNull: false },
-      number: { type: DataTypes.INTEGER, allowNull: false },
-      repeater: { type: DataTypes.TINYINT, allowNull: false }
+      number: { type: DataTypes.INTEGER, allowNull: false }
     },
     {
       timestamps: false,
