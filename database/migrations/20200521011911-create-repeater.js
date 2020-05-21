@@ -1,22 +1,12 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Class_Students', {
+    return queryInterface.createTable('Repeaters', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
-      },
-      classId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Classes",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE"
       },
       studentId: {
         type: Sequelize.INTEGER,
@@ -28,13 +18,19 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE"
       },
-      number: {
+      courseId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: "Courses",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Class_Students');
+    return queryInterface.dropTable('Repeaters');
   }
 };

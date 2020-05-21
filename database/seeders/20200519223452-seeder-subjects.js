@@ -5,7 +5,7 @@ module.exports = {
     return queryInterface.bulkInsert('Subjects', [
       { name: "artes" },
       { name: "biologia" },
-      { name: "ciências" },
+      { name: "ciência" },
       { name: "educação física" },
       { name: "filosofia" },
       { name: "física" },

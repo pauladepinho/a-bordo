@@ -1,4 +1,4 @@
-const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Student_Guardian, Class_Student, Lesson, Attendance, Evaluation, Student_Evaluation } = require("../models");
+const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Student_Guardian, Class_Student, Lesson, Attendance, Evaluation, Student_Evaluation, Repeater } = require("../models");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -60,11 +60,16 @@ module.exports = {
         res.render("register-guardian");
     },
     registerTeacher: async (req, res, next) => {
-        // CREATE USER - OK
+
+        // CREATE USER
         const { forename, surname, email, phone, password } = req.body;
         let picture;
         req.file ? picture = req.file.filename : picture = null;
 
+        let invalidEmail = await User.findOne({ where: { email } });
+        if (invalidEmail) {
+            return res.send(`O email ${email} já está cadastrado!`)
+        }
         const user = await User.create(
             {
                 forename,
@@ -75,106 +80,135 @@ module.exports = {
                 picture
             }
         );
+        // MAKE THE USER A TEACHER
+        const teacher = await Teacher.create({ userId: user.id });
 
-        // ASSOCIATE USER TO A CATEGORY - OK
-        const category = await Category.findByPk(1); // CATEGORY PROFESSOR
-        await user.setCategories(category);
-
-        // CREATE SCHOOLS - OK
+        // CREATE SCHOOLS
         const objKeysSchool = Object.keys(req.body).filter(
             key => key.substr(0, 6) == "school"
         );
         let schoolsList = [];
-        for (school of objKeysSchool) {
+        for (schoolKey of objKeysSchool) {
             schoolsList.push(
                 {
-                    name: req.body[school][2],
-                    passing_grade: req.body[school][3],
-                    academic_terms: req.body[school][4],
-                    state: req.body[school][0],
-                    municipality: req.body[school][1]
+                    name: req.body[schoolKey][2],
+                    passingGrade: req.body[schoolKey][3],
+                    academicTerms: req.body[schoolKey][4],
+                    state: req.body[schoolKey][0],
+                    municipality: req.body[schoolKey][1]
                 }
             );
         };
         const schools = await School.bulkCreate(schoolsList);
 
-        // CREATE CLASSES - OK
+        // CREATE CLASSES
         const objKeysClass = Object.keys(req.body).filter( // ex. return [ "class1-school1", "class2-school1", "class1-school2" ]
             key => key.substr(0, 5) == "class"
         );
         let classesList = [];
-        for (let i = 1; i <= schools.length; i++) {
+        for (let i = 0; i < schools.length; i++) {
             let thisSchoolClasses = objKeysClass.filter(
-                thisClass => thisClass.includes(`school${i}`)
+                thisClass => thisClass.includes(`school${i + 1}`)
             );
             for (aClass of thisSchoolClasses) {
-                let grade = req.body[aClass][2].split("-"); // ex. return [ "Ensino Fundamental", "6" ]
+                let lvl = req.body[aClass][2].split("-"); // ex. return [ "Ensino Fundamental ", " 6º ano" ]
                 classesList.push(
                     {
+                        schoolId: schools[i].id, // ASSOCIATE CLASSES TO A SCHOOL
                         code: req.body[aClass][0],
                         year: req.body[aClass][1],
-                        level_of_education: grade[0],
-                        grade: grade[1],
-                        schools_id: schools[i - 1].id // ASSOCIATE CLASSES TO A SCHOOL
+                        levelOfEducation: lvl[0].trim(),
+                        grade: lvl[1].trim()
                     }
                 );
             };
         };
         const classes = await Class.bulkCreate(classesList);
 
-
-
-        // ASSOCIATE USER TO CLASSES (THROUGH USER_CATEGORY)
-        const userCategory = await User_Category.findOne({
-            where: { users_id: user.id }
-        });
-        await userCategory.setClasses(classes);
-
-        // USERS_CLASSES TABLE
-        let userClasses = await User_Class.findAll();
-
-        return res.send(userClasses);
-        // return res.redirect("/professor/cadastrar");
-
-
-
-
-        // CREATE STUDENTS
-        let objKeysStudent = Object.keys(req.body).filter(
-            key => key.substr(0, 7) == "student"
-        );
-        let studentsList = [];
-        for (student of students) {
-            studentsList.push(
-                {
-                    name: req.body[student][1]
-                }
-            );
-            // let student_number = req.body[student][0];
-            // let repeater = req.body[student].length > 2;
-        };
-        // students = await Student.bulkCreate(studentsList);
-
-        // CREATE SUBJECTS
+        // CREATE COURSES
         const objKeysSubjects = Object.keys(req.body).filter( // ex. return [ "subjects-class1-school1", "subjects-class2-school1", "subjects-class1-school2" ]
             key => key.substr(0, 8) == "subjects"
         );
-        let subjectsList = []; // may have repeated strings
-        for (subject of objKeysSubjects) {
-            subjectsList.push(
-                req.body[subject]
+        let coursesList = [];
+        for (let i = 0; i < classes.length; i++) {
+            let thisClassSubjectsKey = objKeysSubjects.filter(
+                subjects => subjects.includes(`class${i + 1}`)
             );
-        };
+            let thisClassSubjects = req.body[thisClassSubjectsKey]; // array containing the subjects ids of only one class
 
+            for (subjectId of thisClassSubjects) {
+                let course = await Course.create(
+                    {
+                        teacherId: teacher.id,
+                        subjectId,
+                        classId: classes[i].id
+                    }
+                );
+                coursesList.push(course);
+            }
+        }
 
+        // CREATE STUDENTS
+        const objKeysStudent = Object.keys(req.body).filter( // ex. return [ "student1-class1-school1", "student2-class1-school1", "student1-class2-school1" ]
+            key => key.substr(0, 7) == "student"
+        );
+        for (let i = 0; i < classes.length; i++) {
+            let thisClassStudentsKeys = objKeysStudent.filter(
+                student => student.includes(objKeysClass[i])
+            );
+            let thisClassStudents = []; // array of arrays like ["student class number", "student name", "checkbox on", "retaken course subjectId"]
+            for (key of thisClassStudentsKeys) {
+                thisClassStudents.push(req.body[key]);
+            }
+            for (student of thisClassStudents) { // array of arrays
+                let newStudent = await Student.create(
+                    {
+                        name: student[1].trim()
+                    }
+                );
 
+                // ASSOCIATE STUDENT TO CLASS
+                await Class_Student.create(
+                    {
+                        classId: classes[i].id,
+                        studentId: newStudent.id,
+                        number: student[0]
+                    }
+                );
 
+                // CREATE REPEATER
+                let repeater = false;
+                if (student[2] == "on") { repeater = true; } // checkbox checked
 
+                if (repeater) {
+                    let thisClassCourses = coursesList.filter(
+                        course => course.classId == classes[i].id
+                    );
+                    let coursesIdsList = [];
+
+                    for (let j = 3; j < student.length; j++) { // from student[3], there's a list of subjects ids the student is repeating
+
+                        for (course of thisClassCourses) {
+                            if (course.subjectId == student[j]) {
+                                coursesIdsList.push(course.id);
+                            }
+                        }
+                    }
+                    for (courseId of coursesIdsList) {
+                        await Repeater.create(
+                            {
+                                studentId: newStudent.id,
+                                courseId
+                            }
+                        );
+                    }
+                }
+            }
+        }
         // SET A SESSION FOR THE USER
-        // let user = await User.findOne({ where: { email } })
-        // req.session.user = user;
-        // AND THEN...
-        // return res.redirect("/professor/home");
+        req.session.user = user;
+        // AND REDIRECT HOME
+        return res.redirect("/professor/home");
     },
     registerGuardian: async (req, res, next) => {
         // ENCRYPT PASSWORD,
