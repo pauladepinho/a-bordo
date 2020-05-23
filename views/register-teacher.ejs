@@ -45,9 +45,9 @@
           </div>
 
           <div id="full-name">
-            <input type="text" name="forename" id="name" placeholder="Nome" value="Professor" />
+            <input type="text" name="forename" id="name" placeholder="Nome" value="Professor" required />
 
-            <input type="text" name="surname" id="surname" placeholder="Sobrenome" value="Pardal" />
+            <input type="text" name="surname" id="surname" placeholder="Sobrenome" value="Pardal" required />
           </div>
           <div id=" contact-info">
             <input type="email" name="email" id="email" placeholder="E-mail" />
@@ -56,15 +56,22 @@
           </div>
           <div id=" add-password">
             <div class="password">
-              <input type="password" name="password" id="password" placeholder="Senha" value="senha" />
+              <input type="password" name="password" id="password" placeholder="Senha" value="senha" required />
               <div class="eye-icon" id="eye-icon-1" onclick="toogleVisibility()"></div>
             </div>
 
             <div class="password">
-              <input type="password" id="confirm-password" placeholder="Confirme a senha" />
+              <input type="password" id="confirm-password" placeholder="Confirme a senha" value="senha" required />
               <div class="eye-icon" id="eye-icon-2" onclick="toogleVisibility()"></div>
             </div>
           </div>
+
+          <% if(typeof errors != "undefined") { %>
+          <% errors.forEach(error => { %>
+          <p><%= error.msg %></p>
+          <% }); %>
+          <% } %>
+
           <ul id="password-strength">
             <li class="dash"></li>
             <li class="dash"></li>
@@ -103,7 +110,7 @@
           </div>
           <div class="gray-box">
             <div class="school-location">
-              <select name="school1[]">
+              <select name="school1[]" required>
                 <option disabled>UF</option>
                 <option value="AC">Acre</option>
                 <option value="AL">Alagoas</option>
@@ -134,13 +141,13 @@
                 <option value="TO">Tocantins</option>
               </select>
 
-              <select name="school1[]">
+              <select name="school1[]" required>
                 <option disabled>Município</option>
                 <option value="Rio de Janeiro" selected>Rio de Janeiro</option>
               </select>
             </div>
 
-            <select name="school1[]">
+            <select name="school1[]" required>
               <option disabled>Nome da escola</option>
               <option value="Colégio Pedro II" selected>Colégio Pedro II</option>
               <option value="ETE Ensino Fundamental Visconde de Mauá">Escola Técnica Estadual do Ensino Fundamental
@@ -148,7 +155,7 @@
               </option>
             </select>
 
-            <select name="school1[]">
+            <select name="school1[]" required>
               <option disabled>Média para aprovação</option>
               <option disabled>Escala de 0 a 10 pontos</option>
               <option value="5">5,0 pontos</option>
@@ -163,7 +170,7 @@
             <p>Sistema de avaliação: <span id="term"></span></p>
             <label class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
               Bimestral
-              <input type="radio" name="school1[]" value="4" />
+              <input type="radio" name="school1[]" value="4" required />
             </label>
             <label class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
               Trimestral
@@ -266,11 +273,12 @@
           <div class="gray-box">
             <div id="class-code">
               <label for="class">Turma</label>
-              <input type="text" name="class1-school1[]" id="class" placeholder="Número da turma" value="2233" />
+              <input type="text" name="class1-school1[]" id="class" placeholder="Número da turma" value="2233"
+                required />
               <label for="">Ano
-                <input type="text" name="class1-school1[]" value="2020">
+                <input type="text" name="class1-school1[]" value="2020" required>
               </label>
-              <select name="class1-school1[]">
+              <select name="class1-school1[]" required>
                 <option disabled>Série/Ano</option>
                 <option disabled>Ensino Fundamental</option>
                 <option value="Ensino Fundamental - 1º ano">1º ano</option>
@@ -291,7 +299,7 @@
 
             <p>Nesta turma, eu leciono...</p>
             <div id="new-courses">
-              <select name="subjects-class1-school1[]">
+              <select name="subjects-class1-school1[]" required>
                 <option value="" disabled>Escolher disciplina</option>
                 <option value="1">Artes</option>
                 <option value="2">Biologia</option>
@@ -354,8 +362,9 @@
               </div>
 
               <div class="students">
-                <input type="number" name="student1-class1-school1[]" value="1" />
-                <input type="text" name="student1-class1-school1[]" placeholder="Nome do aluno" value="João da Silva" />
+                <input type="number" name="student1-class1-school1[]" value="1" required />
+                <input type="text" name="student1-class1-school1[]" placeholder="Nome do aluno" value="João da Silva"
+                  required />
 
                 <label for="course-retake-checkbox-student1" class="checkbox-container">Dependência
                   <input type="checkbox" name="student1-class1-school1[]" class="course-retake-checkbox"
@@ -363,7 +372,7 @@
                   <span class="checkmark"></span>
                 </label>
 
-                <div class="course-retake-list" id="course-retake-student1" hidden>
+                <div class="course-retake-list" id="course-retake-student1" hidden required>
                   <select name="student1-class1-school1[]" id="course-retake-list1-student1">
                     <option value="" disabled selected>Dependência em...</option>
                     <option value="1">Artes</option>
@@ -397,8 +406,9 @@
               </div>
 
               <div class="students">
-                <input type="number" name="student2-class1-school1[]" value="2" />
-                <input type="text" name="student2-class1-school1[]" placeholder="Nome do aluno" value="Zeca Tatu" />
+                <input type="number" name="student2-class1-school1[]" value="2" required />
+                <input type="text" name="student2-class1-school1[]" placeholder="Nome do aluno" value="Zeca Tatu"
+                  required />
 
                 <label for="course-retake-checkbox-student2" class="checkbox-container">Dependência
                   <input type="checkbox" name="student2-class1-school1[]" class="course-retake-checkbox"
@@ -406,7 +416,7 @@
                   <span class="checkmark"></span>
                 </label>
 
-                <div class="course-retake-list" id="course-retake-student2" hidden>
+                <div class="course-retake-list" id="course-retake-student2" hidden required>
                   <select name="student2-class1-school1[]" id="course-retake-list1-student2">
                     <option value="" disabled selected>Dependência em...</option>
                     <option value="1">Artes</option>

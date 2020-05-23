@@ -1,3 +1,5 @@
+const { check, validationResult, body } = require("express-validator")
+
 const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Student_Guardian, Class_Student, Lesson, Attendance, Evaluation, Student_Evaluation, Repeater } = require("../models");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -59,17 +61,27 @@ module.exports = {
     renderGuardianRegistrationForm: (req, res) => {
         res.render("register-guardian");
     },
-    registerTeacher: async (req, res, next) => {
+    registerTeacher: async (req, res) => {
 
-        // CREATE USER
         const { forename, surname, email, phone, password } = req.body;
-        let picture;
-        req.file ? picture = req.file.filename : picture = null;
+
+        // VALIDATIONS
+        let errorsList = validationResult(req);
+        if (!errorsList.isEmpty()) {
+            console.log("errorsList", errorsList);
+            console.log("req.body", req.body);
+
+            return res.render("register-teacher", { errors: errorsList.errors });
+        }
+
+        let picture = req.file ? req.file.filename : null;
 
         let invalidEmail = await User.findOne({ where: { email } });
         if (invalidEmail) {
             return res.send(`O email ${email} já está cadastrado!`)
         }
+
+        // CREATE USER
         const user = await User.create(
             {
                 forename,
