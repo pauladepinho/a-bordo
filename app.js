@@ -8,7 +8,8 @@ let session = require("express-session");
 let bodyParser = require("body-parser");
 
 var IndexRouter = require('./routes/IndexRouter');
-// var usersRouter = require('./routes/users');
+var TeacherRouter = require('./routes/TeacherRouter');
+var GuardianRouter = require('./routes/GuardianRouter');
 
 var app = express();
 
@@ -27,7 +28,8 @@ app.use(session({ secret: "abordo" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', IndexRouter);
-// app.use('/usuario', usersRouter);
+app.use('/professor', TeacherRouter);
+app.use('/responsavel', GuardianRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
