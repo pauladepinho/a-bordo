@@ -211,10 +211,50 @@ module.exports = {
         return res.redirect("/professor/home");
     },
     registerGuardian: async (req, res, next) => {
-        // ENCRYPT PASSWORD,
-        // SAVE DATA IN DB,
-        // SET A SESSION,
-        // AND THEN...
+
+        // CREATE USER 
+        const { forename, surname, email, phone, password } = req.bory;
+        let picture = req.file ? req.file.name : null;
+
+        let invalidEmail = await User.findOne({ where: { email }});
+        if (invalidEmail) {
+            return res.send(`O email ${email} já está cadastrado!`)
+        }
+        const user = User.create({
+            forename,
+            surname,
+            email,
+            phone,
+            password: bcrypt.hashSync(password, saltRounds),
+            picture
+        });
+
+        // MAKE THE USER A GUARDIAN
+        const guardian = await Guardian.create({userId: user.id});
+
+        const { selectState, selectCity } = req.body;
+        
+        // SCHOOL LIST
+        const schools = await School.findAll({ where: { state: selectState, municipality: selectCity }});
+        const school = req.body.selectSchool;
+        
+        // CLASS LIST
+        const classes = await Class.findAll({ where: { schoolId: school.id }});
+        const clas = req.body.selectClass;
+        
+        const classStudent = await Class_Student.findAll({ where: { classId: clas.id}});
+
+        // STUDENT LIST
+        const students = await Student.findAll({ where: { id: classStudent.studentId }});
+        const selectStudent = req.body.selectStudent;
+        const student = await Student.findOne({ where: { name: selectStudent }});
+       
+        // ASSOCIATE STUDENT TO GUARDIAN
+        const student_guardian = await Student_Guardian.create({studentId: student.id, guardianId: guardian.id});
+
+        // SET A SESSION
+        req.session.user = user;
+
         return res.redirect("/responsavel/home");
     },
     renderTeacherUpdateForm: async (req, res) => {
