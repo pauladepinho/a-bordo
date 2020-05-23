@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = {
+    uploadFile: (req, res) => {
+        return res.render("teacher-home", { userPicture: user.picture })
+    },
     renderLogin: (req, res) => {
         return res.render('index');
     },
@@ -41,9 +44,32 @@ module.exports = {
         }
     },
     renderTeacherHome: async (req, res) => {
-        // GET TEACHER DATA FROM DB,
+        const user = req.session.user;
+
+        const teacher = await Teacher.findOne({ where: { userId: user.id } });
+        const courses = await Course.findAll({ where: { teacherId: teacher.id } });
+
+        const subjectsIds = courses.filter(course => course.subjectId);
+        const classesIds = courses.filter(course => course.classId);
+        const schoolsIds = courses.filter(course => course.schoolId);
+
+        let subjects = [];
+        for (id of subjectsIds) {
+            subjects.push(await Subject.findOne({ where: { id } }));
+        }
+        let classes = [];
+        for (id of classesIds) {
+            classes.push(await Subject.findOne({ where: { id } }));
+        }
+        let schools = [];
+        for (id of schoolsIds) {
+            schools.push(await Subject.findOne({ where: { id } }));
+        }
+
+        console.log(user.picture);
+
         // AND THEN...
-        return res.render("teacher-home");
+        return res.render("teacher-home", { user, schools, classes });
     },
     renderGuardianHome: async (req, res) => {
         // GET GUARDIAN DATA FROM DB,
@@ -63,30 +89,15 @@ module.exports = {
     },
     registerTeacher: async (req, res) => {
 
-        const { forename, surname, email, phone, password } = req.body;
-
-        // VALIDATIONS
-        let errorsList = validationResult(req);
-        if (!errorsList.isEmpty()) {
-            console.log("errorsList", errorsList);
-            console.log("req.body", req.body);
-
-            return res.render("register-teacher", { errors: errorsList.errors });
-        }
-
-        let picture = req.file ? req.file.filename : null;
-
-        let invalidEmail = await User.findOne({ where: { email } });
-        if (invalidEmail) {
-            return res.send(`O email ${email} já está cadastrado!`)
-        }
-
         // CREATE USER
+        const { forename, surname, email, phone, password } = req.body;
+        const picture = req.file ? req.file.filename : null;
+
         const user = await User.create(
             {
-                forename,
-                surname,
-                email,
+                forename: forename.toUpperCase(),
+                surname: surname.toUpperCase(),
+                email: email.toUpperCase(),
                 phone,
                 password: bcrypt.hashSync(password, saltRounds),
                 picture
@@ -123,12 +134,12 @@ module.exports = {
                 thisClass => thisClass.includes(`school${i + 1}`)
             );
             for (aClass of thisSchoolClasses) {
-                let lvl = req.body[aClass][2].split("-"); // ex. return [ "Ensino Fundamental ", " 6º ano" ]
+                let lvl = req.body[aClass][1].split("-"); // ex. return [ "Ensino Fundamental ", " 6º ano" ]
                 classesList.push(
                     {
                         schoolId: schools[i].id, // ASSOCIATE CLASSES TO A SCHOOL
-                        code: req.body[aClass][0],
-                        year: req.body[aClass][1],
+                        code: req.body[aClass][2],
+                        year: req.body[aClass][0],
                         levelOfEducation: lvl[0].trim(),
                         grade: lvl[1].trim()
                     }
@@ -173,6 +184,14 @@ module.exports = {
                 thisClassStudents.push(req.body[key]);
             }
             for (student of thisClassStudents) { // array of arrays
+
+                // VALIDATE STUDENTS
+                let registeredStudent = await Student.findOne({ where: { name: student[1].trim() } });
+                if (registeredStudent) {
+                    return res.render("register-teacher", { errors: ["Cadastre novos alunos."] })
+                }
+
+                // CREATE STUDENTS
                 let newStudent = await Student.create(
                     {
                         name: student[1].trim()

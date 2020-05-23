@@ -1,4 +1,4 @@
-<%- include("partials/header.ejs", { title: "aBordo - Fazer chamada" }) %>
+<%- include("partials/header.ejs", { title: "aBordo - Professorx" }) %>
 </head>
 
 <body>
@@ -13,10 +13,10 @@
             </div>
 
             <div id="user-options">
-                <img src="../images/professor.png" alt="">
+                <img src="../<%= user.picture %>" alt="avatar">
                 <span>
-                    <p>Nome do professor</p>
-                    <p>PROFESSOR</p>
+                    <p><%= user.forename + " " + user.surname %></p>
+                    <p>PROFESSORX</p>
                 </span>
             </div>
         </div>
@@ -28,12 +28,6 @@
                 <option value="" disabled selected>Escola</option>
                 <option value="0">Colégio Pedro II</option>
                 <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
-            </select>
-
-            <select name="class" id="class" required>
-                <option value="" disabled selected>Turma</option>
-                <option value="2223">Turma 2223</option>
-                <option value="1121">Turma 1121</option>
             </select>
 
             <select id="course" name="course" required>
@@ -58,6 +52,12 @@
                 <option value="writing">Redação</option>
                 <option value="sociology">Sociologia</option>
                 <option value="drama">Teatro</option>
+            </select>
+
+            <select name="class" id="class" required>
+                <option value="" disabled selected>Turma</option>
+                <option value="2223">Turma 2223</option>
+                <option value="1121">Turma 1121</option>
             </select>
 
             <select name="term" id="term" required>

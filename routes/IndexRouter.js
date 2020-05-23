@@ -1,29 +1,32 @@
+const path = require("path");
 const express = require('express');
 const router = express.Router();
 const multer = require("multer");
-let upload = multer({ dest: 'uploads/' });
-const { check, validationResult, body } = require("express-validator")
+// const upload = multer({ dest: 'uploads/' });
+const storage = multer.diskStorage(
+    {
+        destination: function (req, file, cb) {
+            cb(null, path.join("uploads"))
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        }
+    }
+);
+const upload = multer({ storage: storage });
 
 const IndexController = require("../controllers/IndexController");
 const VerifyLoggedInUser = require("../middlewares/VerifyLoggedInUser");
-const { User } = require("../models");
+const ValidateNewUser = require("../middlewares/ValidateNewUser");
 
 // ON LOGIN PAGE
-router.get('/', IndexController.renderLogin);
-router.get('/login', IndexController.renderLogin);
+router.get("/", IndexController.renderLogin);
+router.get("/login", IndexController.renderLogin);
 router.post("/login", IndexController.login);
 router.get("/cadastrar", IndexController.redirectToRegistrationForm);
 
 router.get("/professor/cadastrar", IndexController.renderTeacherRegistrationForm);
-
-router.post("/professor/cadastrar",
-    [
-        check("password")
-            .isLength({ min: 2 }, { max: 5 })
-            .withMessage("A senha deve ter entre 2 e 5 caracteres.")
-    ],
-    upload.single("picture"), IndexController.registerTeacher
-);
+router.post("/professor/cadastrar", upload.single("picture"), ValidateNewUser, IndexController.registerTeacher);
 
 
 router.get("/responsavel/cadastrar", IndexController.renderGuardianRegistrationForm)

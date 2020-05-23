@@ -21,6 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 app.use(methodOverride("_method"));
 app.use(session({ secret: "abordo" }));
 app.use(bodyParser.urlencoded({ extended: true }));
