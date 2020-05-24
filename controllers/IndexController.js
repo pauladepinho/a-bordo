@@ -1,6 +1,5 @@
 const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Student_Guardian, Class_Student, Lesson, Attendance, Evaluation, Student_Evaluation, Repeater } = require("../models");
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 module.exports = {
     renderLogin: (req, res) => {
@@ -8,7 +7,7 @@ module.exports = {
     },
     login: async (req, res) => {
         // READ INFOS FROM REQ.BODY
-        const { userType, email, password } = req.body;
+        const { userType, email, password, rememberMe } = req.body;
         // TRY AND LOAD A USER FROM DB WHOSE EMAIL == REQ.BODY.EMAIL
         const user = await User.findOne(
             {
@@ -26,6 +25,11 @@ module.exports = {
         }
         // IF PASSWORDS MATCH, SET A SESSION FOR THE USER
         req.session.user = user;
+        // REMEMBER USER
+        const oneWeek = 7 * 24 * 3600 * 1000; //1 week
+        if (rememberMe != "undefined") {
+            res.cookie("aBordo", user.email, { maxAge: oneWeek });
+        }
         // FINALLY, MANAGE REDIRECTIONS
         const isTeacher = await Teacher.findOne({ where: { userId: user.id } });
         const isGuardian = await Guardian.findOne({ where: { userId: user.id } });

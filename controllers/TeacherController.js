@@ -9,24 +9,49 @@ module.exports = {
         const teacher = await Teacher.findOne({ where: { userId: user.id } });
         const courses = await Course.findAll({ where: { teacherId: teacher.id } });
 
-        const subjectsIds = courses.filter(course => course.subjectId);
-        const classesIds = courses.filter(course => course.classId);
-        const schoolsIds = courses.filter(course => course.schoolId);
+        let subjectsIds = [];
+        let classesIds = [];
+
+        for (course of courses) {
+            subjectsIds.push(course.subjectId);
+            classesIds.push(course.classId);
+        }
 
         let subjects = [];
         for (id of subjectsIds) {
-            subjects.push(await Subject.findOne({ where: { id } }));
-        }
-        let classes = [];
-        for (id of classesIds) {
-            classes.push(await Subject.findOne({ where: { id } }));
-        }
-        let schools = [];
-        for (id of schoolsIds) {
-            schools.push(await Subject.findOne({ where: { id } }));
+            let subject = await Subject.findOne({ where: { id } });
+            subjects.push(subject);
         }
 
-        return res.render("teacher-home", { user, schools, classes });
+        let uniqueClassesIds = classesIds.filter((id, index) => {
+            classesIds.indexOf(id) === index;
+        });
+        console.log("uniqueClassesIds", uniqueClassesIds);
+
+        let classes = [];
+        for (id of uniqueClassesIds) {
+            let c = await Class.findOne({ where: { id } });
+            classes.push(c);
+        }
+
+        let schoolsIds = [];
+        for (c of classes) {
+            schoolsIds.push(c.schoolId);
+        }
+        let uniqueSchoolsIds = schoolsIds.filter((id, index) => {
+            schoolsIds.indexOf(id) === index;
+        });
+        let schools = [];
+        for (id of uniqueSchoolsIds) {
+            let school = await School.findOne({ where: { id } });
+            schools.push(school);
+        }
+
+        console.log(subjects);
+        console.log(classes);
+        console.log(schools);
+
+        return res.render("teacher-home", { user, subjects, classes, schools });
     },
     renderRegistrationForm: (req, res) => {
         res.render("register-teacher");
@@ -179,21 +204,21 @@ module.exports = {
                 }
             }
         }
-        // SET A SESSION FOR THE USER
+        // SET A SESSION FOR THE TEACHER USER
         req.session.user = user;
         // AND REDIRECT HOME
         return res.redirect("/professor/home");
-    },
-    renderGradeBook: (req, res) => {
-        return res.render("set-notes");
-    },
-    recordGrades: (req, res) => {
-
     },
     renderAttendanceSheet: (req, res) => {
         return res.render("attendance");
     },
     recordAttendances: (req, res) => {
+
+    },
+    renderGradeBook: (req, res) => {
+        return res.render("set-notes");
+    },
+    recordGrades: (req, res) => {
 
     },
     renderRecordBook: (req, res) => {
