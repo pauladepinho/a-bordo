@@ -26,7 +26,7 @@ module.exports = {
         // IF PASSWORDS MATCH, SET A SESSION FOR THE USER
         req.session.user = user;
         // REMEMBER USER
-        const oneWeek = 7 * 24 * 3600 * 1000; //1 week
+        const oneWeek = 7 * 24 * 3600 * 1000; // 1 week
         if (rememberMe != "undefined") {
             res.cookie("aBordo", user.email, { maxAge: oneWeek });
         }

@@ -22,10 +22,11 @@ const isTeacher = require("../middlewares/isTeacher");
 /*****************************************************************************/
 /***********************--------CRUD--------**********************************/
 /*****************************************************************************/
-router.get("/home", VerifyLoggedInUser, isTeacher, TeacherController.renderHome); // middleware
+router.get("/", VerifyLoggedInUser, isTeacher, TeacherController.renderHome);
+router.get("/home", VerifyLoggedInUser, isTeacher, TeacherController.renderHome);
 /*****************************************************************************/
 router.get("/cadastrar", TeacherController.renderRegistrationForm);
-router.post("/cadastrar", upload.single("picture"), ValidateNewUser, TeacherController.registerTeacher); // middleware
+router.post("/cadastrar", upload.single("picture"), ValidateNewUser, TeacherController.registerTeacher);
 /*****************************************************************************/
 router.get("/fazer-chamada", VerifyLoggedInUser, isTeacher, TeacherController.renderAttendanceSheet);
 router.post("/fazer-chamada", TeacherController.recordAttendances);

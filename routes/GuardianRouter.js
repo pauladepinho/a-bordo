@@ -22,12 +22,13 @@ const isGuardian = require("../middlewares/isGuardian");
 /*****************************************************************************/
 /***********************--------CRUD--------**********************************/
 /*****************************************************************************/
-router.get("/home", VerifyLoggedInUser, isGuardian, GuardianController.renderHome); // middleware
+router.get("/", VerifyLoggedInUser, isGuardian, GuardianController.renderHome);
+router.get("/home", VerifyLoggedInUser, isGuardian, GuardianController.renderHome);
 /*****************************************************************************/
 router.get("/cadastrar", GuardianController.renderRegistrationForm)
-router.post("/cadastrar", upload.single("picture"), ValidateNewUser, GuardianController.registerGuardian); // middleware
+router.post("/cadastrar", upload.single("picture"), ValidateNewUser, GuardianController.registerGuardian);
 /*****************************************************************************/
-router.get("/atualizar", GuardianController.renderUpdateForm);
+router.get("/atualizar", VerifyLoggedInUser, isGuardian, GuardianController.renderUpdateForm);
 router.put("/atualizar", upload.single("picture"), GuardianController.updateGuardian);
 /*****************************************************************************/
 router.delete("/deletar", GuardianController.deleteGuardian);

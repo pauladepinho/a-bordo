@@ -16,34 +16,19 @@ module.exports = {
             subjectsIds.push(course.subjectId);
             classesIds.push(course.classId);
         }
-
         let subjects = [];
         for (id of subjectsIds) {
             let subject = await Subject.findOne({ where: { id } });
             subjects.push(subject);
         }
-
-        let uniqueClassesIds = classesIds.filter((id, index) => {
-            classesIds.indexOf(id) === index;
-        });
-        console.log("uniqueClassesIds", uniqueClassesIds);
-
         let classes = [];
-        for (id of uniqueClassesIds) {
+        for (id of classesIds) {
             let c = await Class.findOne({ where: { id } });
             classes.push(c);
         }
-
-        let schoolsIds = [];
-        for (c of classes) {
-            schoolsIds.push(c.schoolId);
-        }
-        let uniqueSchoolsIds = schoolsIds.filter((id, index) => {
-            schoolsIds.indexOf(id) === index;
-        });
         let schools = [];
-        for (id of uniqueSchoolsIds) {
-            let school = await School.findOne({ where: { id } });
+        for (c of classes) {
+            let school = await School.findOne({ where: { id: c.schoolId } });
             schools.push(school);
         }
 
