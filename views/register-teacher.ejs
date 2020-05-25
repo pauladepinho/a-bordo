@@ -110,49 +110,17 @@
           </div>
           <div class="gray-box">
             <div class="school-location">
-              <select name="school1[]" required>
+              <select name="school1[]" id="state-school1" required>
                 <option disabled selected>UF</option>
-                <option value="AC">Acre</option>
-                <option value="AL">Alagoas</option>
-                <option value="AP">Amapá</option>
-                <option value="AM">Amazonas</option>
-                <option value="BA">Bahia</option>
-                <option value="CE">Ceará</option>
-                <option value="DF">Distrito Federal</option>
-                <option value="ES">Espírito Santo</option>
-                <option value="GO">Goiás</option>
-                <option value="MA">Maranhão</option>
-                <option value="MT">Mato Grosso</option>
-                <option value="MS">Mato Grosso do Sul</option>
-                <option value="MG">Minas Gerais</option>
-                <option value="PA">Pará</option>
-                <option value="PB">Paraíba</option>
-                <option value="PR">Paraná</option>
-                <option value="PE">Pernambuco</option>
-                <option value="PI">Piauí</option>
-                <option value="RJ">Rio de Janeiro</option>
-                <option value="RN">Rio Grande do Norte</option>
-                <option value="RS">Rio Grande do Sul</option>
-                <option value="RO">Rondônia</option>
-                <option value="RR">Roraima</option>
-                <option value="SC">Santa Catarina</option>
-                <option value="SP">São Paulo</option>
-                <option value="SE">Sergipe</option>
-                <option value="TO">Tocantins</option>
               </select>
 
-              <select name="school1[]" required>
+              <select name="school1[]" id="municipality-school1" disabled required>
                 <option disabled selected>Município</option>
-                <option value="Rio de Janeiro">Rio de Janeiro</option>
               </select>
             </div>
 
-            <select name="school1[]" required>
+            <select name="school1[]" id="school1" disabled required>
               <option disabled selected>Nome da escola</option>
-              <option value="Colégio Pedro II">Colégio Pedro II</option>
-              <option value="ETE Ensino Fundamental Visconde de Mauá">Escola Técnica Estadual do Ensino Fundamental
-                Visconde de Mauá
-              </option>
             </select>
 
             <select name="school1[]" required>
@@ -487,4 +455,5 @@
     </form>
   </main>
 
+  <script src="/javascripts/api.js"></script>
   <%- include("partials/footer.ejs") %>

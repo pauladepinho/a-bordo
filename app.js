@@ -6,6 +6,7 @@ var logger = require('morgan');
 let methodOverride = require("method-override");
 let session = require("express-session");
 let bodyParser = require("body-parser");
+// const cors = require("cors");
 
 var IndexRouter = require('./routes/IndexRouter');
 var TeacherRouter = require('./routes/TeacherRouter');
@@ -34,6 +35,7 @@ app.use('/professor', TeacherRouter);
 app.use('/responsavel', GuardianRouter);
 
 app.use(CookieMiddleware);
+// app.use(cors());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
