@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false
       },
       picture: {
-        type: Sequelize.STRING
+        type: Sequelize.BLOB
       }
     });
   },
