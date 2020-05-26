@@ -68,5 +68,11 @@ module.exports = {
         } else { // user is already logged in
             redirectHome(req, res);
         }
+    },
+
+    // GET /logout
+    logout: (req, res) => {
+        req.session.user = null;
+        return res.redirect("/login");
     }
 };
