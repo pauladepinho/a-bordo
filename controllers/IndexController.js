@@ -60,7 +60,7 @@ module.exports = {
             return res.redirect(`/responsavel/home`);
         }
     },
-
+  
     // GET /cadastrar
     register: async (req, res) => {
         if (!req.session.user) {
