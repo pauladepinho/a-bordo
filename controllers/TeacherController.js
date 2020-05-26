@@ -206,26 +206,41 @@ module.exports = {
         return res.redirect("/professor/home");
     },
 
-    renderAttendanceSheet: (req, res) => {
-        return res.render("attendance");
+    // GET professor/fazer-chamada
+    renderAttendanceSheet: async (req, res) => {
+        const student = await Student.findAll()
+        return res.render("attendance", { student });
     },
+
+    // POST professor/fazer-chamada
     recordAttendances: (req, res) => {
 
     },
+
+    // GET professor/lancar-notas
     renderGradeBook: (req, res) => {
         return res.render("set-notes");
     },
+
+    // POST professor/lancar-notas
     recordGrades: (req, res) => {
 
     },
-    renderRecordBook: (req, res) => {
-        return res.render('daily');
+
+    // GET professor/diario-de-classe
+    renderRecordBook: async (req, res) => {
+        const student = await Student.findAll()
+        return res.render('daily', { student });
     },
+
+    // GET professor/atualizar
     renderUpdateForm: async (req, res) => {
         // LOAD USER FROM DB
         // PASS OBJECT USER INTO RENDER METHOD
         return res.render("update-teacher");
     },
+
+    // PUT professor/atualizar
     updateTeacher: async (req, res, next) => {
         // GET REQ.BODY CONTENT
         // AND UPDATE DATA IN DB
@@ -238,6 +253,8 @@ module.exports = {
         //     }
         // });
     },
+
+    // DELETE professor/deletar
     deleteTeacher: async (req, res) => {
         // RETRIEVE USER ID,
         // AND DELETE ONLY TEACHER USER TYPE
