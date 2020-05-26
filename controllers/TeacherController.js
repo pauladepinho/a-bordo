@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = {
+
+    // GET professor/
+    // GET professor/home
     renderHome: async (req, res) => {
         const user = req.session.user;
 
@@ -11,7 +14,6 @@ module.exports = {
 
         let subjectsIds = [];
         let classesIds = [];
-
         for (course of courses) {
             subjectsIds.push(course.subjectId);
             classesIds.push(course.classId);
@@ -38,13 +40,22 @@ module.exports = {
 
         return res.render("teacher-home", { user, subjects, classes, schools });
     },
-    renderRegistrationForm: (req, res) => {
-        res.render("register-teacher");
+
+    // GET professor/cadastrar
+    renderRegistrationForm: async (req, res) => {
+        if (req.session.user) { // user is already logged in
+            return res.redirect("/professor/home");
+        } else {
+            const subjects = await Subject.findAll();
+            res.render("register-teacher", { subjects });
+        }
     },
+
+    // POST professor/cadastrar
     registerTeacher: async (req, res) => {
         // CREATE USER
         const { forename, surname, email, phone, password } = req.body;
-        const picture = req.file ? req.file.filename : null;
+        const picture = req.file ? req.file.filename : "default.jpg";
 
         const user = await User.create(
             {
@@ -194,6 +205,7 @@ module.exports = {
         // AND REDIRECT HOME
         return res.redirect("/professor/home");
     },
+
     renderAttendanceSheet: (req, res) => {
         return res.render("attendance");
     },

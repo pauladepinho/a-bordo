@@ -31,7 +31,6 @@
 
   <main id="login">
     <div id="login-box">
-
       <form action="/cadastrar" method="GET" id="signup">
         <div id="user-type">
           <label for="teacher" class="selected">Sou DOCENTE<input type="radio" name="usuario" value="professor"
@@ -66,7 +65,14 @@
       <button class="special" type="submit" form="signup">Cadastrar</button>
     </div>
 
-    </div>
+    <% 
+      if(typeof error != "undefined") { 
+    %>
+    <p><%= error %></p>
+    <% 
+      } 
+    %>
+
   </main>
 
   <%- include("partials/footer.ejs") %>

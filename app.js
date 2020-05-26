@@ -15,6 +15,7 @@ var GuardianRouter = require('./routes/GuardianRouter');
 const CookieMiddleware = require("./middlewares/CookieLogin");
 
 var app = express();
+// app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,7 +36,6 @@ app.use('/professor', TeacherRouter);
 app.use('/responsavel', GuardianRouter);
 
 app.use(CookieMiddleware);
-// app.use(cors());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

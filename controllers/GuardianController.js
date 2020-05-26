@@ -3,14 +3,22 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = {
+    // GET responsavel/
+    // GET responsavel/home
     renderHome: async (req, res) => {
         // GET GUARDIAN DATA FROM DB,
         // AND THEN...
         return res.render("guardian-home");
     },
-    renderRegistrationForm: (req, res) => {
-        res.render("register-guardian");
+    // GET responsavel/cadastrar
+    renderRegistrationForm: async (req, res) => {
+        if (req.session.user) { // user is already logged in
+            return res.redirect(`/responsavel/home`);
+        } else {
+            res.render("register-guardian");
+        }
     },
+    // POST responsavel/cadastrar
     registerGuardian: async (req, res, next) => {
 
         // CREATE USER 
