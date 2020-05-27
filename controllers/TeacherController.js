@@ -47,6 +47,8 @@ module.exports = {
             return res.redirect("/professor/home");
         } else {
             const subjects = await Subject.findAll();
+            console.log(subjects);
+
             res.render("register-teacher", { subjects });
         }
     },
@@ -57,12 +59,14 @@ module.exports = {
         const { forename, surname, email, phone, password } = req.body;
         const picture = req.file ? req.file.filename : "default.jpg";
 
+        const validPhone = phone.length == 15 ? phone : null;
+
         const user = await User.create(
             {
                 forename: forename.toUpperCase(),
                 surname: surname.toUpperCase(),
-                email: email.toUpperCase(),
-                phone,
+                email: email.toLowerCase(),
+                phone: validPhone,
                 password: bcrypt.hashSync(password, saltRounds),
                 picture
             }
@@ -158,7 +162,7 @@ module.exports = {
                 // CREATE STUDENTS
                 let newStudent = await Student.create(
                     {
-                        name: student[1].trim()
+                        name: student[1].trim().toUpperCase()
                     }
                 );
 
