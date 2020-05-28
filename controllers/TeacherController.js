@@ -34,10 +34,6 @@ module.exports = {
             schools.push(school);
         }
 
-        console.log(subjects);
-        console.log(classes);
-        console.log(schools);
-
         return res.render("teacher", { user, subjects, classes, schools });
     },
 
