@@ -76,30 +76,30 @@
 
             <h3>Lista de dados</h3>
             <br>
-            <ul> <% for (school of schools) { %>
+            <ul style="margin-bottom: 48px;"> <% for (school of schools) { %>
 
-                <li><%= school.name %></li>
-
-                <% } %>
-            </ul>
-
-            <ul> <% for (subject of subjects) { %>
-
-                <li><%= subject.name %></li>
+                <li style="margin-bottom: 18px;"><button type="button"><%= school.name %></button></li>
 
                 <% } %>
             </ul>
 
-            <ul> <% for (c of classes) { %>
+            <ul style="margin-bottom: 48px;"> <% for (subject of subjects) { %>
 
-                <li><%= c.code %></li>
+                <li style="margin-bottom: 18px;"><button type="button"><%= subject.name %></button></li>
 
                 <% } %>
             </ul>
 
-            <ul> <% for (student of students) { %>
+            <ul style="margin-bottom: 48px;"> <% for (c of classes) { %>
 
-                <li><%= student.name %></li>
+                <li style="margin-bottom: 18px;"><button type="button"><%= c.code %></button></li>
+
+                <% } %>
+            </ul>
+
+            <ul style="margin-bottom: 48px;"> <% for (student of students) { %>
+
+                <li style="margin-bottom: 18px;"><button type="button"><%= student.name %></button></li>
 
                 <% } %>
             </ul>

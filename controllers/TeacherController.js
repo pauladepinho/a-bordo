@@ -70,12 +70,12 @@ module.exports = {
 
     // GET professor/cadastrar
     renderRegistrationForm: async (req, res) => {
-        if (req.session.user) { // user is already logged in
+        // USER HAS ALREADY SUCCESSFULLY LOGGED IN
+        if (req.session.user) {
             return res.redirect("/professor/home");
         } else {
+            // RENDER REGISTRATION FORM
             const subjects = await Subject.findAll();
-            console.log(subjects);
-
             res.render("teacher/register", { subjects });
         }
     },
@@ -123,7 +123,7 @@ module.exports = {
         const objKeysClass = Object.keys(req.body).filter( // ex. return [ "class1-school1", "class2-school1", "class1-school2" ]
             key => key.substr(0, 5) == "class"
         );
-        let classesList = [];
+        let classesList = []; // [ [ {}, {} ], [ {}, {}, {}, {} ] ] -> {} is a class, inner [] is a school
         for (let i = 0; i < schools.length; i++) {
             let thisSchoolClasses = objKeysClass.filter(
                 thisClass => thisClass.includes(`school${i + 1}`)
