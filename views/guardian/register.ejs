@@ -98,19 +98,17 @@
           </div>
           <div class="gray-box">
             <div class="school-location">
-              <select name="selectState" id="">
+              <select name="selectState" id="state-school1" required>
                 <option disabled selected>UF</option>
               </select>
 
-              <select name="selectCity" id="">
+              <select name="selectCity" id="municipality-school1" disabled required>
                 <option disabled selected>Município</option>
               </select>
             </div>
 
-            <select name="selectSchool">
+            <select name="selectSchool" id="school1" disabled required>
               <option disabled selected>Nome da escola</option>
-              <option value="0">Colégio Pedro II</option>
-              <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá
               </option>
             </select>
 
@@ -130,4 +128,5 @@
     </form>
   </main>
 
+  <script src="/javascripts/api.js"></script>
   <%- include("../partials/footer.ejs") %>
