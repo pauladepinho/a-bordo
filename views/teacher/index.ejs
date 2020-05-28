@@ -71,8 +71,40 @@
         </div>
     </nav>
 
-    <main id="">
+    <main id="home" style="margin-left: 450px;margin-top: 56px;">
+        <div>
 
+            <h3>Lista de dados</h3>
+            <br>
+            <ul> <% for (school of schools) { %>
+
+                <li><%= school.name %></li>
+
+                <% } %>
+            </ul>
+
+            <ul> <% for (subject of subjects) { %>
+
+                <li><%= subject.name %></li>
+
+                <% } %>
+            </ul>
+
+            <ul> <% for (c of classes) { %>
+
+                <li><%= c.code %></li>
+
+                <% } %>
+            </ul>
+
+            <ul> <% for (student of students) { %>
+
+                <li><%= student.name %></li>
+
+                <% } %>
+            </ul>
+
+        </div>
     </main>
 
     <%- include("../partials/footer.ejs") %>

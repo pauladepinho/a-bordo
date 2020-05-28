@@ -2,54 +2,56 @@ const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Studen
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-// FOR TESTS ONLY
-const students = [
-    {
-        id: 1,
-        name: "João da Silva"
-    },
-    {
-        id: 2,
-        name: "Ana dos Santos"
-    },
-    {
-        id: 3,
-        name: "Felipe de Souza"
-    }
-];
-
 const getTeacherData = async (user) => {
+
+    let subjectsIds = [];
+    let classesIds = [];
+    let subjects = [];
+    let classes = [];
+    let classesStudents = [];
+    let students = []; // {id, number, name}
+    let schools = [];
 
     const teacher = await Teacher.findOne({ where: { userId: user.id } });
     const courses = await Course.findAll({ where: { teacherId: teacher.id } });
 
-    let subjectsIds = [];
-    let classesIds = [];
     for (course of courses) {
         subjectsIds.push(course.subjectId);
         classesIds.push(course.classId);
     }
-    let subjects = [];
+    // SUBJECTS
     for (id of subjectsIds) {
         let subject = await Subject.findOne({ where: { id } });
         subjects.push(subject);
     }
-    let classes = [];
+    // CLASSES AND CLASS_STUDENTS
     for (id of classesIds) {
         let c = await Class.findOne({ where: { id } });
+        let thisClassStudents = await Class_Student.findAll({ where: { classId: id } });
         classes.push(c);
+        classesStudents.push(...thisClassStudents);
     }
-    let schools = [];
+    // STUDENTS
+    for (student of classesStudents) {
+        let thisStudent = await Student.findOne({ where: { id: student.studentId } });
+        students.push({
+            id: thisStudent.id,
+            number: student.number,
+            name: thisStudent.name
+        });
+    }
+    // SCHOOLS
     for (c of classes) {
         let school = await School.findOne({ where: { id: c.schoolId } });
         schools.push(school);
     }
-
+    // DATA
     return {
         user,
         subjects,
         classes,
-        schools
+        schools,
+        students
     };
 }
 
@@ -58,10 +60,11 @@ module.exports = {
     // GET professor/
     // GET professor/home
     renderHome: async (req, res) => {
+        // USER IS LOGGED IN
         const user = req.session.user;
-
+        // GET TEACHER'S DATAS
         let data = await getTeacherData(user);
-
+        // RENDER PAGE WITH DATA
         return res.render("teacher", data);
     },
 
@@ -236,12 +239,12 @@ module.exports = {
 
     // GET professor/fazer-chamada
     renderAttendanceSheet: async (req, res) => {
+        // USER IS LOGGED IN
         const user = req.session.user;
-
+        // GET TEACHER'S DATAS
         let data = await getTeacherData(user);
-
-        // const student = await Student.findAll()
-        return res.render("teacher/take-attendance", { ...data, students });
+        // RENDER PAGE WITH DATA
+        return res.render("teacher/take-attendance", data);
     },
 
     // POST professor/fazer-chamada
@@ -251,10 +254,11 @@ module.exports = {
 
     // GET professor/lancar-notas
     renderGradeBook: async (req, res) => {
+        // USER IS LOGGED IN
         const user = req.session.user;
-
+        // GET TEACHER'S DATAS
         let data = await getTeacherData(user);
-
+        // RENDER PAGE WITH DATA
         return res.render("teacher/grade", data);
     },
 
@@ -265,12 +269,12 @@ module.exports = {
 
     // GET professor/diario-de-classe
     renderRecordBook: async (req, res) => {
+        // USER IS LOGGED IN
         const user = req.session.user;
-
+        // GET TEACHER'S DATAS
         let data = await getTeacherData(user);
-
-        // const student = await Student.findAll()
-        return res.render("teacher/records", { ...data, students });
+        // RENDER PAGE WITH DATA
+        return res.render("teacher/records", data);
     },
 
     // GET professor/atualizar
