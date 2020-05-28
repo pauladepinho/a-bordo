@@ -35,7 +35,9 @@ header {
   justify-content: space-between;
 }
 
-div#logo {
+a#logo {
+  text-decoration: none;
+  
   display: flex;
   align-items: center;
 }

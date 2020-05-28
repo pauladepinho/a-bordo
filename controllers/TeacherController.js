@@ -168,7 +168,7 @@ module.exports = {
                 // VALIDATE STUDENTS
                 let registeredStudent = await Student.findOne({ where: { name: student[1].trim() } });
                 if (registeredStudent) {
-                    return res.render("register-teacher", { errors: ["Cadastre novos alunos."] })
+                    return res.render("teacher/register", { errors: ["Cadastre novos alunos."] })
                 }
 
                 // CREATE STUDENTS
