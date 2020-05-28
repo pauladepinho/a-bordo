@@ -29,10 +29,10 @@ module.exports = {
             const { error } = req.query;
             let msg;
 
-            if (error == 1) { // from IndexController function login
+            if (error == 1) { // from IndexController.login
                 msg = "Email ou senha inválidos."
             }
-            else if (error == 2) { // from middleware function VerifyLoggedInUser
+            else if (error == 2) { // from middleware VerifyLoggedInUser
                 msg = "Você não está logado. Por favor, digite seu email e sua senha e clique em ENTRAR. Caso não possua um cadastro, clique em CADASTRAR."
             }
             // RENDER LOGIN PAGE

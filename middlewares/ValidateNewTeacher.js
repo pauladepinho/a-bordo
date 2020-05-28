@@ -46,7 +46,7 @@ module.exports = async (req, res, next) => {
     if (errors.length > 0) {
         const subjects = await Subject.findAll();
         return res.render("teacher/register", { errors, subjects });
+    } else {
+        return next(); // TeacherController.registerTeacher
     }
-
-    return next();
 }
