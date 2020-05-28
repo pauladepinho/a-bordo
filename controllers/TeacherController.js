@@ -18,6 +18,41 @@ const students = [
     }
 ];
 
+const getTeacherData = async (user) => {
+
+    const teacher = await Teacher.findOne({ where: { userId: user.id } });
+    const courses = await Course.findAll({ where: { teacherId: teacher.id } });
+
+    let subjectsIds = [];
+    let classesIds = [];
+    for (course of courses) {
+        subjectsIds.push(course.subjectId);
+        classesIds.push(course.classId);
+    }
+    let subjects = [];
+    for (id of subjectsIds) {
+        let subject = await Subject.findOne({ where: { id } });
+        subjects.push(subject);
+    }
+    let classes = [];
+    for (id of classesIds) {
+        let c = await Class.findOne({ where: { id } });
+        classes.push(c);
+    }
+    let schools = [];
+    for (c of classes) {
+        let school = await School.findOne({ where: { id: c.schoolId } });
+        schools.push(school);
+    }
+
+    return {
+        user,
+        subjects,
+        classes,
+        schools
+    };
+}
+
 module.exports = {
 
     // GET professor/
@@ -25,32 +60,9 @@ module.exports = {
     renderHome: async (req, res) => {
         const user = req.session.user;
 
-        const teacher = await Teacher.findOne({ where: { userId: user.id } });
-        const courses = await Course.findAll({ where: { teacherId: teacher.id } });
+        let data = await getTeacherData(user);
 
-        let subjectsIds = [];
-        let classesIds = [];
-        for (course of courses) {
-            subjectsIds.push(course.subjectId);
-            classesIds.push(course.classId);
-        }
-        let subjects = [];
-        for (id of subjectsIds) {
-            let subject = await Subject.findOne({ where: { id } });
-            subjects.push(subject);
-        }
-        let classes = [];
-        for (id of classesIds) {
-            let c = await Class.findOne({ where: { id } });
-            classes.push(c);
-        }
-        let schools = [];
-        for (c of classes) {
-            let school = await School.findOne({ where: { id: c.schoolId } });
-            schools.push(school);
-        }
-
-        return res.render("teacher", { user, subjects, classes, schools });
+        return res.render("teacher", data);
     },
 
     // GET professor/cadastrar
@@ -225,8 +237,11 @@ module.exports = {
     // GET professor/fazer-chamada
     renderAttendanceSheet: async (req, res) => {
         const user = req.session.user;
+
+        let data = await getTeacherData(user);
+
         // const student = await Student.findAll()
-        return res.render("teacher/take-attendance", { user, students });
+        return res.render("teacher/take-attendance", { ...data, students });
     },
 
     // POST professor/fazer-chamada
@@ -235,9 +250,12 @@ module.exports = {
     },
 
     // GET professor/lancar-notas
-    renderGradeBook: (req, res) => {
+    renderGradeBook: async (req, res) => {
         const user = req.session.user;
-        return res.render("teacher/grade", { user });
+
+        let data = await getTeacherData(user);
+
+        return res.render("teacher/grade", data);
     },
 
     // POST professor/lancar-notas
@@ -248,8 +266,11 @@ module.exports = {
     // GET professor/diario-de-classe
     renderRecordBook: async (req, res) => {
         const user = req.session.user;
+
+        let data = await getTeacherData(user);
+
         // const student = await Student.findAll()
-        return res.render('teacher/records', { user, students });
+        return res.render("teacher/records", { ...data, students });
     },
 
     // GET professor/atualizar
