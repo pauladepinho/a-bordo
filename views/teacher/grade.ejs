@@ -3,7 +3,8 @@
 </head>
 
 <body>
-  <header>
+  <%- include("../partials/teacher-topMenu.ejs") %>
+  <!-- <header>
     <div id="logo">
       <img class="logo" src="../images/airplane.svg" alt="">
       <h1 class="logo">aBordo</h1>
@@ -20,7 +21,7 @@
         </span>
       </div>
     </div>
-  </header>
+  </header> -->
 
   <nav>
     <div class="navbar select">
@@ -70,13 +71,13 @@
 
     <div class="navbar">
       <ul class="nav">
-        <li><a class="nav-link" href="/fazer-chamada">
+        <li><a class="nav-link" href="/professor/fazer-chamada">
             Fazer chamada
           </a></li>
         <li><a class="nav-link active" href="#">
             Lançar notas
           </a></li>
-        <li><a class="nav-link" href="/diario-de-classe">
+        <li><a class="nav-link" href="/professor/diario-de-classe">
             Diário de classe
           </a></li>
         <li><a class="nav-link" href="#">

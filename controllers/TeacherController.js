@@ -2,6 +2,22 @@ const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Studen
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+// FOR TESTS ONLY
+const students = [
+    {
+        id: 1,
+        name: "João da Silva"
+    },
+    {
+        id: 2,
+        name: "Ana dos Santos"
+    },
+    {
+        id: 3,
+        name: "Felipe de Souza"
+    }
+];
+
 module.exports = {
 
     // GET professor/
@@ -208,8 +224,9 @@ module.exports = {
 
     // GET professor/fazer-chamada
     renderAttendanceSheet: async (req, res) => {
-        const student = await Student.findAll()
-        return res.render("teacher/take-attendance", { student });
+        const user = req.session.user;
+        // const student = await Student.findAll()
+        return res.render("teacher/take-attendance", { user, students });
     },
 
     // POST professor/fazer-chamada
@@ -219,7 +236,8 @@ module.exports = {
 
     // GET professor/lancar-notas
     renderGradeBook: (req, res) => {
-        return res.render("teacher/grade");
+        const user = req.session.user;
+        return res.render("teacher/grade", { user });
     },
 
     // POST professor/lancar-notas
@@ -229,8 +247,9 @@ module.exports = {
 
     // GET professor/diario-de-classe
     renderRecordBook: async (req, res) => {
-        const student = await Student.findAll()
-        return res.render('teacher/records', { student });
+        const user = req.session.user;
+        // const student = await Student.findAll()
+        return res.render('teacher/records', { user, students });
     },
 
     // GET professor/atualizar

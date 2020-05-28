@@ -2,7 +2,8 @@
 </head>
 
 <body>
-  <header>
+  <%- include("../partials/teacher-topMenu.ejs") %>
+  <!-- <header>
     <div id="logo">
       <img class="logo" src="../images/airplane.svg" alt="">
       <h1 class="logo">aBordo</h1>
@@ -20,7 +21,7 @@
         </span>
       </div>
     </div>
-  </header>
+  </header> -->
 
   <nav>
     <div class="navbar select">
@@ -73,10 +74,10 @@
         <li><a class="nav-link active" href="#">
             Fazer chamada
           </a></li>
-        <li><a class="nav-link" href="/lancar-notas">
+        <li><a class="nav-link" href="/professor/lancar-notas">
             Lançar notas
           </a></li>
-        <li><a class="nav-link" href="/diario-de-classe">
+        <li><a class="nav-link" href="/professor/diario-de-classe">
             Diário de classe
           </a></li>
         <li><a class="nav-link" href="#">
@@ -122,10 +123,10 @@
           </tr>
         </thead>
         <tbody>
-          <% for (let i = 1; i <= student.length; i++) { %>
-          <tr id=<%= "student" + i %>>
-            <td class="student-number" id=<%= "student-number" + i %>><%= student[i].id %></td>
-            <td class="student-name" id=<%= "student-name" + i %>><%= student[i].name %></td>
+          <% for (let i = 0; i < students.length; i++) { %>
+          <tr id=<%= "student" + (i + 1) %>>
+            <td class="student-number" id=<%= "student-number" + (i + 1) %>><%= students[i].id %></td>
+            <td class="student-name" id=<%= "student-name" + (i + 1) %>><%= students[i].name %></td>
             <td class="attendance-check">
               <% for (let j = 1; j <= 3; j++) { %>
               <div class="attendance-check" id=<%= "student" + i + "-period" + j %>>
