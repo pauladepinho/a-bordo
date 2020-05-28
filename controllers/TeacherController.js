@@ -2,56 +2,95 @@ const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Studen
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+// FOR TESTS ONLY
+const students = [
+    {
+        id: 1,
+        name: "João da Silva"
+    },
+    {
+        id: 2,
+        name: "Ana dos Santos"
+    },
+    {
+        id: 3,
+        name: "Felipe de Souza"
+    }
+];
+
+const getTeacherData = async (user) => {
+
+    const teacher = await Teacher.findOne({ where: { userId: user.id } });
+    const courses = await Course.findAll({ where: { teacherId: teacher.id } });
+
+    let subjectsIds = [];
+    let classesIds = [];
+    for (course of courses) {
+        subjectsIds.push(course.subjectId);
+        classesIds.push(course.classId);
+    }
+    let subjects = [];
+    for (id of subjectsIds) {
+        let subject = await Subject.findOne({ where: { id } });
+        subjects.push(subject);
+    }
+    let classes = [];
+    for (id of classesIds) {
+        let c = await Class.findOne({ where: { id } });
+        classes.push(c);
+    }
+    let schools = [];
+    for (c of classes) {
+        let school = await School.findOne({ where: { id: c.schoolId } });
+        schools.push(school);
+    }
+
+    return {
+        user,
+        subjects,
+        classes,
+        schools
+    };
+}
+
 module.exports = {
+
+    // GET professor/
+    // GET professor/home
     renderHome: async (req, res) => {
         const user = req.session.user;
 
-        const teacher = await Teacher.findOne({ where: { userId: user.id } });
-        const courses = await Course.findAll({ where: { teacherId: teacher.id } });
+        let data = await getTeacherData(user);
 
-        let subjectsIds = [];
-        let classesIds = [];
-
-        for (course of courses) {
-            subjectsIds.push(course.subjectId);
-            classesIds.push(course.classId);
-        }
-        let subjects = [];
-        for (id of subjectsIds) {
-            let subject = await Subject.findOne({ where: { id } });
-            subjects.push(subject);
-        }
-        let classes = [];
-        for (id of classesIds) {
-            let c = await Class.findOne({ where: { id } });
-            classes.push(c);
-        }
-        let schools = [];
-        for (c of classes) {
-            let school = await School.findOne({ where: { id: c.schoolId } });
-            schools.push(school);
-        }
-
-        console.log(subjects);
-        console.log(classes);
-        console.log(schools);
-
-        return res.render("teacher-home", { user, subjects, classes, schools });
+        return res.render("teacher", data);
     },
-    renderRegistrationForm: (req, res) => {
-        res.render("register-teacher");
+
+    // GET professor/cadastrar
+    renderRegistrationForm: async (req, res) => {
+        if (req.session.user) { // user is already logged in
+            return res.redirect("/professor/home");
+        } else {
+            const subjects = await Subject.findAll();
+            console.log(subjects);
+
+            res.render("teacher/register", { subjects });
+        }
     },
+
+    // POST professor/cadastrar
     registerTeacher: async (req, res) => {
         // CREATE USER
         const { forename, surname, email, phone, password } = req.body;
-        const picture = req.file ? req.file.filename : null;
+        const picture = req.file ? req.file.filename : "default.jpg";
+
+        const validPhone = phone.length == 15 ? phone : null;
 
         const user = await User.create(
             {
                 forename: forename.toUpperCase(),
                 surname: surname.toUpperCase(),
-                email: email.toUpperCase(),
-                phone,
+                email: email.toLowerCase(),
+                phone: validPhone,
                 password: bcrypt.hashSync(password, saltRounds),
                 picture
             }
@@ -141,13 +180,13 @@ module.exports = {
                 // VALIDATE STUDENTS
                 let registeredStudent = await Student.findOne({ where: { name: student[1].trim() } });
                 if (registeredStudent) {
-                    return res.render("register-teacher", { errors: ["Cadastre novos alunos."] })
+                    return res.render("teacher/register", { errors: ["Cadastre novos alunos."] })
                 }
 
                 // CREATE STUDENTS
                 let newStudent = await Student.create(
                     {
-                        name: student[1].trim()
+                        name: student[1].trim().toUpperCase()
                     }
                 );
 
@@ -194,26 +233,54 @@ module.exports = {
         // AND REDIRECT HOME
         return res.redirect("/professor/home");
     },
-    renderAttendanceSheet: (req, res) => {
-        return res.render("attendance");
+
+    // GET professor/fazer-chamada
+    renderAttendanceSheet: async (req, res) => {
+        const user = req.session.user;
+
+        let data = await getTeacherData(user);
+
+        // const student = await Student.findAll()
+        return res.render("teacher/take-attendance", { ...data, students });
     },
+
+    // POST professor/fazer-chamada
     recordAttendances: (req, res) => {
 
     },
-    renderGradeBook: (req, res) => {
-        return res.render("set-notes");
+
+    // GET professor/lancar-notas
+    renderGradeBook: async (req, res) => {
+        const user = req.session.user;
+
+        let data = await getTeacherData(user);
+
+        return res.render("teacher/grade", data);
     },
+
+    // POST professor/lancar-notas
     recordGrades: (req, res) => {
 
     },
-    renderRecordBook: (req, res) => {
-        return res.render('daily');
+
+    // GET professor/diario-de-classe
+    renderRecordBook: async (req, res) => {
+        const user = req.session.user;
+
+        let data = await getTeacherData(user);
+
+        // const student = await Student.findAll()
+        return res.render("teacher/records", { ...data, students });
     },
+
+    // GET professor/atualizar
     renderUpdateForm: async (req, res) => {
         // LOAD USER FROM DB
         // PASS OBJECT USER INTO RENDER METHOD
-        return res.render("update-teacher");
+        return res.render("teacher/update");
     },
+
+    // PUT professor/atualizar
     updateTeacher: async (req, res, next) => {
         // GET REQ.BODY CONTENT
         // AND UPDATE DATA IN DB
@@ -226,6 +293,8 @@ module.exports = {
         //     }
         // });
     },
+
+    // DELETE professor/deletar
     deleteTeacher: async (req, res) => {
         // RETRIEVE USER ID,
         // AND DELETE ONLY TEACHER USER TYPE

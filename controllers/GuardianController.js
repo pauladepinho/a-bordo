@@ -3,14 +3,25 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 module.exports = {
+
+    // GET responsavel/
+    // GET responsavel/home
     renderHome: async (req, res) => {
         // GET GUARDIAN DATA FROM DB,
         // AND THEN...
-        return res.render("guardian-home");
+        return res.render("guardian");
     },
-    renderRegistrationForm: (req, res) => {
-        res.render("register-guardian");
+
+    // GET responsavel/cadastrar
+    renderRegistrationForm: async (req, res) => {
+        if (req.session.user) { // user is already logged in
+            return res.redirect(`/responsavel/home`);
+        } else {
+            res.render("guardian/register");
+        }
     },
+
+    // POST responsavel/cadastrar
     registerGuardian: async (req, res, next) => {
 
         // CREATE USER 
@@ -54,9 +65,15 @@ module.exports = {
 
         return res.redirect("/responsavel/home");
     },
-    renderUpdateForm: async (req, res) => {
 
+    // GET responsavel/atualizar
+    renderUpdateForm: async (req, res) => {
+        // LOAD USER FROM DB
+        // PASS OBJECT USER INTO RENDER METHOD
+        return res.render("guardian/update");
     },
+
+    // PUT responsavel/atualizar
     updateGuardian: async (req, res, next) => {
         // GET REQ.BODY CONTENT
         // AND UPDATE DATA IN DB
@@ -69,6 +86,8 @@ module.exports = {
         //     }
         // });
     },
+
+    // DELETE responsavel/deletar
     deleteGuardian: async (req, res) => {
         // RETRIEVE USER ID,
         // AND DELETE ONLY GUARDIAN USER TYPE

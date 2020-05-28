@@ -16,27 +16,30 @@ const router = express.Router();
 // CONTROLLER
 const TeacherController = require("../controllers/TeacherController");
 // MIDDLEWARES
-const ValidateNewUser = require("../middlewares/ValidateNewUser");
+const ValidateNewTeacher = require("../middlewares/ValidateNewTeacher");
 const VerifyLoggedInUser = require("../middlewares/VerifyLoggedInUser");
 const isTeacher = require("../middlewares/isTeacher");
 /*****************************************************************************/
 /***********************--------CRUD--------**********************************/
 /*****************************************************************************/
-router.get("/", VerifyLoggedInUser, isTeacher, TeacherController.renderHome);
-router.get("/home", VerifyLoggedInUser, isTeacher, TeacherController.renderHome);
-/*****************************************************************************/
 router.get("/cadastrar", TeacherController.renderRegistrationForm);
-router.post("/cadastrar", upload.single("picture"), ValidateNewUser, TeacherController.registerTeacher);
+router.post("/cadastrar", upload.single("picture"), ValidateNewTeacher, TeacherController.registerTeacher);
 /*****************************************************************************/
-router.get("/fazer-chamada", VerifyLoggedInUser, isTeacher, TeacherController.renderAttendanceSheet);
+router.use(VerifyLoggedInUser);
+router.use(isTeacher);
+/*****************************************************************************/
+router.get("/", TeacherController.renderHome);
+router.get("/home", TeacherController.renderHome);
+/*****************************************************************************/
+router.get("/fazer-chamada", TeacherController.renderAttendanceSheet);
 router.post("/fazer-chamada", TeacherController.recordAttendances);
 /*****************************************************************************/
-router.get('/lancar-notas', VerifyLoggedInUser, isTeacher, TeacherController.renderGradeBook);
+router.get('/lancar-notas', TeacherController.renderGradeBook);
 router.post('/lancar-notas', TeacherController.recordGrades);
 /*****************************************************************************/
-router.get('/diario-de-classe', VerifyLoggedInUser, isTeacher, TeacherController.renderRecordBook);
+router.get('/diario-de-classe', TeacherController.renderRecordBook);
 /*****************************************************************************/
-router.get("/atualizar", VerifyLoggedInUser, isTeacher, TeacherController.renderUpdateForm);
+router.get("/atualizar", TeacherController.renderUpdateForm);
 router.put("/atualizar", upload.single("picture"), TeacherController.updateTeacher);
 /*****************************************************************************/
 router.delete("/deletar", TeacherController.deleteTeacher);
