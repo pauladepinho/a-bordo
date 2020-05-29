@@ -62,7 +62,7 @@ module.exports = {
     renderHome: async (req, res) => {
         // USER IS LOGGED IN
         const user = req.session.user;
-        // GET TEACHER'S DATAS
+        // GET TEACHER'S DATA
         let data = await getTeacherData(user);
         // RENDER PAGE WITH DATA
         return res.render("teacher", data);
@@ -84,8 +84,8 @@ module.exports = {
     registerTeacher: async (req, res) => {
         // CREATE USER
         const { forename, surname, email, phone, password } = req.body;
-        const picture = req.file ? req.file.filename : "default.jpg";
 
+        const picture = req.file ? req.file.filename : "default.jpg";
         const validPhone = phone.length == 15 ? phone : null;
 
         const user = await User.create(
@@ -102,41 +102,42 @@ module.exports = {
         const teacher = await Teacher.create({ userId: user.id });
 
         // CREATE SCHOOLS
-        const objKeysSchool = Object.keys(req.body).filter(
+        const reqBodySchool = Object.keys(req.body).filter( // [ "school1", "school2", "school3" ]
             key => key.substr(0, 6) == "school"
         );
         let schoolsList = [];
-        for (schoolKey of objKeysSchool) {
+        for (school of reqBodySchool) { // req.body[ school ] = [ 0=state, 1=municipality, 2=name, 3=passingGrade, 4=academicTerms ]
             schoolsList.push(
                 {
-                    name: req.body[schoolKey][2],
-                    passingGrade: req.body[schoolKey][3],
-                    academicTerms: req.body[schoolKey][4],
-                    state: req.body[schoolKey][0],
-                    municipality: req.body[schoolKey][1]
+                    name: req.body[school][2],
+                    passingGrade: req.body[school][3],
+                    academicTerms: req.body[school][4],
+                    state: req.body[school][0],
+                    municipality: req.body[school][1]
                 }
             );
         };
         const schools = await School.bulkCreate(schoolsList);
 
         // CREATE CLASSES
-        const objKeysClass = Object.keys(req.body).filter( // ex. return [ "class1-school1", "class2-school1", "class1-school2" ]
+        const reqBodyClass = Object.keys(req.body).filter( // [ "class1-school1", "class2-school1", "class1-school2" ]
             key => key.substr(0, 5) == "class"
         );
-        let classesList = []; // [ [ {}, {} ], [ {}, {}, {}, {} ] ] -> {} is a class, inner [] is a school
+        let classesList = [];
         for (let i = 0; i < schools.length; i++) {
-            let thisSchoolClasses = objKeysClass.filter(
-                thisClass => thisClass.includes(`school${i + 1}`)
+            let schoolClasses = reqBodyClass.filter(
+                key => key.includes(`school${i + 1}`)
             );
-            for (aClass of thisSchoolClasses) {
-                let lvl = req.body[aClass][1].split("-"); // ex. return [ "Ensino Fundamental ", " 6º ano" ]
+            for (aClass of schoolClasses) { // req.body[ aClass ] = [ 0=year, 1=levelOfEducation-grade, 2=code ]
+                let eduLvl = req.body[aClass][1].split("-"); // ex.: [ "Ensino Fundamental ", " 6º ano" ]
+
                 classesList.push(
                     {
                         schoolId: schools[i].id, // ASSOCIATE CLASSES TO A SCHOOL
                         code: req.body[aClass][2],
                         year: req.body[aClass][0],
-                        levelOfEducation: lvl[0].trim(),
-                        grade: lvl[1].trim()
+                        levelOfEducation: eduLvl[0].trim(),
+                        grade: eduLvl[1].trim()
                     }
                 );
             };
@@ -144,52 +145,41 @@ module.exports = {
         const classes = await Class.bulkCreate(classesList);
 
         // CREATE COURSES
-        const objKeysSubjects = Object.keys(req.body).filter( // ex. return [ "subjects-class1-school1", "subjects-class2-school1", "subjects-class1-school2" ]
+        const reqBodySubjects = Object.keys(req.body).filter( // [ "subjects-class1-school1", "subjects-class2-school1", "subjects-class1-school2" ]
             key => key.substr(0, 8) == "subjects"
         );
         let coursesList = [];
         for (let i = 0; i < classes.length; i++) {
-            let thisClassSubjectsKey = objKeysSubjects.filter(
-                subjects => subjects.includes(`class${i + 1}`)
+            let classSubjects = reqBodySubjects.filter(
+                key => key.includes(reqBodyClass[i]) // reqBodyClass = [ "class1-school1", "class2-school1", "class1-school2" ]
             );
-            let thisClassSubjects = req.body[thisClassSubjectsKey]; // array containing the subjects ids of only one class
+            const subjectsIds = req.body[classSubjects]; // array containing the subjects ids of only one class
+            for (subjectId of subjectsIds) {
 
-            for (subjectId of thisClassSubjects) {
-                let course = await Course.create(
+                coursesList.push(
                     {
                         teacherId: teacher.id,
                         subjectId,
                         classId: classes[i].id
                     }
                 );
-                coursesList.push(course);
             }
         }
+        const courses = await Course.bulkCreate(coursesList);
 
         // CREATE STUDENTS
-        const objKeysStudent = Object.keys(req.body).filter( // ex. return [ "student1-class1-school1", "student2-class1-school1", "student1-class2-school1" ]
+        const reqBodyStudent = Object.keys(req.body).filter( // [ "student1-class1-school1", "student2-class1-school1", "student1-class2-school1" ]
             key => key.substr(0, 7) == "student"
         );
         for (let i = 0; i < classes.length; i++) {
-            let thisClassStudentsKeys = objKeysStudent.filter(
-                student => student.includes(objKeysClass[i])
+            let classStudents = reqBodyStudent.filter(
+                key => key.includes(reqBodyClass[i]) // reqBodyClass = [ "class1-school1", "class2-school1", "class1-school2" ]
             );
-            let thisClassStudents = []; // array of arrays like ["student class number", "student name", "checkbox on", "retaken course subjectId"]
-            for (key of thisClassStudentsKeys) {
-                thisClassStudents.push(req.body[key]);
-            }
-            for (student of thisClassStudents) { // array of arrays
+            for (aStudent of classStudents) { // req.body[ aStudent ] = [ 0=number, 1=name, 2=checkbox_on, 3=retaken_course_subjectId, ... ]
 
-                // VALIDATE STUDENTS
-                let registeredStudent = await Student.findOne({ where: { name: student[1].trim() } });
-                if (registeredStudent) {
-                    return res.render("teacher/register", { errors: ["Cadastre novos alunos."] })
-                }
-
-                // CREATE STUDENTS
                 let newStudent = await Student.create(
                     {
-                        name: student[1].trim().toUpperCase()
+                        name: req.body[aStudent][1].trim().toUpperCase()
                     }
                 );
 
@@ -198,35 +188,30 @@ module.exports = {
                     {
                         classId: classes[i].id,
                         studentId: newStudent.id,
-                        number: student[0]
+                        number: req.body[aStudent][0]
                     }
                 );
 
                 // CREATE REPEATER
-                let repeater = false;
-                if (student[2] == "on") { repeater = true; } // checkbox checked
+                if (req.body[aStudent][2] == "on") { // checkbox checked
 
-                if (repeater) {
-                    let thisClassCourses = coursesList.filter(
+                    let classCourses = courses.filter(
                         course => course.classId == classes[i].id
                     );
-                    let coursesIdsList = [];
+                    for (let j = 3; j < aStudent.length; j++) { // from index 3, there's a list of subjects ids the student is repeating
 
-                    for (let j = 3; j < student.length; j++) { // from student[3], there's a list of subjects ids the student is repeating
+                        for (course of classCourses) {
 
-                        for (course of thisClassCourses) {
-                            if (course.subjectId == student[j]) {
-                                coursesIdsList.push(course.id);
+                            if (course.subjectId == req.body[aStudent][j]) {
+
+                                await Repeater.create(
+                                    {
+                                        studentId: newStudent.id,
+                                        courseId: course.id
+                                    }
+                                );
                             }
                         }
-                    }
-                    for (courseId of coursesIdsList) {
-                        await Repeater.create(
-                            {
-                                studentId: newStudent.id,
-                                courseId
-                            }
-                        );
                     }
                 }
             }
