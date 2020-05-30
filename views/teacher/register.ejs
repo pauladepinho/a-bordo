@@ -106,7 +106,9 @@
           <div id="new-schools">
             <div class="align-left">
               <div class="schools-tabs">
-                <button type="button" class="selected school1">Escola 1</button>
+                <!-- JAVASCRIPT ADDED
+                <button type="button" class="school1 selected">Escola 1</button> 
+                -->
               </div>
               <button type="button" class="btn-add" id="add-school">+</button>
             </div>
@@ -114,7 +116,8 @@
           </div>
 
           <div class="gray-box">
-            <div class="school-content">
+            <!-- JAVASCRIPT ADDED
+            <div class="school-content school1">
               <div class="school-location">
                 <select name="school1[]" id="state-school1" required>
                   <option disabled selected>UF</option>
@@ -149,9 +152,11 @@
               <label class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
                 Trimestral
                 <input type="radio" name="school1[]" value="3" />
-              </label>
+              </label> 
             </div>
+            -->
           </div>
+
         </section>
 
         <section id="set-classes">
@@ -329,6 +334,6 @@
     </form>
   </main>
 
-  <script src="/javascripts/api.js"></script>
+  <!-- <script src="/javascripts/api.js"></script> -->
   <script src="/javascripts/formItems.js"></script>
   <%- include("../partials/footer.ejs") %>
