@@ -571,6 +571,10 @@ div.school-location { display: flex; }
   opacity: 0;
   cursor: pointer;
 }
+
+#set-schools input[type="radio"]:disabled {
+  cursor: default;
+}
 /* END OF SETTING RADIO INPUT APPEARANCE */
 /* END OF SCHOOLS SETTING*/
 
@@ -754,13 +758,20 @@ button:active,
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+.disabled,
 button:disabled,
-button[disabled],
+button[disabled]/*,
 .btn-appearance:disabled,
-.btn-appearance[disabled] {
+.btn-appearance[disabled]*/ {
   background-color: #c4c4c4;
   box-shadow: none;
   color: #eaeaea;
+}
+
+.disabled:hover {
+  background-color: #c4c4c4;
+  color: #eaeaea;
+  cursor: grab;
 }
 
 .selected {

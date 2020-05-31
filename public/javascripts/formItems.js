@@ -19,14 +19,28 @@
 let schoolCount = 0; // decreases on school deletion
 let schoolNumber = 0; // never decreases
 
-// let schoolCount = 1; // decreases on school deletion
-// let schoolNumber = 1; // never decreases
-
 const enter = 13; // keyboard key;
 
 const addSchoolBtn = document.getElementById("add-school");
 const delSchoolBtn = document.getElementById("del-school");
 let schoolsTabs = document.querySelectorAll("#new-schools .schools-tabs button");
+
+// FUNCTIONS CALLS
+
+// ADD SCHOOL
+window.addEventListener("load", () => addSchool());
+addSchoolBtn.addEventListener("mouseup", () => addSchool());
+addSchoolBtn.addEventListener("keydown", evt => {
+    if (evt.keyCode == enter) { addSchool(); }
+});
+// DELETE SCHOOL
+delSchoolBtn.addEventListener("mouseup", () => delSchool());
+delSchoolBtn.addEventListener("keydown", evt => {
+    if (evt.keyCode == enter) { delSchool(); }
+});
+
+
+// FUNCTIONS EXPRESSIONS
 
 const selectSchool = (tab) => {
     // REMOVE THE SELECTED CLASS FROM ALL TABS
@@ -68,15 +82,17 @@ const addSchool = () => {
     schoolTab.innerText = `Escola ${schoolNumber}`;
 
     // HTML CLASSES SECTION TAB
-    const tabCSec = document.createElement("button");
-    tabCSec.type = "button";
-    tabCSec.className = `school${schoolNumber}`;
-    tabCSec.innerText = `Escola ${schoolNumber}`;
+    const cSchoolTab = document.createElement("button");
+    cSchoolTab.type = "button";
+    cSchoolTab.className = `school${schoolNumber}`;
+    cSchoolTab.innerText = `Escola ${schoolNumber}`;
+
+    if (schoolsTabs.length == 0) { cSchoolTab.classList.add("selected") }; // the first tab
 
     // APPEND EACH NEW TAB TO TABS ON CORRESPONDING SECTIONS
     const tabsList = document.querySelectorAll(".schools-tabs");
     tabsList[0].appendChild(schoolTab);
-    tabsList[1].appendChild(tabCSec);
+    tabsList[1].appendChild(cSchoolTab);
 
     /* 
         NEW SCHOOL CONTENT
@@ -137,6 +153,7 @@ const addSchool = () => {
     const passGrade = document.createElement("select");
     passGrade.name = `school${schoolNumber}[]`;
     passGrade.required = true;
+    passGrade.disabled = true;
 
     const passGradeOption = document.createElement("option");
     passGradeOption.disabled = true;
@@ -175,15 +192,17 @@ const addSchool = () => {
     const evaluationSystem = document.createElement("p");
     evaluationSystem.innerHTML = 'Sistema de avaliação: <span id="term"></span>'
 
-    const bimontly = document.createElement("label");
-    bimontly.className = "btn-appearance"
-    bimontly.id = "bimonthly";
-    bimontly.innerHTML = `Bimestral <input type="radio" name="school${schoolNumber}[]" value="4" required />`
+    const bimonthly = document.createElement("label");
+    bimonthly.classList.add("btn-appearance", "disabled");
+    bimonthly.id = "bimonthly";
+    bimonthly.innerHTML = `Bimestral <input type="radio" name="school${schoolNumber}[]" value="4" required />`
+    bimonthly.childNodes[1].disabled = true;
 
-    const trimontly = document.createElement("label");
-    trimontly.className = "btn-appearance"
-    trimontly.id = "trimonthly";
-    trimontly.innerHTML = `Trimestral <input type="radio" name="school${schoolNumber}[]" value="3" required />`
+    const trimonthly = document.createElement("label");
+    trimonthly.classList.add("btn-appearance", "disabled");
+    trimonthly.id = "trimonthly";
+    trimonthly.innerHTML = `Trimestral <input type="radio" name="school${schoolNumber}[]" value="3" required />`
+    trimonthly.childNodes[1].disabled = true;
 
     /*
         APPEND ELEMENTS
@@ -195,8 +214,8 @@ const addSchool = () => {
     schoolContent.appendChild(school);
     schoolContent.appendChild(passGrade);
     schoolContent.appendChild(evaluationSystem);
-    schoolContent.appendChild(bimontly);
-    schoolContent.appendChild(trimontly);
+    schoolContent.appendChild(bimonthly);
+    schoolContent.appendChild(trimonthly);
 
     schoolLocation.appendChild(state);
     schoolLocation.appendChild(municipality);
@@ -223,9 +242,20 @@ const addSchool = () => {
     state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state));
     municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality));
 
+    // ENABLE PASS GRADE SELECT, AND CHANGE TAB TEXT
+    school.addEventListener("change", () => {
+        enablePassGradeSelect(passGrade), changeTabText(schoolTab, cSchoolTab, school)
+    });
+
+    // ENABLE ACADEMIC DIVISION RADIO INPUTS
+    passGrade.addEventListener("change", () => enableTermsRadios(bimonthly, trimonthly));
+
+    // LISTEN TO ACADEMIC YEAR DIVISION
+    bimonthly.addEventListener("click", () => toggleTerms(evaluationSystem, bimonthly, trimonthly));
+    trimonthly.addEventListener("click", () => toggleTerms(evaluationSystem, trimonthly, bimonthly));
+
     // UPDATE TABS LIST
     schoolsTabs = document.querySelectorAll("#new-schools .schools-tabs button");
-
     // LISTEN TO SELECT SCHOOL FUNCTION
     schoolsTabs.forEach(tab => {
         tab.addEventListener("mouseup", () => selectSchool(tab));
@@ -233,8 +263,11 @@ const addSchool = () => {
             if (evt.keyCode == enter) { selectSchool(tab); }
         });
     });
+
     // TOGGLE ADD AND DEL BUTTONS
-    delSchoolBtn.disabled = false;
+    if (schoolCount > 1) {
+        delSchoolBtn.disabled = false;
+    }
     if (schoolCount == 5) {
         addSchoolBtn.disabled = true;
     }
@@ -286,6 +319,34 @@ const delSchool = () => {
         delSchoolBtn.disabled = true;
     }
 
+};
+
+const enablePassGradeSelect = passGradesSelect => passGradesSelect.disabled = false;
+
+const changeTabText = (tab, classesSectionTab, schoolsSelect) => {
+    const options = schoolsSelect.childNodes;
+    [...options].forEach(option => {
+        if (option.selected) {
+            tab.innerText = option.innerText;
+            classesSectionTab.innerText = option.innerText;
+        }
+    });
+}
+
+const enableTermsRadios = (label1, label2) => {
+    if (label1.childNodes[1].disabled) {
+        label1.classList.remove("disabled");
+        label1.childNodes[1].disabled = false;
+        label2.classList.remove("disabled");
+        label2.childNodes[1].disabled = false;
+    }
+}
+
+const toggleTerms = (title, yearDivision, alternative) => {
+    yearDivision.classList.add("selected");
+    alternative.classList.remove("selected");
+
+    title.childNodes[1].innerText = yearDivision.innerText;
 };
 
 // APIs
@@ -383,152 +444,3 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
             console.log(error);
         });
 };
-
-
-
-
-// ADD SCHOOL
-window.addEventListener("load", () => addSchool());
-addSchoolBtn.addEventListener("mouseup", () => addSchool());
-addSchoolBtn.addEventListener("keydown", evt => {
-    if (evt.keyCode == enter) { addSchool(); }
-});
-// DELETE SCHOOL
-delSchoolBtn.addEventListener("mouseup", () => delSchool());
-delSchoolBtn.addEventListener("keydown", evt => {
-    if (evt.keyCode == enter) { delSchool(); }
-});
-
-
-
-
-
-/////////////////////////////////////////////////////////
-
-// IDENTIFYING CLASSES BY SCHOOL
-// let schoolSelect = document.getElementById("school1");
-// schoolSelect.addEventListener("change", () => {
-//     const schoolName = schoolSelect.value;
-
-//     const span = document.createElement("span");
-//     span.innerText = schoolName;
-
-//     const p = document.getElementsByClassName("name-school1");
-//     [...p].forEach(p => p.appendChild(span));
-// });
-
-
-
-/*
-    API CONSUMPTION
-*/
-
-// const statesSelect = document.getElementById("state-school1");
-// const municipalitiesSelect = document.getElementById("municipality-school1");
-// const schoolsSelect = document.getElementById("school1");
-
-/*
-    FUNCTIONS EXPRESSIONS
-*/
-
-// const populateStatesSelect = (statesSelect) => {
-//     fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
-//         .then(res => res.json())
-//         .then(states => {
-
-//             states.forEach(state => {
-
-//                 const option = document.createElement("option");
-//                 option.value = state.sigla;
-//                 option.textContent = state.nome;
-
-//                 statesSelect.appendChild(option);
-//             })
-//         })
-//         .catch(error => {
-//             console.log(error);
-//         });
-// };
-
-// const populateMunicipalitiesSelect = (municipalitiesSelect) => {
-
-//     municipalitiesSelect.removeAttribute("disabled");
-//     let nodesMunicipalitiesSelect = municipalitiesSelect.childNodes;
-//     [...nodesMunicipalitiesSelect].map(node => node.remove());
-
-//     let selectedState = statesSelect.options[statesSelect.selectedIndex].value;
-
-//     const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-//         targetUrl = `http://educacao.dadosabertosbr.com/api/cidades/${selectedState}`;
-
-//     fetch(proxyUrl + targetUrl)
-//         .then(res => res.json())
-//         .then(municipalities => {
-
-//             municipalities.forEach(municipality => {
-
-//                 let codeName = municipality.split(":");
-//                 let name = codeName[1];
-
-//                 const option = document.createElement("option");
-//                 option.value = municipality;
-//                 option.textContent = name;
-
-//                 municipalitiesSelect.appendChild(option);
-//             });
-
-//             const option = document.createElement("option");
-//             option.textContent = "Município";
-//             option.selected = "selected";
-//             option.disabled = "disabled";
-//             municipalitiesSelect.prepend(option);
-//         })
-//         .catch(error => {
-//             console.log(error);
-//         });
-// };
-
-// const populateSchoolsSelect = (schoolsSelect) => {
-
-//     schoolsSelect.removeAttribute("disabled");
-//     let nodesSchoolsSelect = schoolsSelect.childNodes;
-//     [...nodesSchoolsSelect].map(node => node.remove());
-
-//     let selectedMunicipality = municipalitiesSelect.options[municipalitiesSelect.selectedIndex].value;
-//     let codeName = selectedMunicipality.split(":");
-//     let code = codeName[0];
-
-//     const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-//         targetUrl = `http://educacao.dadosabertosbr.com/api/escolas/buscaavancada?cidade=${code}`;
-
-//     fetch(proxyUrl + targetUrl)
-//         .then(res => res.json())
-//         .then(schools => {
-
-//             schools[1].forEach(school => {
-
-//                 const option = document.createElement("option");
-//                 option.value = school.nome;
-//                 option.textContent = school.nome;
-
-//                 schoolsSelect.appendChild(option);
-//             });
-
-//             const option = document.createElement("option");
-//             option.textContent = "Nome da escola";
-//             option.selected = "selected";
-//             option.disabled = "disabled";
-//             schoolsSelect.prepend(option);
-//         })
-//         .catch(error => {
-//             console.log(error);
-//         });
-// };
-
-/*
-    FUNCTIONS CALLS
-*/
-
-// populateStatesSelect(statesSelect);
-// statesSelect.addEventListener("change", () => populateMunicipalitiesSelect(municipalitiesSelect));
-// municipalitiesSelect.addEventListener("change", () => populateSchoolsSelect(schoolsSelect));
