@@ -580,7 +580,9 @@ div.school-location { display: flex; }
 
 /* CLASSES SETTING */
 div#class-code {
-  text-align: center;
+  /* text-align: center; */
+  display: flex;
+  flex-wrap: nowrap;
   margin-bottom: 1.5rem;
 }
 

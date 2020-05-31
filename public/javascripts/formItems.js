@@ -208,8 +208,8 @@ const addSchool = () => {
         APPEND ELEMENTS
     */
 
-    const schoolGrayBox = document.querySelector("#set-schools .gray-box");
-    schoolGrayBox.appendChild(schoolContent);
+    const schoolsGrayBox = document.querySelector("#set-schools .gray-box");
+    schoolsGrayBox.appendChild(schoolContent);
     schoolContent.appendChild(schoolLocation);
     schoolContent.appendChild(school);
     schoolContent.appendChild(passGrade);
@@ -241,6 +241,9 @@ const addSchool = () => {
     populateStatesSelect(state);
     state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state));
     municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality));
+
+    // ADD A NEIGHBOR UF TO THIS SCHOOL
+    setTimeout(() => getStateFromNeighbors(state, schoolsGrayBox, schoolContent), 100);
 
     // ENABLE PASS GRADE SELECT, AND CHANGE TAB TEXT
     school.addEventListener("change", () => {
@@ -320,6 +323,43 @@ const delSchool = () => {
     }
 
 };
+
+const getStateFromNeighbors = (statesSelect, grayBox, schoolContent) => {
+
+    // GET PREVIOUS NEIGHBORS
+    let index, previous = null;
+
+    const neighbors = grayBox.childNodes;
+    for (let i = 3; i < neighbors.length; i++) {
+        if (neighbors[i] == schoolContent) {
+            index = i;
+        }
+    }
+    if (index > 3) { previous = neighbors[index - 1]; } // there is a previously created school
+
+    // ADD STATE FROM PREVIOUS NEIGHBOR
+    if (!previous) {
+        return;
+    }
+    // const contents = [...previous.childNodes];
+    // const location = contents[0];
+    const location = previous.childNodes[0];
+    const state = location.childNodes[0];
+
+    const options = state.childNodes;
+    options.forEach(opt => {
+        if (opt.selected && !opt.disabled) {
+
+            statesSelect.childNodes.forEach(option => {
+                if (option.value == opt.value) {
+                    option.selected = true;
+                    populateMunicipalitiesSelect(statesSelect.nextSibling, statesSelect);
+                }
+            })
+        }
+    });
+
+}
 
 const enablePassGradeSelect = passGradesSelect => passGradesSelect.disabled = false;
 
