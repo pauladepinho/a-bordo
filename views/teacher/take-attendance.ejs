@@ -106,7 +106,7 @@
         <tbody>
           <% for (let i = 0; i < students.length; i++) { %>
           <tr id=<%= "student" + (i + 1) %>>
-            <td class="student-number" id=<%= "student-number" + (i + 1) %>><%= students[i].id %></td>
+            <td class="student-number" id=<%= "student-number" + (i + 1) %>><%= students[i].number %></td>
             <td class="student-name" id=<%= "student-name" + (i + 1) %>><%= students[i].name %></td>
             <td class="attendance-check">
               <% for (let j = 1; j <= 3; j++) { %>
