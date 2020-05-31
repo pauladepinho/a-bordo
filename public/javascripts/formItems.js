@@ -16,14 +16,15 @@
      -------------------------------
 */
 
-let schoolCount = 0; // decreases on school deletion
-let schoolNumber = 0; // never decreases
-
 const enter = 13; // keyboard key;
 
 const addSchoolBtn = document.getElementById("add-school");
 const delSchoolBtn = document.getElementById("del-school");
-let schoolsTabs = document.querySelectorAll("#new-schools .schools-tabs button");
+
+let schoolsTabs = document.querySelectorAll("#new-schools .schools-tabs button"); // schools section
+
+let schoolCount = 0; // decreases on school deletion
+let schoolNumber = 0; // never decreases
 
 // FUNCTIONS CALLS
 
@@ -42,39 +43,22 @@ delSchoolBtn.addEventListener("keydown", evt => {
 
 // FUNCTIONS EXPRESSIONS
 
-const selectSchool = (tab) => {
-    // REMOVE THE SELECTED CLASS FROM ALL TABS
-    schoolsTabs.forEach(tab => tab.classList.remove("selected"));
-
-    // TOGGLE SCHOOLS CONTENTS VISIBILITY
-    const schoolsContents = document.getElementsByClassName("school-content");
-    [...schoolsContents].forEach(school => {
-
-        school.classList.forEach(c => {
-
-            if (c != tab.className) {
-                school.hidden = true;
-            } else {
-                school.hidden = false;
-            }
-        })
-    });
-    // ADD SELECTED CLASS ONLY TO THIS TAB
-    tab.classList.add("selected");
-};
-
 const addSchool = () => {
+
+    /**** UPDATE VARIABLES ****/
+
     schoolNumber++;
     schoolCount++;
 
-    /* 
+    /*********************
         NEW SCHOOL TAB
-    */
+    *********************/
 
     // REMOVE CLASS SELECTED FROM PREVIOUSLY SELECTED TAB (HTML SCHOOLS SECTION ONLY)
     schoolsTabs.forEach(tab => tab.classList.remove("selected"));
 
-    // CREATE NEW TAB
+    /**** CREATE ELEMENTS ****/
+
     // HTML SCHOOLS SECTION TAB
     const schoolTab = document.createElement("button");
     schoolTab.type = "button";
@@ -87,24 +71,42 @@ const addSchool = () => {
     cSchoolTab.className = `school${schoolNumber}`;
     cSchoolTab.innerText = `Escola ${schoolNumber}`;
 
-    if (schoolsTabs.length == 0) { cSchoolTab.classList.add("selected") }; // the first tab
+    if (schoolsTabs.length == 0) { cSchoolTab.classList.add("selected") }; // the first school tab of the classes section is selected when new school is added
 
-    // APPEND EACH NEW TAB TO TABS ON CORRESPONDING SECTIONS
+    /**** APPEND ELEMENTS ****/
+
+    // APPEND EACH NEW TAB TO TABS LIST OF CORRESPONDING FORM SECTION
     const tabsList = document.querySelectorAll(".schools-tabs");
-    tabsList[0].appendChild(schoolTab);
-    tabsList[1].appendChild(cSchoolTab);
+    tabsList[0].appendChild(schoolTab); // schools section
+    tabsList[1].appendChild(cSchoolTab); // classes section
 
-    /* 
+    /**** LISTEN TO EVENTS ON ELEMENTS ****/
+
+    // LISTEN TO CLICK ON TAB TO SELECT SCHOOL (SCHOOLS SECTION TAB)
+    schoolTab.addEventListener("mouseup", () => selectSchool(schoolTab));
+    schoolTab.addEventListener("keydown", evt => {
+        if (evt.keyCode == enter) { selectSchool(schoolTab); }
+    });
+
+    // LISTEN TO CLICK ON TAB TO SELECT THE SCHOOL CLASSES (CLASSES SECTION TAB)
+    cSchoolTab.addEventListener("mouseup", () => selectSchoolClasses(cSchoolTab));
+    cSchoolTab.addEventListener("keydown", evt => {
+        if (evt.keyCode == enter) { selectSchoolClasses(cSchoolTab); }
+    });
+
+    /**************************
         NEW SCHOOL CONTENT
-    */
+    **************************/
 
     // HIDE PREVIOUSLY SELECTED SCHOOL CONTENT
-    const previousSchoolsContents = document.getElementsByClassName("school-content");
+    const previousSchoolsContents = document.getElementsByClassName("school-content"); // div inside the gray box
     [...previousSchoolsContents].forEach(school => {
         if (!school.hidden) {
             school.hidden = true;
         }
     });
+
+    /**** CREATE ELEMENTS ****/
 
     // NEW CONTENT DIV
     const schoolContent = document.createElement("div");
@@ -204,9 +206,7 @@ const addSchool = () => {
     trimonthly.innerHTML = `Trimestral <input type="radio" name="school${schoolNumber}[]" value="3" required />`
     trimonthly.childNodes[1].disabled = true;
 
-    /*
-        APPEND ELEMENTS
-    */
+    /**** APPEND ELEMENTS ****/
 
     const schoolsGrayBox = document.querySelector("#set-schools .gray-box");
     schoolsGrayBox.appendChild(schoolContent);
@@ -233,47 +233,46 @@ const addSchool = () => {
     state.appendChild(stateOption);
     municipality.appendChild(municipalityOption);
 
-    /*
-        WRAP EVERYTHING UP
-    */
+    /**** CALL OTHER FUNCTIONS / LISTEN TO EVENTS ON ELEMENTS ****/
 
     // POPULATE SELECTS THROUGH API
-    populateStatesSelect(state);
-    state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state));
-    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality));
+    populateStatesSelect(state); // states select
+    state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state)); // municipalities select
+    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality)); // schools select
 
-    // ADD A NEIGHBOR UF TO THIS SCHOOL
-    setTimeout(() => getStateFromNeighbors(state, schoolsGrayBox, schoolContent), 100);
+    // ADD NEIGHBOR SCHOOL'S LOCATION TO THIS SCHOOL
+    setTimeout(() => { // wait for populateStatesSelect() response
+        setNeighborSchoolLocationToSelf(state, municipality, school, schoolContent)
+    }, 100);
 
-    // ENABLE PASS GRADE SELECT, AND CHANGE TAB TEXT
+    // ENABLE PASS GRADE SELECT, AND CHANGE THE TAB'S TEXT TO DISPLAY THE SCHOOL'S NAME
     school.addEventListener("change", () => {
         enablePassGradeSelect(passGrade), changeTabText(schoolTab, cSchoolTab, school)
     });
 
-    // ENABLE ACADEMIC DIVISION RADIO INPUTS
-    passGrade.addEventListener("change", () => enableTermsRadios(bimonthly, trimonthly));
+    // ENABLE OPTIONS OF ACADEMIC YEAR DIVISION (RADIO INPUTS)
+    passGrade.addEventListener("change", () => enableYearDivisionOptions(bimonthly, trimonthly));
 
-    // LISTEN TO ACADEMIC YEAR DIVISION
-    bimonthly.addEventListener("click", () => toggleTerms(evaluationSystem, bimonthly, trimonthly));
-    trimonthly.addEventListener("click", () => toggleTerms(evaluationSystem, trimonthly, bimonthly));
+    // LISTEN TO ACADEMIC YEAR DIVISIONS
+    bimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, bimonthly, trimonthly));
+    trimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, trimonthly, bimonthly));
 
-    // UPDATE TABS LIST
-    schoolsTabs = document.querySelectorAll("#new-schools .schools-tabs button");
-    // LISTEN TO SELECT SCHOOL FUNCTION
-    schoolsTabs.forEach(tab => {
-        tab.addEventListener("mouseup", () => selectSchool(tab));
-        tab.addEventListener("keydown", evt => {
-            if (evt.keyCode == enter) { selectSchool(tab); }
-        });
-    });
+    /*************************
+        WRAP EVERYTHING UP
+    **************************/
 
-    // TOGGLE ADD AND DEL BUTTONS
+    /**** TOGGLE ADD AND DEL BUTTONS ****/
+
     if (schoolCount > 1) {
         delSchoolBtn.disabled = false;
     }
     if (schoolCount == 5) {
         addSchoolBtn.disabled = true;
     }
+
+    /**** UPDATE TABS LIST ****/
+
+    schoolsTabs = document.querySelectorAll("#new-schools .schools-tabs button");
 };
 
 const delSchool = () => {
@@ -287,106 +286,139 @@ const delSchool = () => {
     });
     // CONFIRM DELETION
     if (!confirm(`Tem certeza que deseja deletar a ${school.innerText}?`)) { return; }
+
     schoolCount--;
+
+    /************************
+        REMOVE SCHOOL TAB
+    ************************/
+
     // REMOVE TAB BUTTON FROM SCHOOLS TABS
-    school.remove();
+    school.remove(); // in the schools section
     const tabsCSec = document.querySelectorAll("#new-classes .schools-tabs button");
-    tabsCSec.forEach(tab => {
-        if (tab.innerText == school.innerText) {
-            tab.remove();
-        }
+    tabsCSec.forEach(tab => { // in the classes section
+        if (tab.innerText == school.innerText) { tab.remove(); }
     });
 
     //  UPDATE TABS LIST
     schoolsTabs = document.querySelectorAll("#new-schools .schools-tabs button");
 
-    // ADD SELECTED CLASS TO LAST TAB IN THE LIST
+    // SELECT TO LAST TAB IN THE LIST
     schoolsTabs[schoolsTabs.length - 1].classList.add("selected");
+
+    // IN THE CLASSES SECTION, SELECT THE FIRST TAB
     tabsCSec[0].classList.add("selected");
 
-    /* 
-        REMOVE SCHOOL CONTENT FROM SCHOOL SECTION FORM
-    */
+    /*****************************************************
+        REMOVE SCHOOL CONTENT (FROM SCHOOL SECTION FORM)
+    *****************************************************/
+
     const schoolsContents = document.getElementsByClassName("school-content");
     [...schoolsContents].forEach(school => {
-        if (!school.hidden) {
-            school.remove();
-        }
+        if (!school.hidden) { school.remove(); }
     });
-    schoolsContents[schoolsContents.length - 1].hidden = false;
-    /*
-        (IN)ACTIVATE BUTTONS
-    */
-    addSchoolBtn.disabled = false;
-    if (schoolCount == 1) {
-        delSchoolBtn.disabled = true;
-    }
 
+    // DISPLAY CONTENT OF THE LAST SCHOOL IN THE LIST
+    schoolsContents[schoolsContents.length - 1].hidden = false;
+
+    /*********************************
+        TOGGLE ADD AND DEL BUTTONS
+    *********************************/
+
+    addSchoolBtn.disabled = false;
+    if (schoolCount == 1) { delSchoolBtn.disabled = true; }
 };
 
-const getStateFromNeighbors = (statesSelect, grayBox, schoolContent) => {
+const selectSchool = (tab) => {
+    // UNSELECT PREVIOUSLY SELECTED TAB
+    schoolsTabs.forEach(tab => tab.classList.remove("selected"));
 
-    // GET PREVIOUS NEIGHBORS
-    let index, previous = null;
+    // TOGGLE SCHOOLS CONTENTS VISIBILITY
+    const schoolsContents = document.getElementsByClassName("school-content");
 
-    const neighbors = grayBox.childNodes;
-    for (let i = 3; i < neighbors.length; i++) {
-        if (neighbors[i] == schoolContent) {
-            index = i;
-        }
-    }
-    if (index > 3) { previous = neighbors[index - 1]; } // there is a previously created school
-
-    // ADD STATE FROM PREVIOUS NEIGHBOR
-    if (!previous) {
-        return;
-    }
-    // const contents = [...previous.childNodes];
-    // const location = contents[0];
-    const location = previous.childNodes[0];
-    const state = location.childNodes[0];
-
-    const options = state.childNodes;
-    options.forEach(opt => {
-        if (opt.selected && !opt.disabled) {
-
-            statesSelect.childNodes.forEach(option => {
-                if (option.value == opt.value) {
-                    option.selected = true;
-                    populateMunicipalitiesSelect(statesSelect.nextSibling, statesSelect);
-                }
-            })
-        }
+    [...schoolsContents].forEach(content => {
+        content.classList[1] == tab.className ? content.hidden = false : content.hidden = true;
     });
 
-}
+    // ADD SELECTED CLASS CLICKED TAB
+    tab.classList.add("selected");
+};
+
+const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, schoolsSelect, schoolContent) => {
+    // LOOK FOR PREVIOUS NEIGHBOR
+    let index, neighbor = null;
+    const schoolsContents = document.getElementsByClassName("school-content");
+
+    for (let i = 0; i < schoolsContents.length; i++) {
+        if (schoolsContents[i] == schoolContent) { index = i; } // found own index
+    }
+    if (index > 0) { neighbor = schoolsContents[index - 1]; } // there is a previously created school
+    if (!neighbor) { return; }
+
+    // GET NEIGHBOR'S LOCATION CONTENT
+    const location = neighbor.childNodes[0];
+    const state = location.childNodes[0]; // neighbor's statesSelect
+    const municipality = location.childNodes[1]; // neighbor's municipalitiesSelect
+
+    /**************************************
+        ADD STATE FROM NEIGHBOR TO SELF
+    **************************************/
+
+    let selectedIndex = state.selectedIndex;
+    const selectedState = state.options[selectedIndex]; // neighbor's selected option
+    const selectableState = statesSelect.options[selectedIndex]; // option in statesSelect
+
+    if (selectedState &&
+        !selectedState.disabled &&
+        selectableState
+    ) {
+        selectableState.selected = true;
+        populateMunicipalitiesSelect(municipalitiesSelect, statesSelect);
+    }
+
+    /*********************************************
+        ADD MUNICIPALITY FROM NEIGHBOR TO SELF
+    *********************************************/
+
+    setTimeout(() => { // wait for populateMunicipalitiesSelect() response
+        selectedIndex = municipality.selectedIndex;
+        const selectedMunicipality = municipality.options[selectedIndex]; // neighbor's selected option
+        const selectableMunicipality = municipalitiesSelect.options[selectedIndex]; // option in municipalitiesSelect
+
+        if (selectedMunicipality &&
+            !selectedMunicipality.disabled &&
+            selectableMunicipality
+        ) {
+            selectableMunicipality.selected = true;
+            populateSchoolsSelect(schoolsSelect, municipalitiesSelect);
+        }
+    }, 500);
+};
 
 const enablePassGradeSelect = passGradesSelect => passGradesSelect.disabled = false;
 
-const changeTabText = (tab, classesSectionTab, schoolsSelect) => {
-    const options = schoolsSelect.childNodes;
-    [...options].forEach(option => {
-        if (option.selected) {
-            tab.innerText = option.innerText;
-            classesSectionTab.innerText = option.innerText;
-        }
-    });
-}
+const changeTabText = (tab, cSchoolTab, select) => {
 
-const enableTermsRadios = (label1, label2) => {
+    const selected = select.options[select.selectedIndex];
+
+    tab.innerText = selected.innerText;
+    cSchoolTab.innerText = selected.innerText;
+};
+
+const enableYearDivisionOptions = (label1, label2) => {
     if (label1.childNodes[1].disabled) {
         label1.classList.remove("disabled");
         label1.childNodes[1].disabled = false;
         label2.classList.remove("disabled");
         label2.childNodes[1].disabled = false;
     }
-}
+};
 
-const toggleTerms = (title, yearDivision, alternative) => {
+const toggleYearDivision = (title, yearDivision, alternative) => {
     yearDivision.classList.add("selected");
     alternative.classList.remove("selected");
 
-    title.childNodes[1].innerText = yearDivision.innerText;
+    title.childNodes[1].innerText = yearDivision.innerText; // add text to span element
 };
 
 // APIs
@@ -412,12 +444,9 @@ const populateStatesSelect = (statesSelect) => {
 
 const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
 
-    municipalitiesSelect.removeAttribute("disabled");
-    let nodesMunicipalitiesSelect = municipalitiesSelect.childNodes;
-    [...nodesMunicipalitiesSelect].map(node => node.remove());
+    [...municipalitiesSelect.options].map(option => option.remove()); // remove other state's municipalities
 
-    let selectedState = statesSelect.options[statesSelect.selectedIndex].value;
-
+    const selectedState = statesSelect.options[statesSelect.selectedIndex].value;
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
         targetUrl = `http://educacao.dadosabertosbr.com/api/cidades/${selectedState}`;
 
@@ -426,9 +455,7 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
         .then(municipalities => {
 
             municipalities.forEach(municipality => {
-
-                let codeName = municipality.split(":");
-                let name = codeName[1];
+                const name = municipality.split(":")[1];
 
                 const option = document.createElement("option");
                 option.value = municipality;
@@ -436,12 +463,13 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
 
                 municipalitiesSelect.appendChild(option);
             });
-
             const option = document.createElement("option");
             option.textContent = "Município";
             option.selected = "selected";
             option.disabled = "disabled";
+
             municipalitiesSelect.prepend(option);
+            municipalitiesSelect.disabled = false;
         })
         .catch(error => {
             console.log(error);
@@ -450,13 +478,10 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
 
 const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
 
-    schoolsSelect.removeAttribute("disabled");
-    let nodesSchoolsSelect = schoolsSelect.childNodes;
-    [...nodesSchoolsSelect].map(node => node.remove());
+    [...schoolsSelect.options].map(option => option.remove()); // remove other municipality's schools
 
-    let selectedMunicipality = municipalitiesSelect.options[municipalitiesSelect.selectedIndex].value;
-    let codeName = selectedMunicipality.split(":");
-    let code = codeName[0];
+    const selectedMunicipality = municipalitiesSelect.options[municipalitiesSelect.selectedIndex].value;
+    const code = selectedMunicipality.split(":")[0];
 
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
         targetUrl = `http://educacao.dadosabertosbr.com/api/escolas/buscaavancada?cidade=${code}`;
@@ -473,12 +498,13 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
 
                 schoolsSelect.appendChild(option);
             });
-
             const option = document.createElement("option");
             option.textContent = "Nome da escola";
             option.selected = "selected";
             option.disabled = "disabled";
+
             schoolsSelect.prepend(option);
+            schoolsSelect.disabled = false;
         })
         .catch(error => {
             console.log(error);
