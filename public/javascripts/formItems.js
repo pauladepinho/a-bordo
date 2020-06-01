@@ -76,7 +76,7 @@ const addSchool = () => {
     /**** APPEND ELEMENTS ****/
 
     // APPEND EACH NEW TAB TO TABS LIST OF CORRESPONDING FORM SECTION
-    const tabsList = document.querySelectorAll(".schools-tabs");
+    const tabsList = document.querySelectorAll(".schools-tabs"); //////////////////////////////////////
     tabsList[0].appendChild(schoolTab); // schools section
     tabsList[1].appendChild(cSchoolTab); // classes section
 
@@ -335,6 +335,20 @@ const selectSchool = (tab) => {
     // ADD SELECTED CLASS CLICKED TAB
     tab.classList.add("selected");
 };
+
+const selectSchoolClasses = (tab) => {
+    // UNSELECT PREVIOUSLY SELECTED TAB
+    let cSchoolTabs = document.querySelectorAll("#new-classes .schools-tabs button");
+    cSchoolTabs.forEach(tab => tab.classList.remove("selected"));
+
+    // TOGGLE CLASSES CONTENTS VISIBILITY
+    // [...schoolsContents].forEach(content => {
+    //     content.classList[1] == tab.className ? content.hidden = false : content.hidden = true;
+    // });
+
+    // ADD SELECTED CLASS CLICKED TAB
+    tab.classList.add("selected");
+}
 
 const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, schoolsSelect, schoolContent) => {
     // LOOK FOR PREVIOUS NEIGHBOR
