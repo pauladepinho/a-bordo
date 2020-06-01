@@ -385,7 +385,10 @@ section div.gray-box {
   margin-bottom: 3rem;
 }
 
-section#set-schools div.gray-box { height: 60vh; }
+section#set-schools div.gray-box,
+section#set-child div.gray-box { 
+  height: 60vh; 
+}
 
 /* SETTING USER */
 section#set-user > div {
@@ -505,17 +508,17 @@ section#set-user ul li span {
 }
 /* END OF SETTING USER */
 
-/* BUTTONS FOR ADDING NEW SCHOOLS AND CLASSES */
-#new-schools, #classes { /* .align-left + btn-del */
+/* BUTTONS FOR ADDING NEW SCHOOLS, CLASSES AND CHILDREN */
+#new-schools, #classes, #new-child { /* .align-left + btn-del */
   display: flex;
   justify-content: space-between;
 
   z-index: 1000;
 }
-.align-left { /* .schools-tabs/#classes-tabs + .btn-add */
+.align-left { /* .schools-tabs/#classes-tabs + .btn-add + .child-tabs */
   display: flex;
 }
-.schools-tabs, #classes-tabs, .instances-list {
+.schools-tabs, #classes-tabs, .child-tabs, .instances-list {
   width: 56vw;
   margin-right: .5rem;
 
@@ -523,12 +526,12 @@ section#set-user ul li span {
   flex-wrap: nowrap;
 }
 
-.schools-tabs button, #classes-tabs button {
+.schools-tabs button, #classes-tabs button, .child-tabs button {
   margin-right: .5rem;
   width: 100%;
 }
 
-#new-schools button, #new-classes button {
+#new-schools button, #new-classes button, #new-child button {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -1051,3 +1054,8 @@ div#instructions p {
 }
 
 /* FIM DO SCROLLBAR PERSONALIZADO ---------*/
+
+/* CHILD SETTING */
+#set-child select { width: 100%; }
+#set-child p { margin-top: 12px; }
+#set-child span#term { font-weight: 700; }

@@ -19,7 +19,7 @@
           </a>
         </li>
         <li>
-          <a class="nav-link" href="#set-schools">
+          <a class="nav-link" href="#set-child">
             Filhos
           </a>
         </li>
@@ -40,7 +40,7 @@
           </div>
 
           <div id="full-name">
-            <input type="text" name="name" id="name" placeholder="Nome" />
+            <input type="text" name="forename" id="name" placeholder="Nome" />
 
             <input type="text" name="surname" id="surname" placeholder="Sobrenome" />
           </div>
@@ -60,6 +60,17 @@
               <div class="eye-icon" id="eye-icon-2" onclick="toogleVisibility()"></div>
             </div>
           </div>
+
+          <% 
+            if(typeof errors != "undefined") { 
+              errors.forEach(error => { 
+          %>
+          <span><%= error %></span>
+          <% 
+              }); 
+            } 
+          %>
+
           <ul id="password-strength">
             <li class="dash"></li>
             <li class="dash"></li>
@@ -82,23 +93,25 @@
           </ul>
         </section>
 
-        <section id="set-schools">
-          <div id="new-schools">
-            <div class="instances-list schools">
-              <button type="button" class="selected school1" onclick="select()">
-                Filho 1
-              </button>
+        <section id="set-child">
+
+          <div id="new-child">
+            <div class="align-left">
+              <div class="child-tabs">
+                <!-- JAVASCRIPT ADDED
+                <button type="button" class="school1 selected">Filho 1</button>
+                -->
+              </div>
+              <button type="button" class="btn-add" id="add-child">+</button>
             </div>
-            <button type="button" class="btn-add" id="add-school" onclick="addInstance()">
-              +
-            </button>
-            <button type="button" class="btn-del" id="del-school" onclick="delInstance()" disabled>
-              Excluir
-            </button>
+            <button type="button" class="btn-del" id="del-child" disabled></button>
           </div>
+          
           <div class="gray-box">
+            <!-- JS ADDED -->
+          <!-- <div class="child-content child1">
             <div class="school-location">
-              <select name="selectState" id="state-school1" required>
+              <select name="school1" id="state-school1" required>
                 <option disabled selected>UF</option>
               </select>
 
@@ -119,7 +132,8 @@
             <select name="selectStudent">
               <option disabled selected>Aluno</option>
             </select>
-          </div>
+          </div>  -->
+        </div> 
 
           <button type="submit" class="special">Finalizar e levantar voo!</button>
         </section>
@@ -128,5 +142,7 @@
     </form>
   </main>
 
-  <script src="/javascripts/api.js"></script>
+  
+  <!-- <script src="/javascripts/api.js"></script> -->
+  <script src="/javascripts/formChild.js"></script>
   <%- include("../partials/footer.ejs") %>
