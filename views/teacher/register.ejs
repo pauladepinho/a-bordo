@@ -164,13 +164,13 @@
           <div id="new-classes">
             <div class="schools-tabs">
               <!-- JAVASCRIPT ADDED
-              <button type="button" class="selected school1">Escola 1</button> 
+              <button type="button" class="school1 selected">Escola 1</button> 
               -->
             </div>
             <div id="classes">
               <div class="align-left">
                 <div id="classes-tabs">
-                  <button type="button" class="selected class1">Turma 1</button>
+                  <!-- <button type="button" class="school1 selected">Turma 1</button> -->
                 </div>
                 <button type="button" class="btn-add" id="add-class">+</button>
               </div>
@@ -180,7 +180,8 @@
 
           <div class="gray-box">
 
-            <div class="class-content">
+            <div class="class-content school1">
+
               <div id="class-code">
                 <% 
                 let date = new Date;
@@ -214,34 +215,23 @@
                 <select name="class1-school1[]">
                   <option disabled selected>Número da turma</option>
                   <option value="1111">1111</option>
-                  <option value="1121">1121</option>
-                  <option value="1131">1131</option>
-                  <option value="1141">1141</option>
-                  <option value="1151">1151</option>
-                  <option value="1161">1161</option>
-                  <option value="1171">1171</option>
-                  <option value="1181">1181</option>
-                  <option value="1191">1191</option>
-                  <option value="1211">1211</option>
-                  <option value="1221">1221</option>
-                  <option value="1231">1231</option>
                   <option disabled>•-•-•-•-•</option>
                   <option id="newClass">Adicionar nova turma</option>
                 </select>
               </div>
 
               <p>Nesta turma, eu leciono...</p>
+
               <div id="new-courses">
                 <select name="subjects-class1-school1[]" required>
                   <option disabled selected>Escolher disciplina</option>
                   <%
-                  for (subject of subjects) {
-                %>
+                    for (subject of subjects) {
+                  %>
                   <option value="<%= subject.id %>"><%= subject.name %></option>
                   <%
-                  
-                  }
-                %>
+                    }
+                  %>
                   <option disabled>•-•-•-•-•</option>
                   <option value="newSubject">Adicionar nova disciplina</option>
                 </select>
@@ -249,12 +239,12 @@
                 <select name="subjects-class1-school1[]" required>
                   <option disabled selected>Escolher disciplina</option>
                   <%
-                  for (subject of subjects) {
-                %>
+                    for (subject of subjects) {
+                  %>
                   <option value="<%= subject.id %>"><%= subject.name %></option>
                   <%
-                  }
-                %>
+                    }
+                  %>
                   <option disabled>•-•-•-•-•</option>
                   <option value="newSubject">Adicionar nova disciplina</option>
                 </select>
@@ -263,6 +253,7 @@
                   <button type="button" class="btn-add" id="add-course">+</button>
                   <button type="button" class="btn-del" id="del-course" disabled></button>
                 </div>
+
               </div>
 
               <div id="students-list">
