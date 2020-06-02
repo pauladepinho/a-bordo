@@ -102,83 +102,30 @@
         </section>
 
         <section id="set-schools">
-
           <div id="new-schools">
-            <div class="align-left">
-              <div class="schools-tabs">
-                <!-- JAVASCRIPT ADDED
-                <button type="button" class="school1 selected">Escola 1</button> 
-                -->
-              </div>
-              <button type="button" class="btn-add" id="add-school">+</button>
+            <div class="schools-tabs"></div>
+            <div class="buttons">
+              <button type="button" class="btn-add" id="add-school"></button>
+              <button type="button" class="btn-del" id="del-school" disabled></button>
             </div>
-            <button type="button" class="btn-del" id="del-school" disabled></button>
           </div>
-
-          <div class="gray-box">
-            <!-- JAVASCRIPT ADDED
-            <div class="school-content school1">
-              <div class="school-location">
-                <select name="school1[]" id="state-school1" required>
-                  <option disabled selected>UF</option>
-                </select>
-
-                <select name="school1[]" id="municipality-school1" disabled required>
-                  <option disabled selected>Município</option>
-                </select>
-              </div>
-
-              <select name="school1[]" id="school1" disabled required>
-                <option disabled selected>Nome da escola</option>
-              </select>
-
-              <select name="school1[]" required>
-                <option disabled selected>Média para aprovação</option>
-                <option disabled>Escala de 0 a 10 pontos</option>
-                <option value="5">5,0 pontos</option>
-                <option value="6">6,0 pontos</option>
-                <option value="7">7,0 pontos</option>
-                <option disabled>Escala de 0 a 100 pontos</option>
-                <option value="50">50 pontos</option>
-                <option value="60">60 pontos</option>
-                <option value="70">70 pontos</option>
-              </select>
-
-              <p>Sistema de avaliação: <span id="term"></span></p>
-              <label class="btn-appearance" id="bimonthly" onclick="isBimonthly()">
-                Bimestral
-                <input type="radio" name="school1[]" value="4" required />
-              </label>
-              <label class="btn-appearance" id="trimonthly" onclick="isTrimonthly()">
-                Trimestral
-                <input type="radio" name="school1[]" value="3" />
-              </label> 
-            </div>
-            -->
-          </div>
-
+          <div class="gray-box"></div>
         </section>
 
         <section id="set-classes">
-
           <div id="new-classes">
-            <div class="schools-tabs">
-              <!-- JAVASCRIPT ADDED
-              <button type="button" class="school1 selected">Escola 1</button> 
-              -->
-            </div>
+            <div class="schools-tabs"></div>
             <div id="classes">
-              <div class="align-left">
-                <div id="classes-tabs">
-                  <!-- <button type="button" class="school1 selected">Turma 1</button> -->
-                </div>
-                <button type="button" class="btn-add" id="add-class">+</button>
+              <div id="classes-tabs"></div>
+              <div class="buttons">
+                <button type="button" class="btn-add" id="add-class"></button>
+                <button type="button" class="btn-del" id="del-class" disabled></button>
               </div>
-              <button type="button" class="btn-del" id="del-class" disabled></button>
             </div>
           </div>
 
           <div class="gray-box">
+            <h3 id="class-school"></h3>
 
             <div class="class-content school1">
 
@@ -250,7 +197,7 @@
                 </select>
 
                 <div class="buttons">
-                  <button type="button" class="btn-add" id="add-course">+</button>
+                  <button type="button" class="btn-add" id="add-course"></button>
                   <button type="button" class="btn-del" id="del-course" disabled></button>
                 </div>
 
@@ -273,24 +220,25 @@
 
                   <div class="course-retake-list" id="course-retake-student1" hidden required>
                     <select name="student1-class1-school1[]" id="course-retake-list1-student1">
-                      <option value="" disabled selected>Dependência em...</option>
+                      <option disabled selected>Dependência em...</option>
                       <%
-                      for (subject of subjects) {
-                    %>
+                        for (subject of subjects) {
+                      %>
                       <option value="<%= subject.id %>"><%= subject.name %></option>
                       <%
-                      }
-                    %>
+                        }
+                      %>
                     </select>
-
-                    <button type="button" class="btn-add">+</button>
-                    <button type="button" class="btn-del" disabled></button>
+                    <div class="buttons">
+                      <button type="button" class="btn-add"></button>
+                      <button type="button" class="btn-del" disabled></button>
+                    </div>
                   </div>
                 </div>
 
                 <div class="students">
-                  <input type="number" name="student2-class1-school1[]" value="2" required />
-                  <input type="text" name="student2-class1-school1[]" placeholder="Nome do aluno" required />
+                  <input type="number" name="student2-class1-school1[]" value="2" />
+                  <input type="text" name="student2-class1-school1[]" placeholder="Nome do aluno" />
 
                   <label for="course-retake-checkbox-student2" class="checkbox-container">Dependência
                     <input type="checkbox" name="student2-class1-school1[]" class="course-retake-checkbox"
@@ -298,20 +246,21 @@
                     <span class="checkmark"></span>
                   </label>
 
-                  <div class="course-retake-list" id="course-retake-student2" hidden required>
+                  <div class="course-retake-list" id="course-retake-student2" hidden>
                     <select name="student2-class1-school1[]" id="course-retake-list1-student2">
-                      <option value="" disabled selected>Dependência em...</option>
+                      <option disabled selected>Dependência em...</option>
                       <%
-                      for (subject of subjects) {
+                        for (subject of subjects) {
                       %>
                       <option value="<%= subject.id %>"><%= subject.name %></option>
                       <%
-                      }
-                    %>
+                        }
+                      %>
                     </select>
-
-                    <button type="button" class="btn-add">+</button>
-                    <button type="button" class="btn-del" disabled></button>
+                    <div class="buttons">
+                      <button type="button" class="btn-add"></button>
+                      <button type="button" class="btn-del" disabled></button>
+                    </div>
                   </div>
                 </div>
 
@@ -325,6 +274,5 @@
     </form>
   </main>
 
-  <!-- <script src="/javascripts/api.js"></script> -->
   <script src="/javascripts/formItems.js"></script>
   <%- include("../partials/footer.ejs") %>

@@ -506,17 +506,20 @@ section#set-user ul li span {
 /* END OF SETTING USER */
 
 /* BUTTONS FOR ADDING NEW SCHOOLS AND CLASSES */
-#new-schools, #classes { /* .align-left + btn-del */
+#new-schools, #classes {
   display: flex;
   justify-content: space-between;
+}
 
-  z-index: 1000;
+#new-schools button, #new-classes button {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
-.align-left { /* .schools-tabs/#classes-tabs + .btn-add */
-  display: flex;
-}
+#classes button { margin-top: 0.25rem; } 
+
 .schools-tabs, #classes-tabs, .instances-list {
-  width: 56vw;
+  width: 58vw;
+  /* width: 60vw; */
   margin-right: .5rem;
 
   display: flex;
@@ -528,19 +531,23 @@ section#set-user ul li span {
   width: 100%;
 }
 
-#new-schools button, #new-classes button {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+.buttons {
+  display: flex;
+  flex-wrap: nowrap;
 }
-#classes button { margin-top: 0.25rem; } 
+.btn-add, .btn-del {
+  margin-left: 6px;
+  min-width: 48px; 
+  max-width: 48px;
 
-.btn-add, .btn-del { min-width: 48px; max-width: 48px; }
-.btn-del {
-  background-color: #fe539b; 
-  background-image: url("../images/bin.svg");
-  background-size: 60%;
+  background-size: 70%;
   background-repeat: no-repeat;
   background-position: center;
+}
+.btn-add { background-image: url("../images/btn-add.svg"); }
+.btn-del {
+  background-color: #fe539b; 
+  background-image: url("../images/btn-del.svg");
 }
 /* END OF BUTTONS FOR ADDING NEW SCHOOLS AND CLASSES */
 
@@ -590,13 +597,14 @@ div#class-code label { margin-right: 1rem; }
 
 div#new-courses {
   margin-bottom: 1.5rem;
-
   display: flex;
   flex-wrap: wrap;
 }
 
-div#new-courses div.buttons,
-div.course-retake-list button { margin-left: 6px; }
+/* div#new-courses div.buttons,
+div.course-retake-list button {
+  margin-left: 6px; 
+} */
 
 div#students-list > div:first-child span#student-name {
   margin-left: 84px; /* equals to the input[type="number"] width */
