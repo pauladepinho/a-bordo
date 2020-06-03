@@ -71,13 +71,18 @@ const addSchool = () => {
 
     /**** UPDATE VARIABLES ****/
 
-    schoolNumber++;
     schoolCount++;
+    schoolNumber++;
     classNumber++; // one class is added too
 
-    /*********************
-        NEW SCHOOL TAB
-    *********************/
+    /**** TOGGLE ADD AND DEL BUTTONS ****/
+
+    if (schoolCount == 5) { addSchoolBtn.disabled = true; }
+    if (schoolCount > 1) { delSchoolBtn.disabled = false; }
+
+    /***************
+        NEW TABS
+    ***************/
 
     // UNSELECT PREVIOUSLY SELECTED TAB
     schoolsTabs.forEach(tab => tab.classList.remove("selected"));
@@ -101,6 +106,7 @@ const addSchool = () => {
     const classTab = document.createElement("button");
     classTab.type = "button";
     classTab.className = `school${schoolNumber}`;
+    classTab.id = `class${classNumber}`;
     classTab.innerText = "Turma 1";
 
     if (cSchoolTab.classList.contains("selected")) {
@@ -304,17 +310,6 @@ const addSchool = () => {
     // LISTEN TO ACADEMIC YEAR DIVISIONS
     bimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, bimonthly, trimonthly));
     trimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, trimonthly, bimonthly));
-
-    /*************************
-        WRAP EVERYTHING UP
-    **************************/
-
-    /**** TOGGLE ADD AND DEL BUTTONS ****/
-
-    if (schoolCount == 5) { addSchoolBtn.disabled = true; }
-    // if (schoolCount > 1) {
-    delSchoolBtn.disabled = false;
-    // }
 };
 
 const delSchool = () => {
@@ -327,12 +322,17 @@ const delSchool = () => {
     if (!confirm(`Tem certeza que deseja deletar a ${school.innerText}?`)) { return; }
 
     schoolCount--;
-    // UNSELECT SCHOOL
-    school.classList.remove("selected");
+
+    // TOGGLE ADD AND DEL BUTTONS
+    addSchoolBtn.disabled = false;
+    if (schoolCount == 1) { delSchoolBtn.disabled = true; }
 
     /******************
         REMOVE TABS
     ******************/
+
+    // UNSELECT SCHOOL
+    school.classList.remove("selected");
 
     // REMOVE SCHOOL TABS
     school.remove(); // schools section
@@ -381,14 +381,6 @@ const delSchool = () => {
 
     // DISPLAY CONTENT OF THE LAST SCHOOL IN THE LIST
     schoolsContents[schoolsContents.length - 1].hidden = false;
-
-    /************************
-        WRAP EVERYTHING UP
-    ************************/
-
-    // TOGGLE ADD AND DEL BUTTONS
-    addSchoolBtn.disabled = false;
-    if (schoolCount == 1) { delSchoolBtn.disabled = true; }
 };
 
 const selectSchool = (schoolTab) => {
@@ -644,6 +636,7 @@ const addClass = () => {
     const classTab = document.createElement("button");
     classTab.type = "button";
     classTab.classList.add(school.className, "selected");
+    classTab.id = `class${classNumber}`;
     classTab.innerText = `Turma ${classCount}`;
 
     /**** APPEND ELEMENT ****/
@@ -715,6 +708,10 @@ const delClass = () => {
 
     let classCount = schoolClasses.length; // to toggle add/del btns
 
+    // TOGGLE ADD AND DEL BUTTONS
+    addClassBtn.disabled = false
+    classCount == 1 ? delClassBtn.disabled = true : delClassBtn.disabled = false;
+
     /******************************************************
         REMOVE CLASS CONTENT
     ******************************************************/
@@ -725,14 +722,6 @@ const delClass = () => {
 
     // // DISPLAY CONTENT OF THE LAST SCHOOL IN THE LIST
     // schoolsContents[schoolsContents.length - 1].hidden = false;
-
-    /************************
-        WRAP EVERYTHING UP
-    ************************/
-
-    // TOGGLE ADD AND DEL BUTTONS
-    addClassBtn.disabled = false
-    classCount == 1 ? delClassBtn.disabled = true : delClassBtn.disabled = false;
 };
 
 const selectClass = (tab) => {
@@ -746,4 +735,25 @@ const selectClass = (tab) => {
 
     // SELECT CLICKED CLASS
     tab.classList.add("selected");
+};
+
+
+
+
+
+
+
+const checkboxes = document.getElementsByClassName("checkbox");
+
+[...checkboxes].forEach(checkbox => {
+    checkbox.addEventListener("change", () => showCourseRetakeList(checkbox));
+});
+
+const showCourseRetakeList = (checkbox) => {
+
+    const hiddenElementId = checkbox.dataset.tdId;
+    const repeatCourses = document.getElementById(hiddenElementId);
+
+    checkbox.checked ? repeatCourses.hidden = false : repeatCourses.hidden = true;
+
 };

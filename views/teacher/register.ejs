@@ -170,32 +170,20 @@
               <p>Nesta turma, eu leciono...</p>
 
               <div id="new-courses">
-                <select name="subjects-class1-school1[]" required>
-                  <option disabled selected>Escolher disciplina</option>
-                  <%
+                <div class="subjects">
+                  <select name="subjects-class1-school1[]" required>
+                    <option disabled selected>Escolher disciplina</option>
+                    <%
                     for (subject of subjects) {
-                  %>
-                  <option value="<%= subject.id %>"><%= subject.name %></option>
-                  <%
+                    %>
+                    <option value="<%= subject.id %>"><%= subject.name %></option>
+                    <%
                     }
-                  %>
-                  <option disabled>•-•-•-•-•</option>
-                  <option value="newSubject">Adicionar nova disciplina</option>
-                </select>
-
-                <select name="subjects-class1-school1[]" required>
-                  <option disabled selected>Escolher disciplina</option>
-                  <%
-                    for (subject of subjects) {
-                  %>
-                  <option value="<%= subject.id %>"><%= subject.name %></option>
-                  <%
-                    }
-                  %>
-                  <option disabled>•-•-•-•-•</option>
-                  <option value="newSubject">Adicionar nova disciplina</option>
-                </select>
-
+                    %>
+                    <option disabled>•-•-•-•-•</option>
+                    <option value="newSubject">Adicionar nova disciplina</option>
+                  </select>
+                </div>
                 <div class="buttons">
                   <button type="button" class="btn-add" id="add-course"></button>
                   <button type="button" class="btn-del" id="del-course" disabled></button>
@@ -203,7 +191,49 @@
 
               </div>
 
-              <div id="students-list">
+              <table id="students-table">
+
+                <thead>
+                  <tr>
+                    <th id="student-number">Nº</th>
+                    <th id="student-name">Aluno</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="student">
+                    <td><input type="number" name="student1-class1-school1[]" value="1" min="1" required /></td>
+                    <td><input type="text" name="student1-class1-school1[]" placeholder="Nome do aluno" required /></td>
+                    <td>
+                      <label for="checkbox1" class="checkbox-container">Dependência
+
+                        <input type="checkbox" class="checkbox" id="checkbox1" name="student1-class1-school1[]"
+                          data-td-id="course-student1" />
+
+                        <span class="checkmark"></span>
+
+                      </label>
+                    </td>
+                    <td class="repeat-courses" id="course-student1" hidden>
+
+                      <div class="subjects">
+                        <select name="student1-class1-school1[]">
+                          <option disabled selected>Dependência em...</option>
+                        </select>
+                      </div>
+
+                      <div class="buttons">
+                        <button type="button" class="btn-add"></button>
+                        <button type="button" class="btn-del" disabled></button>
+                      </div>
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+            <!-- <div id="students-list">
                 <div>
                   <span id="student-number">Nº</span><span id="student-name">Aluno</span>
                 </div>
@@ -235,37 +265,7 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="students">
-                  <input type="number" name="student2-class1-school1[]" value="2" />
-                  <input type="text" name="student2-class1-school1[]" placeholder="Nome do aluno" />
-
-                  <label for="course-retake-checkbox-student2" class="checkbox-container">Dependência
-                    <input type="checkbox" name="student2-class1-school1[]" class="course-retake-checkbox"
-                      id="course-retake-checkbox-student2" data-div-id="course-retake-student2" />
-                    <span class="checkmark"></span>
-                  </label>
-
-                  <div class="course-retake-list" id="course-retake-student2" hidden>
-                    <select name="student2-class1-school1[]" id="course-retake-list1-student2">
-                      <option disabled selected>Dependência em...</option>
-                      <%
-                        for (subject of subjects) {
-                      %>
-                      <option value="<%= subject.id %>"><%= subject.name %></option>
-                      <%
-                        }
-                      %>
-                    </select>
-                    <div class="buttons">
-                      <button type="button" class="btn-add"></button>
-                      <button type="button" class="btn-del" disabled></button>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
+              </div> -->
           </div>
 
           <button type="submit" class="special">Finalizar e levantar voo!</button>
