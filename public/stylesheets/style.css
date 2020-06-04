@@ -604,20 +604,20 @@ div.school-location { display: flex; }
   margin-bottom: .75rem;
 }
 
-div#class-code, 
-div#new-courses {
+div.class-code, 
+div.new-courses {
   margin-bottom: 1.5rem;
   display: flex;
 }
-div#class-code { flex-wrap: wrap; }
-div#new-courses { width: 100%; }
+div.class-code { flex-wrap: wrap; }
+div.new-courses { width: 100%; }
 
 div.subjects {
   display: flex;
   flex-wrap: wrap;
 }
 
-#class-code select,
+.class-code select,
 .subjects select {
   flex-grow: 1;
   margin-right: .75rem;
@@ -629,6 +629,7 @@ div.subjects {
   font-weight: normal;
   padding-bottom: .75rem;
 }
+#students-table td { padding-bottom: .75rem; }
 
 .student input[type="number"],
 .student input[type="text"] {

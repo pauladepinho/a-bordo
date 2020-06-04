@@ -34,7 +34,8 @@ let cSchoolsTabs = document.querySelectorAll("#new-classes .schools-tabs button"
 let classesTabs = document.querySelectorAll("#new-classes #classes-tabs button");
 // CONTENTS
 const schoolsContents = document.getElementsByClassName("school-content"); // HTML collection of divs appended to gray box
-const classSchool = document.getElementById("class-school");
+const classSchool = document.getElementById("class-school"); // h3 element that identifies to which school a class belongs
+const classesContents = document.getElementsByClassName("class-content"); // HTML collection of divs appended to gray box
 
 // FUNCTIONS CALLS
 
@@ -107,6 +108,7 @@ const addSchool = () => {
     classTab.type = "button";
     classTab.className = `school${schoolNumber}`;
     classTab.id = `class${classNumber}`;
+    classTab.dataset.contentId = `class${classNumber}`;
     classTab.innerText = "Turma 1";
 
     if (cSchoolTab.classList.contains("selected")) {
@@ -153,163 +155,298 @@ const addSchool = () => {
     cSchoolsTabs = document.querySelectorAll("#new-classes .schools-tabs button");
     classesTabs = document.querySelectorAll("#new-classes #classes-tabs button");
 
-    /**************************
-        NEW SCHOOL CONTENT
-    **************************/
+    /****************************
+        SCHOOLS' FORM SECTION
+    ****************************/
 
-    // HIDE PREVIOUSLY SELECTED SCHOOL CONTENT
-    [...schoolsContents].forEach(content => content.hidden = true);
+    createSchoolFormItems(schoolTab, cSchoolTab);
+
+    /****************************
+        CLASSES' FORM SECTION
+    ****************************/
+
+    // createClassFormItems();
+
+    // HIDE PREVIOUSLY SELECTED CLASS CONTENT
+    // [...classesContents].forEach(content => content.hidden = true);
+
+    // GET GRAY BOX
+    const classesGrayBox = document.querySelector("#set-classes .gray-box");
 
     /**** CREATE ELEMENTS ****/
 
+    let optionDivider;
+    const divider = "•-•-•-•-•";
+
     // NEW CONTENT DIV
-    const schoolContent = document.createElement("div");
-    schoolContent.classList.add("school-content", `school${schoolNumber}`);
+    const classContent = document.createElement("div");
+    // classContent.classList.add("class-content", `school${schoolNumber}`);
+    classContent.className = ("class-content");
+    classContent.id = `class${classNumber}`;
+    classesGrayBox.append(classContent);
 
-    // CREATE SCHOOL LOCATION TO APPEND STATE AND MUNICIPALITY SELECTS
-    const schoolLocation = document.createElement("div");
-    schoolLocation.className = "school-location";
+    [...classesContents].length == 1 ? classContent.hidden = false : classContent.hidden = true;
 
-    // CREATE STATE SELECT
-    const state = document.createElement("select");
-    state.name = `school${schoolNumber}[]`;
-    state.id = `state-school${schoolNumber}`;
-    state.required = true;
+    // DIV TO APPEND ACADEMIC YEAR, LEVEL OF EDUCATION, AND CLASS CODE
+    const classCode = document.createElement("div");
+    classCode.className = "class-code";
+    classContent.append(classCode);
 
-    const stateOption = document.createElement("option");
-    stateOption.disabled = true;
-    stateOption.selected = true;
-    stateOption.innerText = "UF";
+    // ACADEMIC YEAR SELECT
+    const yearSelect = document.createElement("select");
+    yearSelect.name = `class${classNumber}-school${schoolNumber}[]`;
+    classCode.append(yearSelect);
 
-    // MUNICIPALITY SELECT
-    const municipality = document.createElement("select");
-    municipality.name = `school${schoolNumber}[]`;
-    municipality.id = `municipality-school${schoolNumber}`;
-    municipality.required = true;
-    municipality.disabled = true;
+    const yearHeader = document.createElement("option");
+    yearHeader.disabled = true;
+    yearHeader.innerText = "Ano letivo";
+    yearSelect.append(yearHeader);
 
-    const municipalityOption = document.createElement("option");
-    municipalityOption.disabled = true;
-    municipalityOption.selected = true;
-    municipalityOption.innerText = "Município";
+    const currentYearOption = document.createElement("option");
+    const date = new Date();
+    const currentYear = date.getFullYear();
+    currentYearOption.value = currentYear;
+    currentYearOption.selected = true;
+    currentYearOption.innerText = currentYear;
+    yearSelect.append(currentYearOption);
 
-    // SCHOOL'S NAME SELECT
-    const school = document.createElement("select");
-    school.name = `school${schoolNumber}[]`;
-    school.id = `school${schoolNumber}`;
-    school.required = true;
-    school.disabled = true;
+    optionDivider = document.createElement("option");
+    optionDivider.disabled = true;
+    optionDivider.innerText = divider;
+    yearSelect.append(optionDivider);
 
-    const schoolOption = document.createElement("option");
-    schoolOption.disabled = true;
-    schoolOption.selected = true;
-    schoolOption.innerText = "Nome da escola";
+    const addYearOption = document.createElement("option");
+    addYearOption.innerText = "Outro ano letivo";
+    yearSelect.append(addYearOption);
 
-    // PASS GRADE SELECT
-    const passGrade = document.createElement("select");
-    passGrade.name = `school${schoolNumber}[]`;
-    passGrade.required = true;
-    passGrade.disabled = true;
+    // LEVEL OF EDUCATION SELECT
+    const eduLvlSelect = document.createElement("select");
+    eduLvlSelect.name = `class${classNumber}-school${schoolNumber}[]`;
+    classCode.append(eduLvlSelect);
 
-    const passGradeOption = document.createElement("option");
-    passGradeOption.disabled = true;
-    passGradeOption.selected = true;
-    passGradeOption.innerText = "Média para aprovação";
+    const eduLvlHeader = document.createElement("option");
+    eduLvlHeader.disabled = true;
+    eduLvlHeader.selected = true;
+    eduLvlHeader.innerText = "Série/Ano";
+    eduLvlSelect.append(eduLvlHeader);
 
-    const scaleTenOption = document.createElement("option");
-    scaleTenOption.disabled = true;
-    scaleTenOption.innerText = "Escala de 0 a 10 pontos";
+    const middleSchool = document.createElement("option");
+    middleSchool.disabled = true;
+    middleSchool.innerText = "Ensino Fundamental";
+    eduLvlSelect.append(middleSchool);
 
-    const five = document.createElement("option");
-    five.value = 5;
-    five.innerText = "5,0 pontos";
-    const six = document.createElement("option");
-    six.value = 6;
-    six.innerText = "6,0 pontos";
-    const seven = document.createElement("option");
-    seven.value = 7;
-    seven.innerText = "7,0 pontos";
+    for (let g = 1; g <= 9; g++) {
+        const grade = document.createElement("option");
+        grade.value = `Ensino Fundamental-${g}º ano`;
+        grade.innerText = `${g}º ano`;
+        eduLvlSelect.append(grade);
+    }
 
-    const scaleHundredOption = document.createElement("option");
-    scaleHundredOption.disabled = true;
-    scaleHundredOption.innerText = "Escala de 0 a 100 pontos";
+    const highSchool = document.createElement("option");
+    highSchool.disabled = true;
+    highSchool.innerText = "Ensino Médio";
+    eduLvlSelect.append(highSchool);
 
-    const fifty = document.createElement("option");
-    fifty.value = 50;
-    fifty.innerText = "50 pontos";
-    const sixty = document.createElement("option");
-    sixty.value = 60;
-    sixty.innerText = "60 pontos";
-    const seventy = document.createElement("option");
-    seventy.value = 70;
-    seventy.innerText = "70 pontos";
+    for (let g = 1; g <= 3; g++) {
+        const grade = document.createElement("option");
+        grade.value = `Ensino Médio-${g}ª série`;
+        grade.innerText = `${g}ª série`;
+        eduLvlSelect.append(grade);
+    }
 
-    // ACADEMIC YEAR DIVISIONS
-    const evaluationSystem = document.createElement("p");
-    evaluationSystem.innerHTML = 'Sistema de avaliação: <span id="term"></span>'
+    // CLASS CODE SELECT
+    const codeSelect = document.createElement("select");
+    codeSelect.name = `class${classNumber}-school${schoolNumber}[]`;
+    classCode.append(codeSelect);
 
-    const bimonthly = document.createElement("label");
-    bimonthly.classList.add("btn-appearance", "disabled");
-    bimonthly.id = "bimonthly";
-    bimonthly.innerHTML = `Bimestral <input type="radio" name="school${schoolNumber}[]" value="4" required />`
-    bimonthly.childNodes[1].disabled = true;
+    const codeHeader = document.createElement("option");
+    codeHeader.disabled = true;
+    codeHeader.selected = true;
+    codeHeader.innerText = "Número da turma";
+    codeSelect.append(codeHeader);
 
-    const trimonthly = document.createElement("label");
-    trimonthly.classList.add("btn-appearance", "disabled");
-    trimonthly.id = "trimonthly";
-    trimonthly.innerHTML = `Trimestral <input type="radio" name="school${schoolNumber}[]" value="3" required />`
-    trimonthly.childNodes[1].disabled = true;
+    optionDivider = document.createElement("option");
+    optionDivider.disabled = true;
+    optionDivider.innerText = divider;
+    codeSelect.append(optionDivider);
 
-    /**** APPEND ELEMENTS ****/
+    const addCodeOption = document.createElement("option");
+    addCodeOption.innerText = "Adicionar nova turma";
+    codeSelect.append(addCodeOption);
 
-    const schoolsGrayBox = document.querySelector("#set-schools .gray-box");
-    schoolsGrayBox.appendChild(schoolContent);
-    schoolContent.appendChild(schoolLocation);
-    schoolContent.appendChild(school);
-    schoolContent.appendChild(passGrade);
-    schoolContent.appendChild(evaluationSystem);
-    schoolContent.appendChild(bimonthly);
-    schoolContent.appendChild(trimonthly);
+    // COURSES
 
-    schoolLocation.appendChild(state);
-    schoolLocation.appendChild(municipality);
-    school.appendChild(schoolOption);
-    passGrade.appendChild(passGradeOption);
-    passGrade.appendChild(scaleTenOption);
-    passGrade.appendChild(five);
-    passGrade.appendChild(six);
-    passGrade.appendChild(seven);
-    passGrade.appendChild(scaleHundredOption);
-    passGrade.appendChild(fifty);
-    passGrade.appendChild(sixty);
-    passGrade.appendChild(seventy);
+    const p = document.createElement("p");
+    p.innerText = "Nesta turma, eu leciono...";
+    classContent.append(p);
 
-    state.appendChild(stateOption);
-    municipality.appendChild(municipalityOption);
+    // NEW COURSES DIV
+    const newCourses = document.createElement("div");
+    newCourses.className = "new-courses";
+    classContent.append(newCourses);
 
-    /**** CALL OTHER FUNCTIONS / LISTEN TO EVENTS ON ELEMENTS ****/
+    // SUBJECTS DIV
+    const subjects = document.createElement("div");
+    subjects.className = "subjects";
+    newCourses.append(subjects);
 
-    // POPULATE SELECTS THROUGH API
-    populateStatesSelect(state); // states select
-    state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state)); // municipalities select
-    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality)); // schools select
+    // SUBJECTS SELECT
+    const subjectsSelect = document.createElement("select");
+    subjectsSelect.name = `subjects-class${classNumber}-school${schoolNumber}[]`;
+    subjects.append(subjectsSelect);
 
-    // ADD NEIGHBOR SCHOOL'S LOCATION TO THIS SCHOOL
-    setTimeout(() => { // wait for populateStatesSelect() response
-        setNeighborSchoolLocationToSelf(state, municipality, school, schoolContent)
-    }, 100);
+    const subjectsHeader = document.createElement("option");
+    subjectsHeader.disabled = true;
+    subjectsHeader.selected = true;
+    subjectsHeader.innerText = "Escolha uma disciplina";
+    subjectsSelect.append(subjectsHeader);
 
-    // ENABLE PASS GRADE SELECT, AND CHANGE THE TAB'S TEXT TO DISPLAY THE SCHOOL'S NAME
-    school.addEventListener("change", () => {
-        enablePassGradeSelect(passGrade), changeTabText(schoolTab, cSchoolTab, school)
-    });
+    optionDivider = document.createElement("option");
+    optionDivider.disabled = true;
+    optionDivider.innerText = divider;
+    subjectsSelect.append(optionDivider);
 
-    // ENABLE OPTIONS OF ACADEMIC YEAR DIVISION (RADIO INPUTS)
-    passGrade.addEventListener("change", () => enableYearDivisionOptions(bimonthly, trimonthly));
+    const addSubjectOption = document.createElement("option");
+    addSubjectOption.innerText = "Outra disciplina";
+    subjectsSelect.append(addSubjectOption);
 
-    // LISTEN TO ACADEMIC YEAR DIVISIONS
-    bimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, bimonthly, trimonthly));
-    trimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, trimonthly, bimonthly));
+    // ADD/DEL SUJECTS BTN
+    const buttons = document.createElement("div");
+    buttons.className = "buttons";
+    newCourses.append(buttons);
+
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "btn-add";
+    // addBtn.id = "add-course";
+    buttons.append(addBtn);
+
+    const delBtn = document.createElement("button");
+    delBtn.type = "button";
+    delBtn.className = "btn-del";
+    // delBtn.id = "del-course";
+    delBtn.disabled = true;
+    buttons.append(delBtn);
+
+    // STUDENTS
+
+    // CREATE TABLE
+    const table = document.createElement("table");
+    table.id = "students-table";
+    classContent.append(table);
+
+    // TABLE HEAD
+    const thead = document.createElement("thead");
+    table.append(thead);
+
+    let tr = document.createElement("tr");
+    thead.append(tr);
+
+    const thStudentNumber = document.createElement("th");
+    thStudentNumber.id = "student-number";
+    thStudentNumber.innerText = "Nº";
+    tr.append(thStudentNumber);
+
+    const thStudentName = document.createElement("th");
+    thStudentName.id = "student-name";
+    thStudentName.innerText = "Aluno";
+    tr.append(thStudentName);
+
+    // TABLE BODY
+    const tbody = document.createElement("tbody");
+    table.append(tbody);
+
+    for (let n = 1; n <= 2; n++) { // form starts with 2 students
+        const tr = document.createElement("tr");
+        tr.className = "student";
+        tbody.append(tr);
+
+        // STUDENT NUMBER
+
+        const tdStudentNumber = document.createElement("td");
+        tr.append(tdStudentNumber);
+
+        const inputStudentNumber = document.createElement("input");
+        inputStudentNumber.type = "number";
+        inputStudentNumber.name = `student${n}-class${classNumber}-school${schoolNumber}[]`;
+        inputStudentNumber.value = n;
+        inputStudentNumber.min = "1";
+        inputStudentNumber.required = true;
+        tdStudentNumber.append(inputStudentNumber);
+
+        // STUDENT NAME
+
+        const tdStudentName = document.createElement("td");
+        tr.append(tdStudentName);
+
+        const inputStudentName = document.createElement("input");
+        inputStudentName.type = "text";
+        inputStudentName.name = `student${n}-class${classNumber}-school${schoolNumber}[]`;
+        inputStudentName.placeholder = "Nome do aluno";
+        inputStudentName.required = true;
+        tdStudentName.append(inputStudentName);
+
+        // CHECKBOX
+
+        const tdCheckbox = document.createElement("td");
+        tr.append(tdCheckbox);
+
+        const labelCheckbox = document.createElement("label");
+        labelCheckbox.for = `checkbox${n}`;
+        labelCheckbox.className = "checkbox-container";
+        labelCheckbox.innerText = "Dependência";
+        tdCheckbox.append(labelCheckbox);
+
+        const inputCheckbox = document.createElement("input");
+        inputCheckbox.type = "checkbox";
+        inputCheckbox.className = "checkbox";
+        // inputCheckbox.id = `checkbox${n}`;
+        inputCheckbox.name = `student${n}-class${classNumber}-school${schoolNumber}[]`;
+        inputCheckbox.dataset.tdId = `course-student${n}`;
+        labelCheckbox.append(inputCheckbox);
+        inputCheckbox.addEventListener("change", () => showCourseRetakeList(inputCheckbox));
+
+        const checkmark = document.createElement("span");
+        checkmark.className = "checkmark";
+        labelCheckbox.append(checkmark);
+
+        // REPEAT COURSES
+
+        const tdRepeatCourses = document.createElement("td");
+        tdRepeatCourses.className = "repeat-courses";
+        tdRepeatCourses.id = `course-student${n}`;
+        tdRepeatCourses.hidden = true;
+        tr.append(tdRepeatCourses);
+
+        const subjects = document.createElement("div");
+        subjects.className = "subjects";
+        tdRepeatCourses.append(subjects);
+
+        const subjectsSelect = document.createElement("select");
+        subjectsSelect.name = `student${n}-class${classNumber}-school${schoolNumber}[]`;
+        subjects.append(subjectsSelect);
+
+        const subjectsOption = document.createElement("option");
+        subjectsOption.disabled = true;
+        subjectsOption.selected = true;
+        subjectsOption.innerText = "Dependência em...";
+        subjectsSelect.append(subjectsOption);
+
+        const buttons = document.createElement("div");
+        buttons.className = "buttons";
+        tdRepeatCourses.append(buttons);
+
+        const addBtn = document.createElement("button");
+        addBtn.type = "button";
+        addBtn.className = "btn-add";
+        buttons.append(addBtn);
+
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.className = "btn-del";
+        delBtn.disabled = true;
+        buttons.append(delBtn);
+    }
 };
 
 const delSchool = () => {
@@ -743,17 +880,167 @@ const selectClass = (tab) => {
 
 
 
-const checkboxes = document.getElementsByClassName("checkbox");
-
-[...checkboxes].forEach(checkbox => {
-    checkbox.addEventListener("change", () => showCourseRetakeList(checkbox));
-});
-
 const showCourseRetakeList = (checkbox) => {
 
     const hiddenElementId = checkbox.dataset.tdId;
     const repeatCourses = document.getElementById(hiddenElementId);
 
     checkbox.checked ? repeatCourses.hidden = false : repeatCourses.hidden = true;
-
 };
+
+
+const createSchoolFormItems = (schoolTab, cSchoolTab) => {
+    // HIDE PREVIOUSLY SELECTED SCHOOL CONTENT
+    [...schoolsContents].forEach(content => content.hidden = true);
+
+    /**** CREATE ELEMENTS ****/
+
+    // NEW CONTENT DIV
+    const schoolContent = document.createElement("div");
+    schoolContent.classList.add("school-content", `school${schoolNumber}`);
+
+    // CREATE SCHOOL LOCATION TO APPEND STATE AND MUNICIPALITY SELECTS
+    const schoolLocation = document.createElement("div");
+    schoolLocation.className = "school-location";
+
+    // CREATE STATE SELECT
+    const state = document.createElement("select");
+    state.name = `school${schoolNumber}[]`;
+    state.id = `state-school${schoolNumber}`;
+    state.required = true;
+
+    const stateOption = document.createElement("option");
+    stateOption.disabled = true;
+    stateOption.selected = true;
+    stateOption.innerText = "UF";
+
+    // MUNICIPALITY SELECT
+    const municipality = document.createElement("select");
+    municipality.name = `school${schoolNumber}[]`;
+    municipality.id = `municipality-school${schoolNumber}`;
+    municipality.required = true;
+    municipality.disabled = true;
+
+    const municipalityOption = document.createElement("option");
+    municipalityOption.disabled = true;
+    municipalityOption.selected = true;
+    municipalityOption.innerText = "Município";
+
+    // SCHOOL'S NAME SELECT
+    const school = document.createElement("select");
+    school.name = `school${schoolNumber}[]`;
+    school.id = `school${schoolNumber}`;
+    school.required = true;
+    school.disabled = true;
+
+    const schoolOption = document.createElement("option");
+    schoolOption.disabled = true;
+    schoolOption.selected = true;
+    schoolOption.innerText = "Nome da escola";
+
+    // PASS GRADE SELECT
+    const passGrade = document.createElement("select");
+    passGrade.name = `school${schoolNumber}[]`;
+    passGrade.required = true;
+    passGrade.disabled = true;
+
+    const passGradeOption = document.createElement("option");
+    passGradeOption.disabled = true;
+    passGradeOption.selected = true;
+    passGradeOption.innerText = "Média para aprovação";
+
+    const scaleTenOption = document.createElement("option");
+    scaleTenOption.disabled = true;
+    scaleTenOption.innerText = "Escala de 0 a 10 pontos";
+
+    const five = document.createElement("option");
+    five.value = 5;
+    five.innerText = "5,0 pontos";
+    const six = document.createElement("option");
+    six.value = 6;
+    six.innerText = "6,0 pontos";
+    const seven = document.createElement("option");
+    seven.value = 7;
+    seven.innerText = "7,0 pontos";
+
+    const scaleHundredOption = document.createElement("option");
+    scaleHundredOption.disabled = true;
+    scaleHundredOption.innerText = "Escala de 0 a 100 pontos";
+
+    const fifty = document.createElement("option");
+    fifty.value = 50;
+    fifty.innerText = "50 pontos";
+    const sixty = document.createElement("option");
+    sixty.value = 60;
+    sixty.innerText = "60 pontos";
+    const seventy = document.createElement("option");
+    seventy.value = 70;
+    seventy.innerText = "70 pontos";
+
+    // ACADEMIC YEAR DIVISIONS
+    const evaluationSystem = document.createElement("p");
+    evaluationSystem.innerHTML = 'Sistema de avaliação: <span id="term"></span>'
+
+    const bimonthly = document.createElement("label");
+    bimonthly.classList.add("btn-appearance", "disabled");
+    bimonthly.id = "bimonthly";
+    bimonthly.innerHTML = `Bimestral <input type="radio" name="school${schoolNumber}[]" value="4" required />`
+    bimonthly.childNodes[1].disabled = true;
+
+    const trimonthly = document.createElement("label");
+    trimonthly.classList.add("btn-appearance", "disabled");
+    trimonthly.id = "trimonthly";
+    trimonthly.innerHTML = `Trimestral <input type="radio" name="school${schoolNumber}[]" value="3" required />`
+    trimonthly.childNodes[1].disabled = true;
+
+    /**** APPEND ELEMENTS ****/
+
+    const schoolsGrayBox = document.querySelector("#set-schools .gray-box");
+    schoolsGrayBox.appendChild(schoolContent);
+    schoolContent.appendChild(schoolLocation);
+    schoolContent.appendChild(school);
+    schoolContent.appendChild(passGrade);
+    schoolContent.appendChild(evaluationSystem);
+    schoolContent.appendChild(bimonthly);
+    schoolContent.appendChild(trimonthly);
+
+    schoolLocation.appendChild(state);
+    schoolLocation.appendChild(municipality);
+    school.appendChild(schoolOption);
+    passGrade.appendChild(passGradeOption);
+    passGrade.appendChild(scaleTenOption);
+    passGrade.appendChild(five);
+    passGrade.appendChild(six);
+    passGrade.appendChild(seven);
+    passGrade.appendChild(scaleHundredOption);
+    passGrade.appendChild(fifty);
+    passGrade.appendChild(sixty);
+    passGrade.appendChild(seventy);
+
+    state.appendChild(stateOption);
+    municipality.appendChild(municipalityOption);
+
+    /**** CALL OTHER FUNCTIONS / LISTEN TO EVENTS ON ELEMENTS ****/
+
+    // POPULATE SELECTS THROUGH API
+    populateStatesSelect(state); // states select
+    state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state)); // municipalities select
+    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality)); // schools select
+
+    // ADD NEIGHBOR SCHOOL'S LOCATION TO THIS SCHOOL
+    setTimeout(() => { // wait for populateStatesSelect() response
+        setNeighborSchoolLocationToSelf(state, municipality, school, schoolContent)
+    }, 100);
+
+    // ENABLE PASS GRADE SELECT, AND CHANGE THE TAB'S TEXT TO DISPLAY THE SCHOOL'S NAME
+    school.addEventListener("change", () => {
+        enablePassGradeSelect(passGrade), changeTabText(schoolTab, cSchoolTab, school)
+    });
+
+    // ENABLE OPTIONS OF ACADEMIC YEAR DIVISION (RADIO INPUTS)
+    passGrade.addEventListener("change", () => enableYearDivisionOptions(bimonthly, trimonthly));
+
+    // LISTEN TO ACADEMIC YEAR DIVISIONS
+    bimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, bimonthly, trimonthly));
+    trimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, trimonthly, bimonthly));
+}
