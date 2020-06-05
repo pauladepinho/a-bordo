@@ -616,6 +616,9 @@ div.subjects {
   display: flex;
   flex-wrap: wrap;
 }
+.students-table .subjects {
+  flex-wrap: nowrap;
+}
 
 .class-code select,
 .subjects select {
@@ -625,11 +628,11 @@ div.subjects {
 
 /* STUDENTS REGISTER TABLE */
 
-#students-table th {
+.students-table th {
   font-weight: normal;
   padding-bottom: .75rem;
 }
-#students-table td { padding-bottom: .75rem; }
+.students-table td { padding-bottom: .75rem; }
 
 .student input[type="number"],
 .student input[type="text"] {
@@ -637,12 +640,12 @@ div.subjects {
 }
 
 .student input[type="number"], 
-#students-table th:first-child {
+.students-table th:first-child {
   width: 5rem;
   margin-right: 12px;
 }
 .student input[type="text"], 
-#students-table th:last-child {
+.students-table th:last-child {
   min-width: 25rem;
   margin-right: 12px;
 }
