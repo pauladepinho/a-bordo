@@ -34,7 +34,7 @@ let cSchoolsTabs = document.querySelectorAll("#new-classes .schools-tabs button"
 let classesTabs = document.querySelectorAll("#new-classes #classes-tabs button");
 // CONTENTS
 const schoolsContents = document.getElementsByClassName("school-content"); // HTML collection of divs appended to gray box
-const classSchool = document.getElementById("class-school"); // h3 element that identifies to which school a class belongs
+const title = document.getElementById("class-school"); // h3 element that identifies to which school a class belongs
 const classesContents = document.getElementsByClassName("class-content"); // HTML collection of divs appended to gray box
 
 // FUNCTIONS CALLS
@@ -45,15 +45,15 @@ addSchoolBtn.addEventListener("mouseup", () => addSchool());
 addSchoolBtn.addEventListener("keydown", evt => {
     if (evt.keyCode == enter) { addSchool(); }
 });
-// ADD CLASSES
-addClassBtn.addEventListener("mouseup", () => addClass());
-addClassBtn.addEventListener("keydown", evt => {
-    if (evt.keyCode == enter) { addClass(); }
-});
 // DELETE SCHOOL (it also deletes all classes of deleted school)
 delSchoolBtn.addEventListener("mouseup", () => delSchool());
 delSchoolBtn.addEventListener("keydown", evt => {
     if (evt.keyCode == enter) { delSchool(); }
+});
+// ADD CLASSES
+addClassBtn.addEventListener("mouseup", () => addClass());
+addClassBtn.addEventListener("keydown", evt => {
+    if (evt.keyCode == enter) { addClass(); }
 });
 // DELETE CLASSES
 delClassBtn.addEventListener("mouseup", () => delClass());
@@ -112,7 +112,7 @@ const addSchool = () => {
 
     if (cSchoolTab.classList.contains("selected")) {
 
-        classSchool.innerText = `Escola ${schoolNumber} - Turma 1`; // school identifier above the class content
+        title.innerText = `Escola ${schoolNumber} - Turma 1`; // school identifier above the class content
 
         classTab.classList.add("selected"); // select the first class tab of the first listed school
         classTab.hidden = false;
@@ -228,7 +228,7 @@ const delSchool = () => {
 
     /****  DISPLAY SCHOOL IDENTIFIER (NAME OR NUMBER) BEFORE ITS CLASSES CONTENTS ****/
 
-    classSchool.innerText = cSchoolsTabs[0].innerText + " - " + classesTabs[0].innerText;
+    title.innerText = cSchoolsTabs[0].innerText + " - " + classesTabs[0].innerText;
 
     /**********************
         REMOVE CONTENTS
@@ -330,7 +330,7 @@ const changeTabText = (tab, cSchoolTab, classTab, select) => {
     tab.innerText = selected.innerText;
     cSchoolTab.innerText = selected.innerText;
     if (cSchoolTab.classList.contains("selected")) {
-        classSchool.innerText = selected.innerText + " - " + classTab.innerText;
+        title.innerText = selected.innerText + " - " + classTab.innerText;
     }
 };
 
@@ -482,7 +482,7 @@ const selectClassesSchool = (schoolTab) => {
     classCount == 1 ? delClassBtn.disabled = true : delClassBtn.disabled = false;
 
     // UPDATE CLASS SCHOOL IDENTIFIER
-    classSchool.innerText = `${schoolTab.innerText} - ${schoolClasses[0].innerText}`;
+    title.innerText = `${schoolTab.innerText} - ${schoolClasses[0].innerText}`;
 }
 
 const addClass = () => {
@@ -552,7 +552,7 @@ const addClass = () => {
 
     /****  DISPLAY SCHOOL IDENTIFIER (NAME OR NUMBER) BEFORE ITS CLASSES CONTENTS ****/
 
-    classSchool.innerText = school.innerText + " - " + classTab.innerText;
+    title.innerText = school.innerText + " - " + classTab.innerText;
 
     // SELECT SCHOOL
     school.classList.add("selected"); // it's at the end because school.className is added to new elements
@@ -633,9 +633,9 @@ const selectClass = (tab) => {
     });
 
     // UPDATE CLASS SCHOOL IDENTIFIER
-    const previousText = classSchool.innerText;
+    const previousText = title.innerText;
     const school = previousText.split("-")[0];
-    classSchool.innerText = `${school} - ${tab.innerText}`;
+    title.innerText = `${school} - ${tab.innerText}`;
 };
 
 const addYearOption = (yearSelect, previousYearOption) => {
@@ -704,9 +704,9 @@ const changeClassTabText = (select) => {
     selectedTab.innerText = `Turma ${selectedOption.innerText}`;
 
     // UPDATE CLASS SCHOOL IDENTIFIER
-    const previousText = classSchool.innerText;
+    const previousText = title.innerText;
     const school = previousText.split("-")[0];
-    classSchool.innerText = `${school} - Turma ${selectedOption.innerText}`;
+    title.innerText = `${school} - Turma ${selectedOption.innerText}`;
 };
 
 const addSubjectsSelect = (subjectsDiv, school, divider, addBtn, delBtn) => {
@@ -977,7 +977,7 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     // LISTEN TO ACADEMIC YEAR DIVISIONS
     bimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, bimonthly, trimonthly));
     trimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, trimonthly, bimonthly));
-}
+};
 
 const createClassContent = (createdWithSchool, cSchoolTab) => {
     const school = cSchoolTab.classList[0];
@@ -1166,7 +1166,7 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
     ****************************/
 
     createStudentsTable(school, classContent);
-}
+};
 
 const createStudentsTable = (school, classContent) => {
 
@@ -1208,95 +1208,114 @@ const createStudentsTable = (school, classContent) => {
     tr.append(thStudentName);
 
     /************************ 
-      CREATE STUDANTS ROWS 
+      CREATE STUDENTS ROWS 
     ************************/
 
-    for (let n = 1; n <= 2; n++) { // form starts with 2 students
+    let n = 0; // student number
+    createStudentsRow(tbody, n, classNumber, school);
+};
 
-        // NEW STUDENT ROW
-        const tr = document.createElement("tr");
-        tr.className = "student";
+const createStudentsRow = (tbody, n, classNumber, school) => {
 
-        // STUDENT NUMBER
-        const tdStudentNumber = document.createElement("td");
+    const rows = tbody.childNodes;
 
-        const inputStudentNumber = document.createElement("input");
-        inputStudentNumber.type = "number";
-        inputStudentNumber.name = `student${n}-class${classNumber}-${school}[]`;
-        inputStudentNumber.value = n;
-        inputStudentNumber.min = "1";
-        inputStudentNumber.required = true;
+    if (rows.length != n) { return; } // it doesn't allow adding a new row for every focusin event on the same element
 
-        // STUDENT NAME
-        const tdStudentName = document.createElement("td");
-
-        const inputStudentName = document.createElement("input");
-        inputStudentName.type = "text";
-        inputStudentName.name = `student${n}-class${classNumber}-${school}[]`;
-        inputStudentName.placeholder = "Nome do aluno";
-        inputStudentName.required = true;
-
-        // CHECKBOX
-        const tdCheckbox = document.createElement("td");
-
-        const labelCheckbox = document.createElement("label");
-        labelCheckbox.className = "checkbox-container";
-        labelCheckbox.innerText = "Dependência";
-
-        const inputCheckbox = document.createElement("input");
-        inputCheckbox.type = "checkbox";
-        inputCheckbox.className = "checkbox";
-        inputCheckbox.name = `student${n}-class${classNumber}-${school}[]`;
-        inputCheckbox.dataset.tdId = `course-student${n}`;
-
-        const checkmark = document.createElement("span");
-        checkmark.className = "checkmark";
-
-        // // REPEAT COURSES
-        const tdRepeatCourses = document.createElement("td");
-        tdRepeatCourses.className = "repeat-courses";
-        tdRepeatCourses.id = `course-student${n}`;
-        tdRepeatCourses.hidden = true;
-
-        const subjects = document.createElement("div");
-        subjects.className = "subjects";
-
-        const buttons = document.createElement("div");
-        buttons.className = "buttons";
-
-        const addBtn = document.createElement("button");
-        addBtn.type = "button";
-        addBtn.className = "btn-add";
-
-        const delBtn = document.createElement("button");
-        delBtn.type = "button";
-        delBtn.className = "btn-del";
-        delBtn.disabled = true;
-
-        /**** APPEND ELEMENTS ****/
-
-        tbody.append(tr);
-        tr.append(tdStudentNumber);
-        tr.append(tdStudentName);
-        tr.append(tdCheckbox);
-        tr.append(tdRepeatCourses);
-
-        tdStudentNumber.append(inputStudentNumber);
-        tdStudentName.append(inputStudentName);
-        tdCheckbox.append(labelCheckbox);
-        tdRepeatCourses.append(subjects);
-        tdRepeatCourses.append(buttons);
-
-        labelCheckbox.append(inputCheckbox);
-        labelCheckbox.append(checkmark);
-
-        buttons.append(addBtn);
-        buttons.append(delBtn);
-
-        /**** EVENT LISTENERS ****/
-
-        inputCheckbox.addEventListener("change", () => showRepeatingCourses(inputCheckbox, tdRepeatCourses, subjects, n, classNumber, school, addBtn, delBtn));
-        addBtn.addEventListener("mouseup", () => addRepeatingCoursesSelect(subjects, n, classNumber, school, addBtn, delBtn));
-        delBtn.addEventListener("mouseup", () => delRepeatingCoursesSelect(subjects, addBtn, delBtn));
+    // THE STUDENT NAME ROW MUST BE FILLED BEFORE CREATING A NEW ROW
+    if (rows.length > 0) {
+        for (let i = 0; i < rows.length - 1; i++) {
+            const inputName = rows[i].childNodes[1].childNodes[0];
+            if (inputName.value == 0) { return; }
+        }
     }
-}
+
+    n++ // stundet number
+
+    // NEW STUDENT ROW
+    const tr = document.createElement("tr");
+    tr.className = "student";
+
+    // STUDENT NUMBER
+    const tdStudentNumber = document.createElement("td");
+
+    const inputStudentNumber = document.createElement("input");
+    inputStudentNumber.type = "number";
+    inputStudentNumber.name = `student${n}-class${classNumber}-${school}[]`;
+    inputStudentNumber.value = n;
+    inputStudentNumber.min = "1";
+    // inputStudentNumber.required = true;
+
+    // STUDENT NAME
+    const tdStudentName = document.createElement("td");
+
+    const inputStudentName = document.createElement("input");
+    inputStudentName.type = "text";
+    inputStudentName.name = `student${n}-class${classNumber}-${school}[]`;
+    inputStudentName.placeholder = "Nome do aluno";
+    // inputStudentName.required = true;
+
+    // CHECKBOX
+    const tdCheckbox = document.createElement("td");
+
+    const labelCheckbox = document.createElement("label");
+    labelCheckbox.className = "checkbox-container";
+    labelCheckbox.innerText = "Dependência";
+
+    const inputCheckbox = document.createElement("input");
+    inputCheckbox.type = "checkbox";
+    inputCheckbox.className = "checkbox";
+    inputCheckbox.name = `student${n}-class${classNumber}-${school}[]`;
+    inputCheckbox.dataset.tdId = `course-student${n}`;
+
+    const checkmark = document.createElement("span");
+    checkmark.className = "checkmark";
+
+    // // REPEAT COURSES
+    const tdRepeatCourses = document.createElement("td");
+    tdRepeatCourses.className = "repeat-courses";
+    tdRepeatCourses.id = `course-student${n}`;
+    tdRepeatCourses.hidden = true;
+
+    const subjects = document.createElement("div");
+    subjects.className = "subjects";
+
+    const buttons = document.createElement("div");
+    buttons.className = "buttons";
+
+    const addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "btn-add";
+
+    const delBtn = document.createElement("button");
+    delBtn.type = "button";
+    delBtn.className = "btn-del";
+    delBtn.disabled = true;
+
+    /**** APPEND ELEMENTS ****/
+
+    tbody.append(tr);
+    tr.append(tdStudentNumber);
+    tr.append(tdStudentName);
+    tr.append(tdCheckbox);
+    tr.append(tdRepeatCourses);
+
+    tdStudentNumber.append(inputStudentNumber);
+    tdStudentName.append(inputStudentName);
+    tdCheckbox.append(labelCheckbox);
+    tdRepeatCourses.append(subjects);
+    tdRepeatCourses.append(buttons);
+
+    labelCheckbox.append(inputCheckbox);
+    labelCheckbox.append(checkmark);
+
+    buttons.append(addBtn);
+    buttons.append(delBtn);
+
+    /**** EVENT LISTENERS ****/
+
+    inputStudentName.addEventListener("focusin", () => createStudentsRow(tbody, n, classNumber, school));
+
+    inputCheckbox.addEventListener("change", () => showRepeatingCourses(inputCheckbox, tdRepeatCourses, subjects, n, classNumber, school, addBtn, delBtn));
+    addBtn.addEventListener("mouseup", () => addRepeatingCoursesSelect(subjects, n, classNumber, school, addBtn, delBtn));
+    delBtn.addEventListener("mouseup", () => delRepeatingCoursesSelect(subjects, addBtn, delBtn));
+};
