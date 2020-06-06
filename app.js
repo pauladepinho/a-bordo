@@ -11,6 +11,7 @@ let bodyParser = require("body-parser");
 var IndexRouter = require('./routes/IndexRouter');
 var TeacherRouter = require('./routes/TeacherRouter');
 var GuardianRouter = require('./routes/GuardianRouter');
+var API_Router = require("./routes/API_Router")
 
 const CookieLogin = require("./middlewares/CookieLogin");
 
@@ -41,6 +42,7 @@ app.use(CookieLogin);
 app.use('/', IndexRouter);
 app.use('/professor', TeacherRouter);
 app.use('/responsavel', GuardianRouter);
+app.use("/api", API_Router);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

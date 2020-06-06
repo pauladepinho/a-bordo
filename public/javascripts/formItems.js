@@ -16,12 +16,16 @@
      -------------------------------
 */
 
+// API
+const endpoint = "http://localhost:3000/api/";
+
 // VARIABLES/CONSTANTS
 
 let schoolCount = 0; // decreases on school deletion; sole purpose: (in)activate add/del btns
 let schoolNumber = 0; // never decreases
 let classNumber = 0;
 const maxClassesPerSchool = 10;
+const maxSubjectsPerClass = 8;
 // BUTTONS
 const enter = 13; // keyboard key;
 const addSchoolBtn = document.getElementById("add-school");
@@ -121,7 +125,7 @@ const addSchool = () => {
     /**** APPEND ELEMENTS ****/
 
     // APPEND EACH NEW TAB TO TABS LIST OF CORRESPONDING FORM SECTION
-    let tabsList = document.querySelectorAll(".schools-tabs"); //////////////////////////////////////
+    let tabsList = document.querySelectorAll(".schools-tabs");
     tabsList[0].appendChild(schoolTab); // schools section
     tabsList[1].appendChild(cSchoolTab); // classes section
 
@@ -135,13 +139,11 @@ const addSchool = () => {
     schoolTab.addEventListener("keydown", evt => {
         if (evt.keyCode == enter) { selectSchool(schoolTab); }
     });
-
     // LISTEN TO CLICK ON SCHOOL TAB (CLASSES SECTION)
     cSchoolTab.addEventListener("mouseup", () => selectClassesSchool(cSchoolTab));
     cSchoolTab.addEventListener("keydown", evt => {
         if (evt.keyCode == enter) { selectClassesSchool(cSchoolTab); }
     });
-
     // LISTEN TO CLICK ON CLASS TAB
     classTab.addEventListener("mouseup", () => selectClass(classTab));
     classTab.addEventListener("keydown", evt => {
@@ -321,6 +323,32 @@ const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, sch
     }, 500);
 };
 
+const addSchoolOption = (schoolsSelect, anotherSchool, tab, cSchoolTab, classTab) => {
+
+    // AFTER SELECT CHANGE (EVENT), TEST AND SEE WHETHER OPTION ISN'T THE ONE TO ADD NEW OPTION
+    const selected = schoolsSelect.options[schoolsSelect.selectedIndex];
+    if (selected != anotherSchool) { return changeTabText(tab, cSchoolTab, classTab, schoolsSelect); }
+
+    let schoolName = prompt("Digite o nome da disciplina:");
+
+    if (!schoolName) { return schoolsSelect.options[0].selected = true; } // null
+
+    schoolName = schoolName.trim();
+    if (schoolName == "") { return schoolsSelect.options[0].selected = true; } // empty
+
+    schoolName = formatString(schoolName);
+
+    // CREATE NEW OPTION ELEMENT
+    const newOption = document.createElement("option");
+    newOption.value = schoolName;
+    newOption.innerText = schoolName;
+    newOption.selected = true;
+
+    schoolsSelect.append(newOption);
+
+    changeTabText(tab, cSchoolTab, classTab, schoolsSelect);
+};
+
 const enablePassGradeSelect = passGradesSelect => passGradesSelect.disabled = false;
 
 const changeTabText = (tab, cSchoolTab, classTab, select) => {
@@ -384,7 +412,9 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
         .then(municipalities => {
 
             municipalities.forEach(municipality => {
-                const name = municipality.split(":")[1];
+
+                let name = municipality.split(":")[1];
+                name = formatString(name);
 
                 const option = document.createElement("option");
                 option.value = municipality;
@@ -405,7 +435,7 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
         });
 };
 
-const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
+const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect, anotherSchool) => {
 
     [...schoolsSelect.options].map(option => option.remove()); // remove other municipality's schools
 
@@ -421,16 +451,24 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
 
             schools[1].forEach(school => {
 
+                const name = formatString(school.nome);
+
                 const option = document.createElement("option");
-                option.value = school.nome;
-                option.textContent = school.nome;
+                option.value = name;
+                option.textContent = name;
 
                 schoolsSelect.appendChild(option);
             });
+            const divider = document.createElement("option");
+            divider.innerText = "•-•-•-•-•";
+            divider.disabled = true;
+
+            schoolsSelect.append(divider, anotherSchool);
+
             const option = document.createElement("option");
             option.textContent = "Nome da escola";
-            option.selected = "selected";
-            option.disabled = "disabled";
+            option.selected = true;
+            option.disabled = true;
 
             schoolsSelect.prepend(option);
             schoolsSelect.disabled = false;
@@ -667,6 +705,8 @@ const addYearOption = (yearSelect, previousYearOption) => {
 };
 
 const addCodeOption = (codeSelect, newCodeOption) => {
+
+    // AFTER SELECT CHANGE (EVENT), TEST AND SEE WHETHER OPTION ISN'T THE ONE TO ADD NEW OPTION
     const selected = codeSelect.options[codeSelect.selectedIndex];
     if (selected != newCodeOption) { return changeClassTabText(codeSelect); }
 
@@ -733,8 +773,8 @@ const addSubjectsSelect = (subjectsDiv, school, divider, addBtn, delBtn) => {
 
     subjectsDiv.append(subjectsSelect);
     subjectsSelect.append(subjectsHeader);
-    subjectsSelect.append(subjectOptionDivider);
-    subjectsSelect.append(newSubjectOption);
+
+    populateSubjectsSelect(subjectsSelect, subjectOptionDivider, newSubjectOption);
 
     /**** EVENT LISTENER ****/
 
@@ -742,7 +782,7 @@ const addSubjectsSelect = (subjectsDiv, school, divider, addBtn, delBtn) => {
 
     /**** TOGGLE ADD/DEL BUTTONS ****/
 
-    subjectsDiv.childNodes.length == 10 ? addBtn.disabled = true : addBtn.disabled = false;
+    subjectsDiv.childNodes.length == maxSubjectsPerClass ? addBtn.disabled = true : addBtn.disabled = false;
     subjectsDiv.childNodes.length > 1 ? delBtn.disabled = false : delBtn.disabled = true;
 };
 
@@ -756,15 +796,18 @@ const delSubjectsSelect = (subjectsDiv, addBtn, delBtn) => {
 
 const addSubjectOption = (subjectsSelect, newSubjectOption) => {
 
+    // AFTER SELECT CHANGE (EVENT), TEST AND SEE WHETHER OPTION ISN'T THE ONE TO ADD NEW OPTION
     const selected = subjectsSelect.options[subjectsSelect.selectedIndex];
     if (selected != newSubjectOption) { return changeClassTabText(subjectsSelect); }
 
     let subject = prompt("Digite o nome da disciplina:");
 
-    if (!subject) { return subjectsSelect.options[0].selected = true; }
+    if (!subject) { return subjectsSelect.options[0].selected = true; } // null
 
     subject = subject.trim();
-    if (subject == "") { return subjectsSelect.options[0].selected = true; }
+    if (subject == "") { return subjectsSelect.options[0].selected = true; } // empty
+
+    subject = formatString(subject);
 
     // CREATE NEW OPTION ELEMENT
     const newOption = document.createElement("option");
@@ -777,11 +820,6 @@ const addSubjectOption = (subjectsSelect, newSubjectOption) => {
 
 const showRepeatingCourses = (checkbox, tdRepeatCourses, subjects, n, classNumber, school, addBtn, delBtn) => {
 
-    // const hiddenElementId = checkbox.dataset.tdId;
-    // const tdRepeatCourses = document.getElementById(hiddenElementId);
-
-    // checkbox.checked ? tdRepeatCourses.hidden = false : tdRepeatCourses.hidden = true;
-
     if (checkbox.checked) {
         tdRepeatCourses.hidden = false;
         addRepeatingCoursesSelect(subjects, n, classNumber, school, addBtn, delBtn);
@@ -792,6 +830,8 @@ const showRepeatingCourses = (checkbox, tdRepeatCourses, subjects, n, classNumbe
 };
 
 const addRepeatingCoursesSelect = (subjects, n, classNumber, school, addBtn, delBtn) => {
+
+    /**** CREATE ELEMENTS ****/
 
     const subjectsSelect = document.createElement("select");
     subjectsSelect.name = `student${n}-class${classNumber}-${school}[]`;
@@ -819,6 +859,70 @@ const delRepeatingCoursesSelect = (subjects, addBtn, delBtn) => {
 
     addBtn.disabled = false;
     subjects.childNodes.length == 1 ? delBtn.disabled = true : delBtn.disabled = false;
+};
+
+// API
+
+const populateSubjectsSelect = (subjectsSelect, subjectOptionDivider, newSubjectOption, ) => {
+
+    fetch(`${endpoint}subjects`)
+        .then(res => res.json())
+        .then(subjects => {
+
+            subjects.forEach(subject => {
+
+                const option = document.createElement("option");
+                option.value = subject.id;
+                option.textContent = subject.name;
+
+                subjectsSelect.appendChild(option);
+            });
+            subjectsSelect.append(subjectOptionDivider, newSubjectOption);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};
+
+const populateCodesSelect = (codeSelect, codeHeader, codeOptionDivider, newCodeOption, school, yearSelect, eduLvlSelect) => {
+
+    [...codeSelect.options].map(option => option.remove()); // remove to update
+
+    codeSelect.append(codeHeader);
+    codeSelect.disabled = false;
+
+    const schoolsSelect = document.getElementById(school);
+    const schoolName = schoolsSelect.options[schoolsSelect.selectedIndex].value;
+
+    const year = yearSelect.options[yearSelect.selectedIndex].value;
+
+    const eduLvl = eduLvlSelect.options[eduLvlSelect.selectedIndex].value;
+    const levelOfEducation = eduLvl.split("-")[0];
+    const grade = eduLvl.split("-")[1];
+
+
+    fetch(`${endpoint}school/${schoolName}`)
+        .then(res => res.json())
+        .then(schoolId => {
+
+            fetch(`${endpoint}classes/${schoolId}/${year}/${levelOfEducation}/${grade}`)
+                .then(res => res.json())
+                .then(classes => {
+
+                    classes.forEach(c => {
+
+                        const option = document.createElement("option");
+                        option.value = c;
+                        option.textContent = c;
+
+                        codeSelect.appendChild(option);
+                    });
+                    codeSelect.append(codeOptionDivider, newCodeOption);
+                    codeHeader.selected = true;
+                })
+                .catch(error => { console.log(error); });
+        })
+        .catch(error => { console.log(error); });
 };
 
 
@@ -871,6 +975,9 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     schoolOption.disabled = true;
     schoolOption.selected = true;
     schoolOption.innerText = "Nome da escola";
+
+    const anotherSchool = document.createElement("option");
+    anotherSchool.innerText = "Outra escola";
 
     // PASS GRADE SELECT
     const passGrade = document.createElement("select");
@@ -941,6 +1048,7 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     schoolLocation.appendChild(state);
     schoolLocation.appendChild(municipality);
     school.appendChild(schoolOption);
+    // school.append(anotherSchool);
     passGrade.appendChild(passGradeOption);
     passGrade.appendChild(scaleTenOption);
     passGrade.appendChild(five);
@@ -959,7 +1067,9 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     // POPULATE SELECTS THROUGH API
     populateStatesSelect(state); // states select
     state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state)); // municipalities select
-    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality)); // schools select
+    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality, anotherSchool)); // schools select
+
+    school.addEventListener("change", () => addSchoolOption(school, anotherSchool, schoolTab, cSchoolTab, classTab));
 
     // ADD NEIGHBOR SCHOOL'S LOCATION TO THIS SCHOOL
     setTimeout(() => { // wait for populateStatesSelect() response
@@ -986,7 +1096,7 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
         CREATE ELEMENTS
     **********************/
 
-    // obs.: except students table, which is create by another function
+    // obs.: except students table, which is created by another function
 
     const divider = "•-•-•-•-•"; // used in selects that have an option to create new options
 
@@ -998,7 +1108,6 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
 
     // HANDLE CONTENT VISIBILITY
     if (createdWithSchool) {
-        // [...classesContents].length == 1 ? classContent.hidden = false : classContent.hidden = true;
         [...classesContents].length == 0 ? classContent.hidden = false : classContent.hidden = true;
     } else {
         [...classesContents].forEach(content => content.hidden = true);
@@ -1007,7 +1116,7 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
 
     /**** CLASS CODE DIV ****/
 
-    // DIV TO APPEND ACADEMIC YEAR, LEVEL OF EDUCATION, AND CLASS CODE
+    // DIV TO APPEND ACADEMIC YEAR, LEVEL OF EDUCATION, AND CLASS CODE SELECTS
     const classCode = document.createElement("div");
     classCode.className = "class-code";
 
@@ -1056,6 +1165,7 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
     const codeSelect = document.createElement("select");
     codeSelect.name = `class${classNumber}-${school}[]`;
     codeSelect.required = true;
+    codeSelect.disabled = true;
 
     const codeHeader = document.createElement("option");
     codeHeader.disabled = true;
@@ -1079,11 +1189,11 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
     newCourses.className = "new-courses";
 
     // SUBJECTS DIV
-    const subjects = document.createElement("div");
+    const subjects = document.createElement("div"); // appended to newCourses, and appends subjects selects
     subjects.className = "subjects";
 
     // ADD/DEL SUJECTS BUTTONS
-    const buttons = document.createElement("div");
+    const buttons = document.createElement("div"); // appended to newCourses
     buttons.className = "buttons";
 
     const addBtn = document.createElement("button");
@@ -1095,7 +1205,7 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
     delBtn.className = "btn-del";
 
     // SUBJECTS SELECT
-    addSubjectsSelect(subjects, school, divider, addBtn, delBtn)
+    addSubjectsSelect(subjects, school, divider, addBtn, delBtn);
 
     /**********************
         APPEND ELEMENTS
@@ -1105,58 +1215,37 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
     const classesGrayBox = document.querySelector("#set-classes .gray-box");
     classesGrayBox.append(classContent);
 
-    classContent.append(classCode);
-    classContent.append(p);
-    classContent.append(newCourses);
+    classContent.append(classCode, p, newCourses);
 
-    /**** ITEMS APPENDED TO CLASS CONTENT ****/
+    classCode.append(yearSelect, eduLvlSelect, codeSelect);
+    newCourses.append(subjects, buttons);
 
-    classCode.append(yearSelect);
-    classCode.append(eduLvlSelect);
-    classCode.append(codeSelect);
-
-    /**** ITEMS APPENDED TO NEW COURSES ****/
-
-    newCourses.append(subjects);
-    newCourses.append(buttons);
-
-    /****  ITEMS APPENDED TO CLASS CODE ****/
-
-    yearSelect.append(yearHeader);
-    yearSelect.append(currentYearOption);
-    yearSelect.append(yearOptionDivider);
-    yearSelect.append(previousYearOption);
-
-    eduLvlSelect.append(eduLvlHeader);
-    eduLvlSelect.append(middleSchool);
-    for (let g = 1; g <= 9; g++) {
+    yearSelect.append(yearHeader, currentYearOption, yearOptionDivider, previousYearOption);
+    eduLvlSelect.append(eduLvlHeader, middleSchool);
+    for (let g = 1; g <= 9; g++) { // create and append
         const grade = document.createElement("option");
         grade.value = `Ensino Fundamental-${g}º ano`;
         grade.innerText = `${g}º ano`;
         eduLvlSelect.append(grade);
     }
     eduLvlSelect.append(highSchool);
-    for (let g = 1; g <= 3; g++) {
+    for (let g = 1; g <= 3; g++) { // create and append
         const grade = document.createElement("option");
         grade.value = `Ensino Médio-${g}ª série`;
         grade.innerText = `${g}ª série`;
         eduLvlSelect.append(grade);
     }
-
+    // codeSelect.append(codeHeader, codeOptionDivider, newCodeOption);
     codeSelect.append(codeHeader);
-    codeSelect.append(codeOptionDivider);
-    codeSelect.append(newCodeOption);
 
-    /****  ITEMS APPENDED TO BUTTONS ****/
-
-    buttons.append(addBtn);
-    buttons.append(delBtn);
+    buttons.append(addBtn, delBtn);
 
     /***********************************
         LISTEN TO EVENTS ON ELEMENTS
     ***********************************/
 
     yearSelect.addEventListener("change", () => addYearOption(yearSelect, previousYearOption));
+    eduLvlSelect.addEventListener("change", () => populateCodesSelect(codeSelect, codeHeader, codeOptionDivider, newCodeOption, school, yearSelect, eduLvlSelect));
     codeSelect.addEventListener("change", () => addCodeOption(codeSelect, newCodeOption));
     addBtn.addEventListener("mouseup", () => addSubjectsSelect(subjects, school, divider, addBtn, delBtn));
     delBtn.addEventListener("mouseup", () => delSubjectsSelect(subjects, addBtn, delBtn));
@@ -1198,14 +1287,9 @@ const createStudentsTable = (school, classContent) => {
     /**** APPEND ELEMENTS ****/
 
     classContent.append(table);
-
-    table.append(thead);
-    table.append(tbody);
-
+    table.append(thead, tbody);
     thead.append(tr);
-
-    tr.append(thStudentNumber);
-    tr.append(thStudentName);
+    tr.append(thStudentNumber, thStudentName);
 
     /************************ 
       CREATE STUDENTS ROWS 
@@ -1219,17 +1303,21 @@ const createStudentsRow = (tbody, n, classNumber, school) => {
 
     const rows = tbody.childNodes;
 
-    if (rows.length != n) { return; } // it doesn't allow adding a new row for every focusin event on the same element
+    if (rows.length != n) { return; } // it doesn't allow adding new rows for every focus in event on the same element
 
-    // THE STUDENT NAME ROW MUST BE FILLED BEFORE CREATING A NEW ROW
+    // PREVIOUS ROWS MUST BE FILLED BEFORE CREATING A NEW ROW
     if (rows.length > 0) {
-        for (let i = 0; i < rows.length - 1; i++) {
+        for (let i = 0; i < rows.length - 1; i++) { // have the names of previous students been filled?
             const inputName = rows[i].childNodes[1].childNodes[0];
             if (inputName.value == 0) { return; }
         }
+        for (let i = 0; i < rows.length; i++) { // have all input numbers been filled so far?
+            const inputNumber = rows[i].childNodes[0].childNodes[0];
+            if (inputNumber.value == 0) { return; }
+        }
     }
 
-    n++ // stundet number
+    n++ // student number
 
     // NEW STUDENT ROW
     const tr = document.createElement("tr");
@@ -1294,22 +1382,16 @@ const createStudentsRow = (tbody, n, classNumber, school) => {
     /**** APPEND ELEMENTS ****/
 
     tbody.append(tr);
-    tr.append(tdStudentNumber);
-    tr.append(tdStudentName);
-    tr.append(tdCheckbox);
-    tr.append(tdRepeatCourses);
+    tr.append(tdStudentNumber, tdStudentName, tdCheckbox, tdRepeatCourses);
 
     tdStudentNumber.append(inputStudentNumber);
     tdStudentName.append(inputStudentName);
     tdCheckbox.append(labelCheckbox);
-    tdRepeatCourses.append(subjects);
-    tdRepeatCourses.append(buttons);
+    tdRepeatCourses.append(subjects, buttons);
 
-    labelCheckbox.append(inputCheckbox);
-    labelCheckbox.append(checkmark);
+    labelCheckbox.append(inputCheckbox, checkmark);
 
-    buttons.append(addBtn);
-    buttons.append(delBtn);
+    buttons.append(addBtn, delBtn);
 
     /**** EVENT LISTENERS ****/
 
@@ -1318,4 +1400,24 @@ const createStudentsRow = (tbody, n, classNumber, school) => {
     inputCheckbox.addEventListener("change", () => showRepeatingCourses(inputCheckbox, tdRepeatCourses, subjects, n, classNumber, school, addBtn, delBtn));
     addBtn.addEventListener("mouseup", () => addRepeatingCoursesSelect(subjects, n, classNumber, school, addBtn, delBtn));
     delBtn.addEventListener("mouseup", () => delRepeatingCoursesSelect(subjects, addBtn, delBtn));
+};
+
+
+
+const formatString = (str) => {
+
+    let words = str.split(" ");
+    if (words[0].length == 7 && Number(words[0])) { words = words.slice(1); }
+
+    let formattedWords = [];
+    words.forEach(word => {
+        if (word.toUpperCase() == "II") {
+            formattedWords.push(word.toUpperCase());
+        } else {
+            formattedWords.push(word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+        }
+    });
+
+    const finalStr = formattedWords.join(" ");
+    return finalStr;
 };
