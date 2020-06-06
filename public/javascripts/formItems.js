@@ -1014,6 +1014,7 @@ const populateCodesSelect = (codeSelect, codeHeader, codeOptionDivider, newCodeO
                             codeSelect.append(option);
                         });
                         if (school == schools[schools.length - 1]) { // the last school
+                            sortSelect(codeSelect); // sort and remove duplicates
                             codeSelect.append(codeOptionDivider, newCodeOption); // append these options at the very end of the codeSelect
                         }
                     })
