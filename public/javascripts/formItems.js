@@ -771,19 +771,19 @@ const addCodeOption = (codeSelect, newCodeOption) => {
 
     let code = prompt("Digite o número da turma:");
 
-    if (!code) { return codeSelect.options[0].selected = true; }
+    if (!code || // null
+        code.trim() == "" // empty
+    ) {
+        codeSelect.options[0].selected = true;
+    } else {
+        // CREATE NEW OPTION ELEMENT
+        const newOption = document.createElement("option");
+        newOption.value = code;
+        newOption.innerText = code;
+        newOption.selected = true;
 
-    code = code.trim();
-    if (code == "") { return codeSelect.options[0].selected = true; }
-
-    // CREATE NEW OPTION ELEMENT
-    const newOption = document.createElement("option");
-    newOption.value = code;
-    newOption.innerText = code;
-    newOption.selected = true;
-
-    codeSelect.append(newOption);
-
+        codeSelect.append(newOption);
+    }
     changeClassTabText(codeSelect);
 };
 
@@ -799,13 +799,24 @@ const changeClassTabText = (select) => {
     // GET SELECTED OPTION
     const selectedOption = select.options[select.selectedIndex];
 
-    // CHANGE TAB TEXT
-    selectedTab.innerText = `Turma ${selectedOption.innerText}`;
+    if (selectedOption == select.options[0]) {
+        const msg = "Selecione uma turma"
+        // CHANGE TAB TEXT
+        selectedTab.innerText = msg;
 
-    // UPDATE CLASS SCHOOL IDENTIFIER
-    const previousText = title.innerText;
-    const school = previousText.split("-")[0];
-    title.innerText = `${school} - Turma ${selectedOption.innerText}`;
+        // UPDATE CLASS SCHOOL IDENTIFIER
+        const previousText = title.innerText;
+        const school = previousText.split("-")[0];
+        title.innerText = `${school} - ${msg}`;
+    } else {
+        // CHANGE TAB TEXT
+        selectedTab.innerText = `Turma ${selectedOption.innerText}`;
+
+        // UPDATE CLASS SCHOOL IDENTIFIER
+        const previousText = title.innerText;
+        const school = previousText.split("-")[0];
+        title.innerText = `${school} - Turma ${selectedOption.innerText}`;
+    }
 };
 
 const addSubjectsSelect = (subjectsDiv, school, divider, addBtn, delBtn) => {
@@ -942,6 +953,7 @@ const populateRepeatingCoursesSelect = (repeatCoursesSelect, subjects) => {
 
 // API
 
+// CALLED BY addSubjectsSelect()
 const populateSubjectsSelect = (subjectsSelect, subjectOptionDivider, newSubjectOption, ) => {
 
     fetch(`${endpoint}subjects`)
@@ -963,12 +975,10 @@ const populateSubjectsSelect = (subjectsSelect, subjectOptionDivider, newSubject
         });
 };
 
+// CALLED BY eduLvlSelect.onchange()
 const populateCodesSelect = (codeSelect, codeHeader, codeOptionDivider, newCodeOption, school, yearSelect, eduLvlSelect) => {
 
     [...codeSelect.options].map(option => option.remove()); // remove to update
-
-    codeSelect.append(codeHeader);
-    codeSelect.disabled = false;
 
     const schoolsSelect = document.getElementById(school);
     const schoolName = schoolsSelect.options[schoolsSelect.selectedIndex].value;
@@ -980,26 +990,40 @@ const populateCodesSelect = (codeSelect, codeHeader, codeOptionDivider, newCodeO
     const grade = eduLvl.split("-")[1];
 
 
-    fetch(`${endpoint}school/${schoolName}`)
+    fetch(`${endpoint}schools/${schoolName}`) // fetches from db all school registers with the same school.name
         .then(res => res.json())
-        .then(schoolId => {
+        .then(schools => {
 
-            fetch(`${endpoint}classes/${schoolId}/${year}/${levelOfEducation}/${grade}`)
-                .then(res => res.json())
-                .then(classes => {
+            if (schools.length == 0) { // school is not yet in the db
+                codeSelect.append(codeHeader, codeOptionDivider, newCodeOption);
+                codeSelect.disabled = false;
+                return;
+            }
 
-                    classes.forEach(c => {
+            for (let school of schools) {
+                fetch(`${endpoint}classes/${school.id}/${year}/${levelOfEducation}/${grade}`)
+                    .then(res => res.json())
+                    .then(classes => {
 
-                        const option = document.createElement("option");
-                        option.value = c;
-                        option.textContent = c;
+                        classes.forEach(c => {
 
-                        codeSelect.appendChild(option);
-                    });
-                    codeSelect.append(codeOptionDivider, newCodeOption);
-                    codeHeader.selected = true;
-                })
-                .catch(error => { console.log(error); });
+                            const option = document.createElement("option");
+                            option.value = c;
+                            option.textContent = c;
+
+                            codeSelect.append(option);
+                        });
+                        if (school == schools[schools.length - 1]) { // the last school
+                            codeSelect.append(codeOptionDivider, newCodeOption); // append these options at the very end of the codeSelect
+                        }
+                    })
+                    .catch(error => { console.log(error); });
+            }
+            newCodeOption.selected = false; // force false
+            codeHeader.selected = true; // force true
+
+            codeSelect.prepend(codeHeader);
+            codeSelect.disabled = false;
         })
         .catch(error => { console.log(error); });
 };

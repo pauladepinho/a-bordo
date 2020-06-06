@@ -32,14 +32,13 @@ module.exports = {
             .catch(error => res.status(400).json(error))
     },
 
-    // GET /school/:name
-    schoolIdByItsName: async (req, res) => { // in use (register teacher)
-        await School.findOne({
+    schoolsByName: async (req, res) => { // in use (register teacher)
+        await School.findAll({
             where: {
                 name: req.params.name.toUpperCase()
             }
         })
-            .then(school => res.status(200).json(school.id))
+            .then(schools => res.status(200).json(schools))
             .catch(error => res.status(400).json(error))
     },
 

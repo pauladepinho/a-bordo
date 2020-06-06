@@ -9,7 +9,7 @@ router.get("/teacher/:userId", API_Controller.teacherByUserId);
 router.get("/subjects", API_Controller.subjects); // in use
 
 router.get("/schools", API_Controller.schools);
-router.get("/school/:name", API_Controller.schoolIdByItsName); // in use
+router.get("/schools/:name", API_Controller.schoolsByName); // in use
 // router.get("/schools/:teacherId", API_Controller.schoolsByTeacherId);
 router.get("/schools/:municipality", API_Controller.schoolsByMunicipality); // in use
 

@@ -92,7 +92,7 @@ module.exports = {
             {
                 forename: forename,
                 surname: surname,
-                email: email,
+                email: email.toLowerCase(),
                 phone: validPhone,
                 password: bcrypt.hashSync(password, saltRounds),
                 picture
