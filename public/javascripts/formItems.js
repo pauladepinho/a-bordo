@@ -273,7 +273,7 @@ const selectSchool = (schoolTab) => {
     schoolTab.classList.add("selected");
 };
 
-const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, schoolsSelect, schoolContent, schoolTab, cSchoolTab, classTab) => {
+const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, municipalitiesHeader, schoolsSelect, schoolsHeader, schoolContent, schoolTab, cSchoolTab, classTab) => {
     // LOOK FOR PREVIOUS NEIGHBOR
     let index, neighbor = null;
 
@@ -301,7 +301,7 @@ const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, sch
         selectableState
     ) {
         selectableState.selected = true;
-        populateMunicipalitiesSelect(municipalitiesSelect, statesSelect);
+        populateMunicipalitiesSelect(municipalitiesSelect, municipalitiesHeader, statesSelect);
     }
 
     /*********************************************
@@ -318,23 +318,24 @@ const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, sch
             selectableMunicipality
         ) {
             selectableMunicipality.selected = true;
-            populateSchoolsSelect(schoolsSelect, municipalitiesSelect, schoolTab, cSchoolTab, classTab);
+            populateSchoolsSelect(schoolsSelect, schoolsHeader, municipalitiesSelect, schoolTab, cSchoolTab, classTab);
         }
-    }, 500);
+    }, 1000);
 };
 
 const addSchoolOption = (schoolsSelect, anotherSchool) => {
 
     // AFTER SELECT CHANGE (EVENT), TEST AND SEE WHETHER OPTION ISN'T THE ONE TO ADD NEW OPTION
-    // AVOID PROMPTING
+    // AND AVOID PROMPTING
     const selected = schoolsSelect.options[schoolsSelect.selectedIndex];
     if (selected != anotherSchool) { return; }
 
     let schoolName = prompt("Digite o nome da escola:");
 
-    if (!schoolName) { return schoolsSelect.options[0].selected = true; } // null
-    else if (schoolName.trim() == "") { return schoolsSelect.options[0].selected = true; } // empty
-    else if (Number(schoolName)) { return schoolsSelect.options[0].selected = true; } // number
+    if (!schoolName || // null
+        schoolName.trim() == "" || //empty
+        Number(schoolName) //number
+    ) { return schoolsSelect.options[0].selected = true; }
     else {
         schoolName = formatString(schoolName);
         // CREATE NEW OPTION ELEMENT
@@ -386,10 +387,12 @@ const toggleYearDivision = (title, yearDivision, alternative) => {
 
 // APIs
 
-const populateStatesSelect = (statesSelect) => {
+const populateStatesSelect = (statesSelect, statesHeader) => {
     fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados")
         .then(res => res.json())
         .then(states => {
+
+            [...statesSelect.options].map(option => option.remove()); // remove statesHeader
 
             states.forEach(state => {
 
@@ -398,14 +401,16 @@ const populateStatesSelect = (statesSelect) => {
                 option.textContent = state.nome;
 
                 statesSelect.appendChild(option);
-            })
+            });
+            sortSelect(statesSelect);
+            statesSelect.prepend(statesHeader);
         })
         .catch(error => {
             console.log(error);
         });
 };
 
-const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
+const populateMunicipalitiesSelect = (municipalitiesSelect, municipalitiesHeader, statesSelect) => {
 
     [...municipalitiesSelect.options].map(option => option.remove()); // remove other state's municipalities
 
@@ -428,12 +433,9 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
 
                 municipalitiesSelect.appendChild(option);
             });
-            const option = document.createElement("option");
-            option.textContent = "Município";
-            option.selected = "selected";
-            option.disabled = "disabled";
-
-            municipalitiesSelect.prepend(option);
+            sortSelect(municipalitiesSelect);
+            municipalitiesHeader.selected = true;
+            municipalitiesSelect.prepend(municipalitiesHeader);
             municipalitiesSelect.disabled = false;
         })
         .catch(error => {
@@ -441,7 +443,7 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
         });
 };
 
-const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect, schoolTab, cSchoolTab, classTab) => {
+const populateSchoolsSelect = (schoolsSelect, schoolsHeader, municipalitiesSelect, schoolTab, cSchoolTab, classTab) => {
 
     [...schoolsSelect.options].map(option => option.remove()); // remove other municipality's schools
 
@@ -465,31 +467,74 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect, schoolTab, c
 
                 schoolsSelect.appendChild(option);
             });
-            const divider = document.createElement("option");
-            divider.innerText = "•-•-•-•-•";
-            divider.disabled = true;
 
-            const anotherSchool = document.createElement("option");
-            anotherSchool.innerText = "Outra escola";
+            fetch(`${endpoint}schools/${selectedMunicipality}`)
+                .then(res => res.json())
+                .then(schools => {
+                    schools.forEach(school => {
 
-            schoolsSelect.append(divider, anotherSchool);
+                        const name = formatString(school.name);
 
-            const option = document.createElement("option");
-            option.textContent = "Nome da escola";
-            option.selected = true;
-            option.disabled = true;
+                        const option = document.createElement("option");
+                        option.value = name;
+                        option.textContent = name;
 
-            schoolsSelect.prepend(option);
-            schoolsSelect.disabled = false;
+                        schoolsSelect.appendChild(option);
+                    });
 
-            schoolsSelect.addEventListener("change", () => {
-                addSchoolOption(schoolsSelect, anotherSchool),
-                    changeTabText(schoolTab, cSchoolTab, classTab, schoolsSelect)
-            });
+                    sortSelect(schoolsSelect);
+
+                    const divider = document.createElement("option");
+                    divider.innerText = "•-•-•-•-•";
+                    divider.disabled = true;
+
+                    const anotherSchool = document.createElement("option");
+                    anotherSchool.innerText = "Outra escola";
+
+                    schoolsHeader.selected = true;
+                    schoolsSelect.prepend(schoolsHeader);
+                    schoolsSelect.append(divider, anotherSchool);
+                    schoolsSelect.disabled = false;
+
+                    schoolsSelect.addEventListener("change", () => {
+                        addSchoolOption(schoolsSelect, anotherSchool),
+                            changeTabText(schoolTab, cSchoolTab, classTab, schoolsSelect)
+                    });
+                })
         })
         .catch(error => {
             console.log(error);
         });
+};
+
+
+const sortSelect = (select) => {
+    let tmpAry = new Array();
+    for (let i = 0; i < select.options.length; i++) {
+        tmpAry[i] = new Array();
+        tmpAry[i][0] = select.options[i].text;
+        tmpAry[i][1] = select.options[i].value;
+    }
+    tmpAry.sort();
+    tmpAry = removeDuplicates(tmpAry);
+    while (select.options.length > 0) {
+        select.options[0] = null;
+    }
+    for (let i = 0; i < tmpAry.length; i++) {
+        let opt = new Option(tmpAry[i][0], tmpAry[i][1]);
+        select.options[i] = opt;
+    }
+    return;
+};
+
+const removeDuplicates = (arr) => {
+    // OBS: arr == [ [option.text, option.value], [option.text, option.value] ]
+    let uniqueOpts = []
+    for (let i = 0; i < arr.length; i++) {
+        if (i == 0) { uniqueOpts.push(arr[i]) } // because arr[i=0 - 1] == undefined
+        else if (arr[i][0] != arr[i - 1][0]) { uniqueOpts.push(arr[i]); }
+    }
+    return uniqueOpts;
 };
 
 /*************
@@ -812,7 +857,7 @@ const addSubjectOption = (subjectsSelect, newSubjectOption) => {
 
     // AFTER SELECT CHANGE (EVENT), TEST AND SEE WHETHER OPTION ISN'T THE ONE TO ADD NEW OPTION
     const selected = subjectsSelect.options[subjectsSelect.selectedIndex];
-    if (selected != newSubjectOption) { return changeClassTabText(subjectsSelect); }
+    if (selected != newSubjectOption) { return; }
 
     let subject = prompt("Digite o nome da disciplina:");
 
@@ -861,6 +906,9 @@ const addRepeatingCoursesSelect = (subjects, n, classNumber, school, addBtn, del
     subjects.append(subjectsSelect);
     subjectsSelect.append(subjectsOption);
 
+
+    populateRepeatingCoursesSelect(subjectsSelect, subjects);
+
     /**** TOGGLE ADD/DEL BUTTONS ****/
 
     subjects.childNodes.length == 3 ? addBtn.disabled = true : addBtn.disabled = false;
@@ -873,6 +921,23 @@ const delRepeatingCoursesSelect = (subjects, addBtn, delBtn) => {
 
     addBtn.disabled = false;
     subjects.childNodes.length == 1 ? delBtn.disabled = true : delBtn.disabled = false;
+};
+
+const populateRepeatingCoursesSelect = (repeatCoursesSelect, subjects) => {
+
+    // GET SELECTED OPTIONS FROM SUBJECTS SELECTS
+    const divs = document.getElementsByClassName(subjects.className);
+    const taughtSubjectsSelects = divs[0].childNodes;
+
+    taughtSubjectsSelects.forEach(select => {
+        const selected = select.options[select.selectedIndex];
+
+        const option = document.createElement("option");
+        option.value = selected.value;
+        option.innerText = selected.innerText;
+
+        repeatCoursesSelect.append(option);
+    })
 };
 
 // API
@@ -961,10 +1026,10 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     state.id = `state-school${schoolNumber}`;
     state.required = true;
 
-    const stateOption = document.createElement("option");
-    stateOption.disabled = true;
-    stateOption.selected = true;
-    stateOption.innerText = "UF";
+    const statesHeader = document.createElement("option");
+    statesHeader.disabled = true;
+    statesHeader.selected = true;
+    statesHeader.innerText = "UF";
 
     // MUNICIPALITY SELECT
     const municipality = document.createElement("select");
@@ -973,10 +1038,10 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     municipality.required = true;
     municipality.disabled = true;
 
-    const municipalityOption = document.createElement("option");
-    municipalityOption.disabled = true;
-    municipalityOption.selected = true;
-    municipalityOption.innerText = "Município";
+    const municipalitiesHeader = document.createElement("option");
+    municipalitiesHeader.disabled = true;
+    municipalitiesHeader.selected = true;
+    municipalitiesHeader.innerText = "Município";
 
     // SCHOOL'S NAME SELECT
     const school = document.createElement("select");
@@ -985,10 +1050,10 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     school.required = true;
     school.disabled = true;
 
-    const schoolOption = document.createElement("option");
-    schoolOption.disabled = true;
-    schoolOption.selected = true;
-    schoolOption.innerText = "Nome da escola";
+    const schoolsHeader = document.createElement("option");
+    schoolsHeader.disabled = true;
+    schoolsHeader.selected = true;
+    schoolsHeader.innerText = "Nome da escola";
 
     // PASS GRADE SELECT
     const passGrade = document.createElement("select");
@@ -1052,22 +1117,22 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     schoolContent.append(schoolLocation, school, passGrade, evaluationSystem, bimonthly, trimonthly);
 
     schoolLocation.append(state, municipality);
-    school.append(schoolOption); // school.append(anotherSchool);
+    school.append(schoolsHeader); // school.append(anotherSchool);
     passGrade.append(passGradeOption, scaleTenOption, five, six, seven, scaleHundredOption, fifty, sixty, seventy);
 
-    state.append(stateOption);
-    municipality.append(municipalityOption);
+    state.append(statesHeader);
+    municipality.append(municipalitiesHeader);
 
     /**** CALL OTHER FUNCTIONS / LISTEN TO EVENTS ON ELEMENTS ****/
 
     // POPULATE SELECTS THROUGH API
-    populateStatesSelect(state); // states select
-    state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state)); // municipalities select
-    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality, schoolTab, cSchoolTab, classTab)); // schools select
+    populateStatesSelect(state, statesHeader); // states select
+    state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, municipalitiesHeader, state)); // municipalities select
+    municipality.addEventListener("change", () => populateSchoolsSelect(school, schoolsHeader, municipality, schoolTab, cSchoolTab, classTab)); // schools select
 
     // ADD NEIGHBOR SCHOOL'S LOCATION TO THIS SCHOOL
     setTimeout(() => { // wait for populateStatesSelect() response
-        setNeighborSchoolLocationToSelf(state, municipality, school, schoolContent, schoolTab, cSchoolTab, classTab)
+        setNeighborSchoolLocationToSelf(state, municipality, municipalitiesHeader, school, schoolsHeader, schoolContent, schoolTab, cSchoolTab, classTab)
     }, 100);
 
     school.addEventListener("change", () => enablePassGradeSelect(passGrade));
