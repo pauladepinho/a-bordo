@@ -273,7 +273,7 @@ const selectSchool = (schoolTab) => {
     schoolTab.classList.add("selected");
 };
 
-const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, schoolsSelect, schoolContent) => {
+const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, schoolsSelect, schoolContent, schoolTab, cSchoolTab, classTab) => {
     // LOOK FOR PREVIOUS NEIGHBOR
     let index, neighbor = null;
 
@@ -318,35 +318,32 @@ const setNeighborSchoolLocationToSelf = (statesSelect, municipalitiesSelect, sch
             selectableMunicipality
         ) {
             selectableMunicipality.selected = true;
-            populateSchoolsSelect(schoolsSelect, municipalitiesSelect);
+            populateSchoolsSelect(schoolsSelect, municipalitiesSelect, schoolTab, cSchoolTab, classTab);
         }
     }, 500);
 };
 
-const addSchoolOption = (schoolsSelect, anotherSchool, tab, cSchoolTab, classTab) => {
+const addSchoolOption = (schoolsSelect, anotherSchool) => {
 
     // AFTER SELECT CHANGE (EVENT), TEST AND SEE WHETHER OPTION ISN'T THE ONE TO ADD NEW OPTION
+    // AVOID PROMPTING
     const selected = schoolsSelect.options[schoolsSelect.selectedIndex];
-    if (selected != anotherSchool) { return changeTabText(tab, cSchoolTab, classTab, schoolsSelect); }
+    if (selected != anotherSchool) { return; }
 
-    let schoolName = prompt("Digite o nome da disciplina:");
+    let schoolName = prompt("Digite o nome da escola:");
 
     if (!schoolName) { return schoolsSelect.options[0].selected = true; } // null
-
-    schoolName = schoolName.trim();
-    if (schoolName == "") { return schoolsSelect.options[0].selected = true; } // empty
-
-    schoolName = formatString(schoolName);
-
-    // CREATE NEW OPTION ELEMENT
-    const newOption = document.createElement("option");
-    newOption.value = schoolName;
-    newOption.innerText = schoolName;
-    newOption.selected = true;
-
-    schoolsSelect.append(newOption);
-
-    changeTabText(tab, cSchoolTab, classTab, schoolsSelect);
+    else if (schoolName.trim() == "") { return schoolsSelect.options[0].selected = true; } // empty
+    else if (Number(schoolName)) { return schoolsSelect.options[0].selected = true; } // number
+    else {
+        schoolName = formatString(schoolName);
+        // CREATE NEW OPTION ELEMENT
+        const newOption = document.createElement("option");
+        newOption.value = schoolName;
+        newOption.innerText = schoolName;
+        newOption.selected = true;
+        schoolsSelect.append(newOption);
+    }
 };
 
 const enablePassGradeSelect = passGradesSelect => passGradesSelect.disabled = false;
@@ -355,10 +352,19 @@ const changeTabText = (tab, cSchoolTab, classTab, select) => {
 
     const selected = select.options[select.selectedIndex];
 
-    tab.innerText = selected.innerText;
-    cSchoolTab.innerText = selected.innerText;
-    if (cSchoolTab.classList.contains("selected")) {
-        title.innerText = selected.innerText + " - " + classTab.innerText;
+    if (selected == select.options[0]) {
+        const msg = "Selecione uma escola"
+        tab.innerText = msg;
+        cSchoolTab.innerText = msg;
+        if (cSchoolTab.classList.contains("selected")) {
+            title.innerText = msg + " - " + classTab.innerText;
+        }
+    } else {
+        tab.innerText = selected.innerText;
+        cSchoolTab.innerText = selected.innerText;
+        if (cSchoolTab.classList.contains("selected")) {
+            title.innerText = selected.innerText + " - " + classTab.innerText;
+        }
     }
 };
 
@@ -435,7 +441,7 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
         });
 };
 
-const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect, anotherSchool) => {
+const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect, schoolTab, cSchoolTab, classTab) => {
 
     [...schoolsSelect.options].map(option => option.remove()); // remove other municipality's schools
 
@@ -463,6 +469,9 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect, anotherSchoo
             divider.innerText = "•-•-•-•-•";
             divider.disabled = true;
 
+            const anotherSchool = document.createElement("option");
+            anotherSchool.innerText = "Outra escola";
+
             schoolsSelect.append(divider, anotherSchool);
 
             const option = document.createElement("option");
@@ -472,6 +481,11 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect, anotherSchoo
 
             schoolsSelect.prepend(option);
             schoolsSelect.disabled = false;
+
+            schoolsSelect.addEventListener("change", () => {
+                addSchoolOption(schoolsSelect, anotherSchool),
+                    changeTabText(schoolTab, cSchoolTab, classTab, schoolsSelect)
+            });
         })
         .catch(error => {
             console.log(error);
@@ -976,9 +990,6 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     schoolOption.selected = true;
     schoolOption.innerText = "Nome da escola";
 
-    const anotherSchool = document.createElement("option");
-    anotherSchool.innerText = "Outra escola";
-
     // PASS GRADE SELECT
     const passGrade = document.createElement("select");
     passGrade.name = `school${schoolNumber}[]`;
@@ -1037,49 +1048,29 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     /**** APPEND ELEMENTS ****/
 
     const schoolsGrayBox = document.querySelector("#set-schools .gray-box");
-    schoolsGrayBox.appendChild(schoolContent);
-    schoolContent.appendChild(schoolLocation);
-    schoolContent.appendChild(school);
-    schoolContent.appendChild(passGrade);
-    schoolContent.appendChild(evaluationSystem);
-    schoolContent.appendChild(bimonthly);
-    schoolContent.appendChild(trimonthly);
+    schoolsGrayBox.append(schoolContent);
+    schoolContent.append(schoolLocation, school, passGrade, evaluationSystem, bimonthly, trimonthly);
 
-    schoolLocation.appendChild(state);
-    schoolLocation.appendChild(municipality);
-    school.appendChild(schoolOption);
-    // school.append(anotherSchool);
-    passGrade.appendChild(passGradeOption);
-    passGrade.appendChild(scaleTenOption);
-    passGrade.appendChild(five);
-    passGrade.appendChild(six);
-    passGrade.appendChild(seven);
-    passGrade.appendChild(scaleHundredOption);
-    passGrade.appendChild(fifty);
-    passGrade.appendChild(sixty);
-    passGrade.appendChild(seventy);
+    schoolLocation.append(state, municipality);
+    school.append(schoolOption); // school.append(anotherSchool);
+    passGrade.append(passGradeOption, scaleTenOption, five, six, seven, scaleHundredOption, fifty, sixty, seventy);
 
-    state.appendChild(stateOption);
-    municipality.appendChild(municipalityOption);
+    state.append(stateOption);
+    municipality.append(municipalityOption);
 
     /**** CALL OTHER FUNCTIONS / LISTEN TO EVENTS ON ELEMENTS ****/
 
     // POPULATE SELECTS THROUGH API
     populateStatesSelect(state); // states select
     state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state)); // municipalities select
-    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality, anotherSchool)); // schools select
-
-    school.addEventListener("change", () => addSchoolOption(school, anotherSchool, schoolTab, cSchoolTab, classTab));
+    municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality, schoolTab, cSchoolTab, classTab)); // schools select
 
     // ADD NEIGHBOR SCHOOL'S LOCATION TO THIS SCHOOL
     setTimeout(() => { // wait for populateStatesSelect() response
-        setNeighborSchoolLocationToSelf(state, municipality, school, schoolContent)
+        setNeighborSchoolLocationToSelf(state, municipality, school, schoolContent, schoolTab, cSchoolTab, classTab)
     }, 100);
 
-    // ENABLE PASS GRADE SELECT, AND CHANGE THE TAB'S TEXT TO DISPLAY THE SCHOOL'S NAME
-    school.addEventListener("change", () => {
-        enablePassGradeSelect(passGrade), changeTabText(schoolTab, cSchoolTab, classTab, school)
-    });
+    school.addEventListener("change", () => enablePassGradeSelect(passGrade));
 
     // ENABLE OPTIONS OF ACADEMIC YEAR DIVISION (RADIO INPUTS)
     passGrade.addEventListener("change", () => enableYearDivisionOptions(bimonthly, trimonthly));
