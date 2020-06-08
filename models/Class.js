@@ -13,6 +13,35 @@ module.exports = (sequelize, DataTypes) => {
     });
   Class.associate = function (models) {
     // associations can be defined here
+    Class.belongsTo(models.School, {
+      as: "school"
+    });
+
+    Class.belongsToMany(models.Teacher, {
+      as: "teachers",
+      through: models.Course,
+      foreignKey: "classId"
+    });
+
+    Class.belongsToMany(models.Subject, {
+      as: "subjects",
+      through: models.Course,
+      foreignKey: "classId"
+    });
+    // Class.hasMany(models.Course, {
+    //   as: "courses",
+    //   foreignKey: "classId"
+    // });
+
+    Class.belongsToMany(models.Student, {
+      as: "students",
+      through: models.Class_Student,
+      foreignKey: "classId"
+    });
+    Class.hasMany(models.Class_Student, {
+      as: "classStudents",
+      foreignKey: "classId"
+    });
   };
   return Class;
 };

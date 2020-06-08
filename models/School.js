@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     });
   School.associate = function (models) {
     // associations can be defined here
+    School.hasMany(models.Class, {
+      as: "classes",
+      foreignKey: "schoolId"
+    })
   };
   return School;
 };

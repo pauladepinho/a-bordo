@@ -16,16 +16,10 @@
 
       <select name=" subject" required>
         <option disabled selected>Disciplina</option>
-        <% subjects.forEach(subject => { %>
-        <option value="<%= subject.id %>"><%= subject.name %></option>
-        <% }) %>
       </select>
 
       <select name="class" required>
         <option disabled selected>Turma</option>
-        <% classes.forEach(c => { %>
-        <option value="<%= c.id %>"><%= c.code %></option>
-        <% }) %>
       </select>
 
       <select name="term" required>

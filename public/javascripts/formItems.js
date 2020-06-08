@@ -990,7 +990,7 @@ const populateCodesSelect = (codeSelect, codeHeader, codeOptionDivider, newCodeO
     const grade = eduLvl.split("-")[1];
 
 
-    fetch(`${endpoint}schools/${schoolName}`) // fetches from db all school registers with the same school.name
+    fetch(`${endpoint}schools/name/${schoolName}`) // fetches from db all school registers with the same school.name
         .then(res => res.json())
         .then(schools => {
 
@@ -1016,15 +1016,16 @@ const populateCodesSelect = (codeSelect, codeHeader, codeOptionDivider, newCodeO
                         if (school == schools[schools.length - 1]) { // the last school
                             sortSelect(codeSelect); // sort and remove duplicates
                             codeSelect.append(codeOptionDivider, newCodeOption); // append these options at the very end of the codeSelect
+
+                            newCodeOption.selected = false; // force false
+                            codeHeader.selected = true; // force true
+
+                            codeSelect.prepend(codeHeader);
+                            codeSelect.disabled = false;
                         }
                     })
                     .catch(error => { console.log(error); });
             }
-            newCodeOption.selected = false; // force false
-            codeHeader.selected = true; // force true
-
-            codeSelect.prepend(codeHeader);
-            codeSelect.disabled = false;
         })
         .catch(error => { console.log(error); });
 };

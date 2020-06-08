@@ -7,28 +7,22 @@
     <nav>
         <div class="navbar select">
 
-            <select name="school" required>
+            <select id="school" required>
                 <option disabled selected>Escola</option>
                 <% schools.forEach(school => { %>
                 <option value="<%= school.id %>"><%= school.name %></option>
                 <% }) %>
             </select>
 
-            <select name=" subject" required>
+            <select id="subject" required>
                 <option disabled selected>Disciplina</option>
-                <% subjects.forEach(subject => { %>
-                <option value="<%= subject.id %>"><%= subject.name %></option>
-                <% }) %>
             </select>
 
-            <select name="class" required>
+            <select id="class" required>
                 <option disabled selected>Turma</option>
-                <% classes.forEach(c => { %>
-                <option value="<%= c.id %>"><%= c.code %></option>
-                <% }) %>
             </select>
 
-            <select name="term" required>
+            <select id="term" required>
                 <% 
                     schools.forEach(school => { 
                         let terms = school.academicTerms;
@@ -74,37 +68,9 @@
     <main id="home" style="margin-left: 450px;margin-top: 56px;">
         <div>
 
-            <h3>Lista de dados</h3>
-            <br>
-            <ul style="margin-bottom: 48px;"> <% for (school of schools) { %>
-
-                <li style="margin-bottom: 18px;"><button type="button"><%= school.name %></button></li>
-
-                <% } %>
-            </ul>
-
-            <ul style="margin-bottom: 48px;"> <% for (subject of subjects) { %>
-
-                <li style="margin-bottom: 18px;"><button type="button"><%= subject.name %></button></li>
-
-                <% } %>
-            </ul>
-
-            <ul style="margin-bottom: 48px;"> <% for (c of classes) { %>
-
-                <li style="margin-bottom: 18px;"><button type="button"><%= c.code %></button></li>
-
-                <% } %>
-            </ul>
-
-            <ul style="margin-bottom: 48px;"> <% for (student of students) { %>
-
-                <li style="margin-bottom: 18px;"><button type="button"><%= student.name %></button></li>
-
-                <% } %>
-            </ul>
 
         </div>
     </main>
 
+    <script src="../../javascripts/teacher.js"></script>
     <%- include("../partials/footer.ejs") %>
