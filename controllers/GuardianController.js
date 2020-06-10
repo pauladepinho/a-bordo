@@ -9,7 +9,8 @@ module.exports = {
     renderHome: async (req, res) => {
         // GET GUARDIAN DATA FROM DB,
         // AND THEN...
-        return res.render("guardian");
+        const user = req.session.user;
+        return res.render("guardian", { user });
     },
 
     // GET responsavel/cadastrar
