@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const redirectHome = async (req, res) => {
 
     const user = req.session.user;
-    const isTeacher = await Teacher.findOne({ where: { userId: user.id } });
+    const isTeacher = await Teacher.findOne({ where: { userId: user.id }, attributes: { exclude: ["teacherId"] } });
     const isGuardian = await Guardian.findOne({ where: { userId: user.id } });
 
     if (isTeacher && isGuardian) {
@@ -60,7 +60,7 @@ module.exports = {
             res.cookie("aBordo", email, { maxAge: oneWeek });
         }
         // MANAGE REDIRECTIONS
-        const isTeacher = await Teacher.findOne({ where: { userId: user.id } });
+        const isTeacher = await Teacher.findOne({ where: { userId: user.id }, attributes: { exclude: ["teacherId"] } });
         const isGuardian = await Guardian.findOne({ where: { userId: user.id } });
 
         if (isTeacher && isGuardian) {

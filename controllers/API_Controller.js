@@ -11,21 +11,17 @@ module.exports = {
             .catch(error => res.status(400).json(error))
     },
 
-    // GET /teachers
-    teachers: async (req, res) => {
-        await Teacher.findAll(
-            {
-                attributes: { exclude: ["teacherId"] }
-            }
-        )
-            .then(users => res.status(200).json(users))
-            .catch(error => res.status(400).json(error))
-    },
-
     // GET /schools
     schools: async (req, res) => {
         await School.findAll()
             .then(schools => res.status(200).json(schools))
+            .catch(error => res.status(400).json(error))
+    },
+
+    // GET /teachers
+    teachers: async (req, res) => {
+        await Teacher.findAll({ attributes: { exclude: ["teacherId"] } })
+            .then(users => res.status(200).json(users))
             .catch(error => res.status(400).json(error))
     },
 
@@ -50,6 +46,12 @@ module.exports = {
             .catch(error => res.status(400).json(error))
     },
 
+    lessons: async (req, res) => {
+        await Lesson.findAll()
+            .then(lessons => res.status(200).json(lessons))
+            .catch(error => res.status(400).json(error))
+    },
+
     // GET /students
     students: async (req, res) => {
         await Student.findAll()
@@ -57,7 +59,22 @@ module.exports = {
             .catch(error => res.status(400).json(error))
     },
 
+    attendances: async (req, res) => {
+        await Attendance.findAll()
+            .then(attendances => res.status(200).json(attendances))
+            .catch(error => res.status(400).json(error))
+    },
 
+    evaluations: async (req, res) => {
+        await Evaluation.findAll()
+            .then(evaluations => res.status(200).json(evaluations))
+            .catch(error => res.status(400).json(error))
+    },
+
+
+
+
+    // TEACHER HOME
 
     // GET /teacher/user/:userId
     teacher: async (req, res) => {
@@ -65,27 +82,22 @@ module.exports = {
             {
                 where: { userId: req.params.userId },
                 include: [
-                    // {
-                    //     model: User, as: "user",
-                    //     attributes: { exclude: ["password"] }
-                    // },
                     {
-                        model: Subject,
-                        as: "subjects",
-                        through: {
-                            model: Course, as: "course",
-                            attributes: ["classId"]
-                        }
+                        model: User, as: "user",
+                        attributes: ["email"]
                     },
                     {
                         model: Class, as: "classes",
                         through: {
-                            model: Course, as: "course",
-                            attributes: ["subjectId"]
+                            attributes: []
                         },
                         attributes: { exclude: ["schoolId"] },
                         include:
                             [
+                                {
+                                    model: Subject, as: "subjects",
+                                    through: { attributes: [] }
+                                },
                                 {
                                     model: School, as: "school"
                                 },
@@ -96,7 +108,7 @@ module.exports = {
                                         model: Class_Student, as: "number",
                                         attributes: ["number"]
                                     }
-                                },
+                                }
                             ]
                     },
                 ],
@@ -107,91 +119,27 @@ module.exports = {
             .catch(error => res.status(400).json(error))
     },
 
-
-
-
-
-    // GET /schools/teacher/:teacherId
-    teacherSchools: async (req, res) => {
-        await School.findAll(
-            {
-                include: {
-                    model: Class,
-                    as: "classes",
-                    required: true, // exclude schools with empty classes
-                    attributes: { exclude: ["schoolId"] },
-                    include: [
-                        {
-                            model: Subject,
-                            as: "subjects",
-                            through: {
-                                attributes: [] // exclude Course (pivot table)
-                            }
-                        },
-                        {
-                            model: Class_Student,
-                            as: "classStudents"
-                        },
-                        {
-                            model: Teacher,
-                            as: "teachers",
-                            where: {
-                                id: req.params.teacherId
-                            },
-                            through: { attributes: [] }, // exclude Course (pivot table)
-                            attributes: { exclude: ["teacherId"] }, // column automatically created by sequelize
-                            // include: {
-                            //     model: User,
-                            //     as: "user"
-                            // }
-                        },
-                    ]
-                }
-            }
-        )
-            .then(schools => res.status(200).json(schools))
-            .catch(error => res.status(400).json(error))
-    },
-
-
-
-
-
-
-
-    // IN USE
-
-    // GET /subjects/school/:schoolId
-    subjectsBySchoolId: async (req, res) => {
-        await Subject.findAll({
-            include: [{
-                model: Class, as: "classes", where: {
-                    schoolId: req.params.schoolId
-                },
-            }]
-        })
-            .then(subjects => res.status(200).json(subjects))
-            .catch(error => res.status(400).json(error))
-    },
-
-    // GET /classes/school/:schoolId
-    classesBySchoolId: async (req, res) => {
-        await Class.findAll({
+    // router.get("/lessons/teacher/:teacherId/subject/:subjectId/class/:classId", API_Controller.lessons);
+    courseAndlessons: async (req, res) => {
+        await Course.findOne({
             where: {
-                schoolId: req.params.schoolId
+                teacherId: req.params.teacherId,
+                subjectId: req.params.subjectId,
+                classId: req.params.classId
             },
             include: {
-                model: Subject,
-                as: "subjects"
-            }
+                model: Lesson, as: "lessons",
+                attributes: { exclude: ["CourseId"] },
+                include: { model: Evaluation, as: "evaluations" }
+            },
+            attributes: { exclude: ["TeacherId"] }
         })
-            .then(classes => res.status(200).json(classes))
+            .then(teacher => res.status(200).json(teacher))
             .catch(error => res.status(400).json(error))
     },
 
 
-
-
+    // REGISTER TEACHER
 
     // GET /subjects
     subjects: async (req, res) => { // in use (teacher register)

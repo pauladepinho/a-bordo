@@ -2,6 +2,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Subject = sequelize.define('Subject',
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
+      },
       name: { type: DataTypes.STRING, allowNull: false, unique: true }
     },
     {
@@ -20,10 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       through: models.Course,
       foreignKey: "subjectId"
     });
-    // Subject.hasMany(models.Course, {
-    //   as: "courses",
-    //   foreignKey: "subjectId"
-    // });
+    Subject.hasMany(models.Course, {
+      as: "courses",
+      foreignKey: "subjectId"
+    });
   };
   return Subject;
 };

@@ -69,11 +69,12 @@ const getTeacher = async (user) => {
         where: {
             userId: user.id
         },
+        attributes: { exclude: ["teacherId"] },
         include: {
             model: User, as: "user"
         }
     });
-    return { user, schools };
+    return teacher;
 };
 
 module.exports = {
@@ -257,8 +258,48 @@ module.exports = {
     },
 
     // POST professor/fazer-chamada
-    recordAttendances: (req, res) => {
-
+    recordAttendances: async (req, res) => {
+        // CREATE LESSON
+        const lesson = await Lesson.create(
+            {
+                courseId: req.body.courseId,
+                academicTerm: req.body.academicTerm,
+                date: req.body.date,
+                periods: req.body.periods,
+                observations: req.body.observations
+            }
+        );
+        // CREATE ATTENDANCE
+        const reqBodyAttendance = Object.keys(req.body).filter( // [ "attendance_student1-period1", "attendance_student1-period2", "attendance_student2-period1", "attendance_student2-period2" ]
+            key => key.substr(0, 10) == "attendance"
+        );
+        for (attendance of reqBodyAttendance) {
+            const studentId = attendance.slice(attendance.indexOf("student") + "student".length, attendance.indexOf("-"));
+            const period = attendance.slice(attendance.indexOf("period") + "period".length);
+            await Attendance.create(
+                {
+                    lessonId: lesson.id,
+                    studentId,
+                    mark: req.body[attendance], // present, absent or late
+                    period
+                }
+            );
+        }
+        // CREATE EVALUATION
+        const reqBodyEvaluation = Object.keys(req.body).filter( // [ "evaluation-title", "evaluation-color", "evaluation-type", "evaluation-value" ]
+            key => key.substr(0, 10) == "evaluation"
+        );
+        if (!reqBodyEvaluation) { return res.redirect("/professor/home"); }
+        await Evaluation.create(
+            {
+                lessonId: lesson.id,
+                maxGrade: req.body["evaluation-value"],
+                title: req.body["evaluation-title"],
+                color: req.body["evaluation-color"],
+                type: req.body["evaluation-type"]
+            }
+        );
+        return res.redirect("/professor/home");
     },
 
     // GET professor/lancar-notas
@@ -272,7 +313,7 @@ module.exports = {
     },
 
     // POST professor/lancar-notas
-    recordGrades: (req, res) => {
+    recordGrades: async (req, res) => {
 
     },
 

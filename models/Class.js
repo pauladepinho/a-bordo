@@ -2,6 +2,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Class = sequelize.define('Class',
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
+      },
       schoolId: { type: DataTypes.INTEGER, allowNull: false },
       code: { type: DataTypes.STRING, allowNull: false },
       year: { type: DataTypes.STRING, allowNull: false },
@@ -28,10 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       through: models.Course,
       foreignKey: "classId"
     });
-    // Class.hasMany(models.Course, {
-    //   as: "courses",
-    //   foreignKey: "classId"
-    // });
+    Class.hasMany(models.Course, {
+      as: "courses",
+      foreignKey: "classId"
+    });
 
     Class.belongsToMany(models.Student, {
       as: "students",

@@ -6,70 +6,70 @@
 
     <nav>
         <div class="navbar select">
-
-            <select id="school" required>
-                <option disabled selected>Escola</option>
-                <% schools.forEach(school => { %>
-                <option value="<%= school.id %>"><%= school.name %></option>
-                <% }) %>
-            </select>
-
-            <select id="subject" required>
-                <option disabled selected>Disciplina</option>
-            </select>
-
-            <select id="class" required>
-                <option disabled selected>Turma</option>
-            </select>
-
-            <select id="term" required>
-                <% 
-                    schools.forEach(school => { 
-                        let terms = school.academicTerms;
-                        let termType;
-
-                        if (terms == 4) { termType = "Bimestre" }
-                        else if (terms == 3) { termType = "Trimestre" }
-                %>
-                <option disabled selected><%= termType %></option>
-                <% 
-                        for (let term = 1; term <= terms; term++) { 
-                %>
-                <option value="<%= term %>"><%= term + "º " + termType %></option>
-                <% 
-                        }
-                    }) 
-                %>
-            </select>
-
+            <select id="school" required></select>
+            <select id="class" required disabled></select>
+            <select id="subject" required disabled></select>
+            <select id="term" name="academicTerm" form="form-attendance-sheet" required disabled></select>
         </div>
 
         <div class="navbar">
             <ul class="nav">
-                <li><a class="nav-link" href="/professor/fazer-chamada">
-                        Fazer chamada
-                    </a></li>
-                <li><a class="nav-link" href="/professor/lancar-notas">
-                        Lançar notas
-                    </a></li>
-                <li><a class="nav-link" href="/professor/diario-de-classe">
-                        Diário de classe
-                    </a></li>
-                <li><a class="nav-link" href="#">
-                        Estatísticas
-                    </a></li>
-                <li><a class="nav-link" href="#">
-                        Contatar responsáveis
-                    </a></li>
+                <li><button id="btn-attendance-sheet" type="button" disabled>Fazer chamada</button></li>
+                <li><button id="btn-gradebook" type="button" disabled>Lançar notas</button></li>
+                <li><button id="btn-records" type="button" disabled>Diário de classe</button></li>
+                <li><button id="btn-statistics" type="button" disabled>Estatísticas</button></li>
+                <li><button id="btn-contact" type="button" disabled>Contactar responsáveis</button></li>
             </ul>
         </div>
     </nav>
 
-    <main id="home" style="margin-left: 450px;margin-top: 56px;">
-        <div>
+    <main id="home" style="margin-left: 450px;margin-top: 56px;" hidden>
+        <ul id="ul-students"></ul>
+    </main>
 
+    <main id="attendance-sheet">
+        <form id="form-attendance-sheet" action="/professor/fazer-chamada" method="POST">
 
-        </div>
+            <section id="lesson">
+                <div class="selectors">
+                    <input type="date" name="date" id="date" required
+                        value=<%= new Date().toISOString().substr(0, 10) %> />
+                    <select name="periods" id="periods" required>
+                        <option selected disabled>Tempos de aula</option>
+                        <option value="1">1 tempo</option>
+                        <option value="2">2 tempos</option>
+                        <option value="3">3 tempos</option>
+                        <option value="4">4 tempos</option>
+                        <option value="5">5 tempos</option>
+                    </select>
+                </div>
+                <textarea name="observations" id="observations" placeholder="Observações"></textarea>
+            </section>
+
+            <section id="set-evaluation">
+                <div id="evaluation-info"></div>
+                <label class="checkbox-container">Dia de avaliação
+                    <input type="checkbox" id="evaluation-day" />
+                    <span class="checkmark"></span>
+                </label>
+            </section>
+
+            <section class="table">
+                <table class="table-striped">
+                    <thead>
+                        <tr>
+                            <th class="student-number">Nº</th>
+                            <th class="student-name">ALUNO</th>
+                            <th class="attendance-check"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-attendance-sheet"></tbody>
+                </table>
+            </section>
+
+            <button type="submit" class="special">Salvar chamada</button>
+
+        </form>
     </main>
 
     <script src="../../javascripts/teacher.js"></script>
