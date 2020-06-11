@@ -18,18 +18,23 @@ const btnRecords = document.getElementById("btn-records"); // reports btn
 const btnStatistics = document.getElementById("btn-statistics"); // reports btn
 const btnContact = document.getElementById("btn-contact"); // contact btn
 
+const navButtons = [btnAttendanceSheet, btnGradebook, btnRecords, btnStatistics, btnContact];
+
 // MAINS
 const mainHome = document.getElementById("home");
 const mainAttendanceSheet = document.getElementById("attendance-sheet");
 
-// MAINS' ELEMENTS
+const mains = [mainHome, mainAttendanceSheet];
+
+// MAINS' CHILD ELEMENTS
 
 // MAIN HOME
 const ulStudents = document.getElementById("ul-students");
 
 // MAIN ATTENDANCE SHEET
-const periodSelect = document.getElementById("periods"); // attendance-related
+const periodsSelect = document.getElementById("periods"); // attendance-related
 const tbodyAttendanceSheet = document.getElementById("tbody-attendance-sheet");
+const inputCourseId = document.getElementById("input-courseId");
 
 const checkboxEvaluationDay = document.getElementById("evaluation-day"); // new-evaluation-related
 const sectionSetEvaluation = document.getElementById("set-evaluation");
@@ -41,7 +46,8 @@ window.addEventListener("load", () => fetchData());
 
 schoolSelect.addEventListener("change",
     () => {
-        disableNavReportsAndContactBtns(),
+        toggleMainVisibility(mainHome),
+            disableNavReportsAndContactBtns(),
             disableNavFormsBtns(),
             populateClassSelect(),
             populateTermSelect()
@@ -49,25 +55,27 @@ schoolSelect.addEventListener("change",
 classSelect.addEventListener("change",
     () => {
         populateSubjectSelect(),
-            listStudents()
+            listStudents(),
+            populateTableWithStudents(tbodyAttendanceSheet),
+            removeEvaluationFromAttendanceSheet()
     });
 subjectSelect.addEventListener("change",
     () => {
         enableTermSelect(),
             enableNavReportsAndContactBtns(),
-            fetchCourseAndLessons()
+            fetchCourseAndLessons(),
+            removeEvaluationFromAttendanceSheet()
     });
-termSelect.addEventListener("change",
-    () => {
-        enableNavFormsBtns();
-    });
+termSelect.addEventListener("change", () => {
+    enableNavFormsBtns(),
+        removeEvaluationFromAttendanceSheet()
+});
 
+// form btn
+btnAttendanceSheet.addEventListener("click", () => toggleMainVisibility(mainAttendanceSheet, btnAttendanceSheet));
 
-btnAttendanceSheet.addEventListener("click", () => populateAttendanceSheetWithStudents()); // form btn
-
-periodSelect.addEventListener("change", () => populateAttendanceSheetWithMarks());
+periodsSelect.addEventListener("change", () => populateAttendanceSheetWithMarks());
 checkboxEvaluationDay.addEventListener("change", () => createEvaluation());
-
 
 
 
@@ -97,15 +105,7 @@ const fetchCourseAndLessons = async () => {
             lessons = course.lessons;
 
             // ATTENDANCE SHEET NECESSARY DATA
-
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = "courseId";
-            input.value = course.id;
-            input.required = true;
-
-            const sectionLesson = periodSelect.parentNode.parentNode;
-            sectionLesson.append(input);
+            inputCourseId.value = course.id;
         })
         .catch(error => console.log(error))
 };
@@ -151,11 +151,11 @@ const removeChildNodes = (elem) => {
     [...elem.childNodes].map(node => node.remove());
 };
 
-const setSelectTitle = (title, select) => {
+const setSelectTitle = (title, select) => { // must be called only after other select options are created
     const option = document.createElement("option");
     option.innerText = title;
     option.disabled = true;
-    if (select.options.length != 1) {
+    if (select.options.length != 1) { // else, if select has only one available enabled option, that option will be automatically selected
         option.selected = true;
     }
     select.prepend(option);
@@ -172,15 +172,21 @@ const createSelectOption = (value, innerText, select) => {
 
 
 const populateSchoolSelect = () => {
-
     classes.forEach(c => {
         createSelectOption(c.school.id, c.school.name, schoolSelect);
     });
-    sortSelect(schoolSelect);
-
+    if (schoolSelect.options.length < 2) { // there is only one school
+        toggleMainVisibility(mainHome);
+        disableNavReportsAndContactBtns();
+        disableNavFormsBtns();
+        populateClassSelect();
+        populateTermSelect();
+    } else {
+        sortSelect(schoolSelect);
+        setSelectTitle("Turma", classSelect);
+    }
     setSelectTitle("Escola", schoolSelect);
     setSelectTitle("Disciplina", subjectSelect);
-    setSelectTitle("Turma", classSelect);
     setSelectTitle("Etapa", termSelect);
 }
 
@@ -188,24 +194,26 @@ const populateClassSelect = () => {
     const selectedSchool = getSelectedOption(schoolSelect);
     removeChildNodes(classSelect);
     removeChildNodes(ulStudents);
-    if (subjectSelect.disabled == false) { // another school had already been selected
+    if (subjectSelect.disabled == false) { // another class had already been selected
         removeChildNodes(subjectSelect);
         setSelectTitle("Disciplina", subjectSelect);
         subjectSelect.disabled = true;
         termSelect.disabled = true;
         disableNavReportsAndContactBtns();
     }
-
     classes.forEach(c => {
         if (selectedSchool.innerText == c.school.name) {
             createSelectOption(c.id, c.code, classSelect);
         }
     });
-    if (classSelect.options.length < 2) { // there are many classes
+    if (classSelect.options.length < 2) { // there is only one class
         populateSubjectSelect();
         listStudents();
+        populateTableWithStudents(tbodyAttendanceSheet);
+        removeEvaluationFromAttendanceSheet();
+    } else {
+        sortSelect(classSelect);
     }
-    sortSelect(classSelect);
     setSelectTitle("Turma", classSelect);
     classSelect.disabled = false;
 };
@@ -221,13 +229,16 @@ const populateSubjectSelect = () => {
             });
         }
     });
-    if (subjectSelect.options.length > 1) { termSelect.disabled = true; }
-    else {
+    if (subjectSelect.options.length < 2) {  // there is only one subject
         enableTermSelect();
         enableNavReportsAndContactBtns();
         fetchCourseAndLessons();
+        removeEvaluationFromAttendanceSheet();
     }
-    sortSelect(subjectSelect);
+    else {
+        termSelect.disabled = true;
+        sortSelect(subjectSelect);
+    }
     setSelectTitle("Disciplina", subjectSelect);
     subjectSelect.disabled = false;
 };
@@ -248,6 +259,8 @@ const populateTermSelect = () => {
     sortSelect(termSelect);
     setSelectTitle(yearDivision, termSelect);
     termSelect.disabled = true;
+
+    removeEvaluationFromAttendanceSheet();
 };
 
 const enableTermSelect = () => {
@@ -279,6 +292,21 @@ const disableNavFormsBtns = () => {
 
 
 
+
+const toggleMainVisibility = (main, navButton) => {
+    if (main.hidden) {
+        mains.forEach(main => main.hidden = true);
+        main.hidden = false;
+        navButtons.forEach(btn => btn.classList.remove("selected"));
+        if (navButton && !navButton.classList.contains("selected")) {
+            navButton.classList.add("selected");
+        }
+    }
+};
+
+
+
+
 /**************** 
     MAIN HOME
 ****************/
@@ -287,7 +315,7 @@ const listStudents = () => {
     const selectedClass = getSelectedOption(classSelect);
     removeChildNodes(ulStudents);
     classes.forEach(c => {
-        if (c.code == selectedClass.value) {
+        if (c.id == selectedClass.value) {
             const students = c.students;
             students.forEach(student => {
                 if (student.name) {
@@ -300,25 +328,13 @@ const listStudents = () => {
     });
 };
 
+/****************** 
+    OTHER MAINS
+******************/
 
-
-/**************************** 
-    MAIN ATTENDANCE SHEET
-****************************/
-
-/**** ATTENDANCE ****/
-
-const populateAttendanceSheetWithStudents = () => {
-
-    mainHome.hidden = true;
-    mainAttendanceSheet.hidden = false;
-
-    if (btnAttendanceSheet.classList.contains("selected")) { return; }
-    btnAttendanceSheet.classList.add("selected");
-
+const populateTableWithStudents = (tbody) => {
     const selectedClass = getSelectedOption(classSelect);
-    removeChildNodes(tbodyAttendanceSheet);
-
+    removeChildNodes(tbody);
     classes.forEach(c => {
         if (c.id == selectedClass.value) {
             const students = c.students;
@@ -335,7 +351,7 @@ const populateAttendanceSheetWithStudents = () => {
                     name.className = "student-name";
                     name.innerText = student.name;
 
-                    tbodyAttendanceSheet.append(tr);
+                    tbody.append(tr);
                     tr.append(number, name);
                 }
             });
@@ -343,9 +359,15 @@ const populateAttendanceSheetWithStudents = () => {
     });
 };
 
+/**************************** 
+    MAIN ATTENDANCE SHEET
+****************************/
+
+/**** ATTENDANCE ****/
+
 const populateAttendanceSheetWithMarks = () => {
 
-    const selected = getSelectedOption(periodSelect);
+    const selected = getSelectedOption(periodsSelect);
     const numberOfPeriods = selected.value;
 
     const rows = tbodyAttendanceSheet.childNodes;
@@ -434,12 +456,20 @@ const checkAttendance = (input) => {
 
 /**** NEW EVALUATION ****/
 
+const removeEvaluationFromAttendanceSheet = () => {
+    sectionSetEvaluation.style.marginTop = "0";
+    sectionSetEvaluation.style.marginBottom = "0";
+    sectionSetEvaluation.style.backgroundColor = "";
+    removeChildNodes(divEvaluationInfo);
+
+    if (checkboxEvaluationDay.checked) {
+        checkboxEvaluationDay.checked = false;
+    }
+};
+
 const createEvaluation = async () => {
     if (!checkboxEvaluationDay.checked) {
-        sectionSetEvaluation.style.marginTop = "0";
-        sectionSetEvaluation.style.marginBottom = "0";
-        sectionSetEvaluation.style.backgroundColor = "";
-        removeChildNodes(divEvaluationInfo);
+        removeEvaluationFromAttendanceSheet();
     } else {
         let evaluationsCount = 0;
         const term = getSelectedOption(termSelect).value;

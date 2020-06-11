@@ -2,67 +2,58 @@ const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Studen
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-// const getTeacherData = async (user) => {
+const getTeacherData = async (user) => {
 
-//     let subjectsIds = [];
-//     let classesIds = [];
-//     let subjects = [];
-//     let classes = [];
-//     let classesStudents = [];
-//     let students = []; // {id, number, name}
-//     let schools = [];
+    let subjectsIds = [];
+    let classesIds = [];
+    let subjects = [];
+    let classes = [];
+    let classesStudents = [];
+    let students = []; // {id, number, name}
+    let schools = [];
 
-//     const teacher = await Teacher.findOne({ where: { userId: user.id } });
-//     const courses = await Course.findAll({ where: { teacherId: teacher.id } });
+    const teacher = await Teacher.findOne({ where: { userId: user.id } });
+    const courses = await Course.findAll({ where: { teacherId: teacher.id } });
 
-//     for (course of courses) {
-//         subjectsIds.push(course.subjectId);
-//         classesIds.push(course.classId);
-//     }
-//     // SUBJECTS
-//     for (id of subjectsIds) {
-//         let subject = await Subject.findOne({ where: { id } });
-//         subjects.push(subject);
-//     }
-//     // CLASSES AND CLASS_STUDENTS
-//     for (id of classesIds) {
-//         let c = await Class.findOne({ where: { id } });
-//         let thisClassStudents = await Class_Student.findAll({ where: { classId: id } });
-//         classes.push(c);
-//         classesStudents.push(...thisClassStudents);
-//     }
-//     // STUDENTS
-//     for (student of classesStudents) {
-//         let thisStudent = await Student.findOne({ where: { id: student.studentId } });
-//         students.push({
-//             id: thisStudent.id,
-//             number: student.number,
-//             name: thisStudent.name
-//         });
-//     }
-//     // SCHOOLS
-//     for (c of classes) {
-//         let school = await School.findOne({ where: { id: c.schoolId } });
-//         schools.push(school);
-//     }
-//     // DATA
-//     return {
-//         user,
-//         subjects,
-//         classes,
-//         schools,
-//         students
-//     };
-// }
-
-// const getTeacherData = async (user) => {
-//     const schools = await School.findAll({
-//         where: {
-//             userId: user.id
-//         }
-//     });
-//     return { user, schools };
-// };
+    for (course of courses) {
+        subjectsIds.push(course.subjectId);
+        classesIds.push(course.classId);
+    }
+    // SUBJECTS
+    for (id of subjectsIds) {
+        let subject = await Subject.findOne({ where: { id } });
+        subjects.push(subject);
+    }
+    // CLASSES AND CLASS_STUDENTS
+    for (id of classesIds) {
+        let c = await Class.findOne({ where: { id } });
+        let thisClassStudents = await Class_Student.findAll({ where: { classId: id } });
+        classes.push(c);
+        classesStudents.push(...thisClassStudents);
+    }
+    // STUDENTS
+    for (student of classesStudents) {
+        let thisStudent = await Student.findOne({ where: { id: student.studentId } });
+        students.push({
+            id: thisStudent.id,
+            number: student.number,
+            name: thisStudent.name
+        });
+    }
+    // SCHOOLS
+    for (c of classes) {
+        let school = await School.findOne({ where: { id: c.schoolId } });
+        schools.push(school);
+    }
+    // DATA
+    return {
+        user,
+        subjects,
+        classes,
+        schools,
+        students
+    };
+}
 
 const getTeacher = async (user) => {
     const teacher = await Teacher.findOne({
@@ -84,11 +75,8 @@ module.exports = {
     renderHome: async (req, res) => {
         // USER IS LOGGED IN
         const user = req.session.user;
-        // GET TEACHER'S DATA
-        // let data = await getTeacherData(user);
         const teacher = await getTeacher(user);
         // RENDER PAGE WITH DATA
-        // return res.render("teacher", data);
         return res.render("teacher", { user, teacher });
     },
 

@@ -23,14 +23,15 @@
         </div>
     </nav>
 
-    <main id="home" style="margin-left: 450px;margin-top: 56px;" hidden>
+    <main id="home">
         <ul id="ul-students"></ul>
     </main>
 
-    <main id="attendance-sheet">
+    <main id="attendance-sheet" hidden>
         <form id="form-attendance-sheet" action="/professor/fazer-chamada" method="POST">
 
             <section id="lesson">
+                <input type="hidden" name="courseId" id="input-courseId" required>
                 <div class="selectors">
                     <input type="date" name="date" id="date" required
                         value=<%= new Date().toISOString().substr(0, 10) %> />
@@ -67,7 +68,7 @@
                 </table>
             </section>
 
-            <button type="submit" class="special">Salvar chamada</button>
+            <button type="submit" class="special">Salvar</button>
 
         </form>
     </main>
