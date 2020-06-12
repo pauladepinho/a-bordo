@@ -29,8 +29,8 @@ const ulStudents = document.getElementById("ul-students");
 
 // MAIN ATTENDANCE SHEET
 const periodsSelect = document.getElementById("periods"); // attendance-related
-const tbodyAttendanceSheet = document.getElementById("tbody-attendance-sheet");
 const inputCourseId = document.getElementById("input-courseId");
+const tbodyAttendanceSheet = document.getElementById("tbody-attendance-sheet");
 
 const checkboxEvaluationDay = document.getElementById("evaluation-day"); // new-evaluation-related
 const sectionSetEvaluation = document.getElementById("set-evaluation");
@@ -39,33 +39,36 @@ const divEvaluationInfo = document.getElementById("evaluation-info");
 // MAIN GRADEBOOK
 const qntBarsSelect = document.getElementById("qnt-bars");
 const divContainer = document.getElementById("container");
+const divInputFields = document.getElementById("input-fields");
+
+const tbodyGradebook = document.getElementById("tbody-gradebook");
+
+
 
 
 
 window.addEventListener("load", () => fetchData());
 
-schoolSelect.addEventListener("change",
-    () => {
-        toggleMainVisibility(mainHome),
-            disableNavReportsAndContactBtns(),
-            disableNavFormsBtns(),
-            populateClassSelect(),
-            populateTermSelect()
-    });
-classSelect.addEventListener("change",
-    () => {
-        populateSubjectSelect(),
-            listStudents(),
-            populateTableWithStudents(tbodyAttendanceSheet),
-            removeEvaluationFromAttendanceSheet()
-    });
-subjectSelect.addEventListener("change",
-    () => {
-        enableTermSelect(),
-            enableNavReportsAndContactBtns(),
-            fetchCourseLessonsAndEvaluations(),
-            removeEvaluationFromAttendanceSheet()
-    });
+schoolSelect.addEventListener("change", () => {
+    toggleMainVisibility(mainHome),
+        disableNavReportsAndContactBtns(),
+        disableNavFormsBtns(),
+        populateClassSelect(),
+        populateTermSelect()
+});
+classSelect.addEventListener("change", () => {
+    populateSubjectSelect(),
+        listStudents(),
+        populateTableWithStudents(tbodyAttendanceSheet),
+        populateTableWithStudents(tbodyGradebook),
+        removeEvaluationFromAttendanceSheet()
+});
+subjectSelect.addEventListener("change", () => {
+    enableTermSelect(),
+        enableNavReportsAndContactBtns(),
+        fetchCourseLessonsAndEvaluations(),
+        removeEvaluationFromAttendanceSheet()
+});
 termSelect.addEventListener("change", () => {
     enableNavFormsBtns(),
         removeEvaluationFromAttendanceSheet(),
@@ -136,7 +139,7 @@ const getTermEvaluations = () => {
         }
     });
     populateQntBarsSelect();
-    populateDivContainer();
+    setGradeBookChart();
 };
 
 
@@ -239,6 +242,7 @@ const populateClassSelect = () => { // when a school is selected
         populateSubjectSelect();
         listStudents();
         populateTableWithStudents(tbodyAttendanceSheet);
+        populateTableWithStudents(tbodyGradebook);
         removeEvaluationFromAttendanceSheet();
     } else {
         sortSelect(classSelect);
@@ -362,6 +366,9 @@ const listStudents = () => {
 ******************/
 
 const populateTableWithStudents = (tbody) => {
+
+    console.log(tbody);
+
     const selectedClass = getSelectedOption(classSelect);
     removeChildNodes(tbody);
     classes.forEach(c => {
@@ -645,6 +652,11 @@ const populateQntBarsSelect = () => {
     qntBarsSelect.append(optionDivider, optionAdd, optionDel);
 };
 
+const setGradeBookChart = () => {
+    populateDivContainer();
+    createChartControllers();
+};
+
 const populateDivContainer = () => {
     removeChildNodes(divContainer);
     let possibleTotalPoints = 0;
@@ -665,21 +677,32 @@ const createChartBar = (eval, possibleTotalPoints) => {
     divContainer.append(bar);
 };
 
+const createChartControllers = () => {
+    removeChildNodes(divInputFields);
+    termEvaluations.forEach(eval => {
+        const div = document.createElement("div");
+
+        const label = document.createElement("label");
+        label.className = "title";
+        label.style.color = eval[0].color;
+        label.innerText = eval[0].title;
+
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = 0;
+        input.max = 10; /////////////////////////////////////////////////////////////////////////
+        input.step = 0.5;
+        input.classList.add("max-grade", `evaluation${eval[0].id}`);
+        input.name = `max-grade-evaluation${eval[0].id}`;
+        input.value = `${Number(eval[0].maxGrade).toFixed(1)}`;
+
+        divInputFields.append(div);
+        div.append(label);
+        label.append(input);
+    });
+};
 
 /*
-
-    <div id="input-fields">
-        <% evaluations.forEach(evaluation => { %>
-            <div>
-                <label class="title" style=< <%= evaluation.title %></label>
-
-                <input class="<%= 'max-grade evaluation' + evaluation.number %>" type='number'
-                value="<%= evaluation.maxGrade.toFixed(1) %>" step='0.5' min='0' max='10'
-                name=<%= "max-grade-evaluation" + evaluation.number %>>
-            </div>
-        <% }) %>
-    </div >
-
 
     <section class="table">
 

@@ -23,9 +23,15 @@
         </div>
     </nav>
 
+
+
+
     <main id="home">
         <ul id="ul-students"></ul>
     </main>
+
+
+
 
     <main id="attendance-sheet" hidden>
         <form id="form-attendance-sheet" action="/professor/fazer-chamada" method="POST">
@@ -73,6 +79,9 @@
         </form>
     </main>
 
+
+
+
     <main id="grade" hidden>
         <form action="/professor/lancar-nota" method="POST">
 
@@ -97,7 +106,7 @@
                         <div id="disclaimer"></div>
                     </div>
                     <div id="input-fields">
-                        <%# evaluations.forEach(evaluation => { %>
+                        <!-- <%# evaluations.forEach(evaluation => { %>
                         <div>
                             <label class="title" style=<%#= "color:" + evaluation.color %>> <%#= evaluation.title %>
                             </label>
@@ -105,14 +114,14 @@
                                 value="<%#= evaluation.maxGrade.toFixed(1) %>" step='0.5' min='0' max='10'
                                 name=<%#= "max-grade-evaluation" + evaluation.number %>>
                         </div>
-                        <%# }) %>
+                        <%# }) %> -->
                     </div>
                     <div id="container">
-                        <%# evaluations.forEach(evaluation => { %>
+                        <!-- <%# evaluations.forEach(evaluation => { %>
                         <div class="<%#= 'bar evaluation' + evaluation.number %>"
                             style="<%#= 'width:' + Math.round(100 * (evaluation.maxGrade / possibleTotalPoints)) + '%; background-color:' + evaluation.color %>">
                         </div>
-                        <%# }) %>
+                        <%# }) %> -->
                     </div>
                 </div>
             </section>
@@ -133,7 +142,7 @@
                             <th class="term-final-grade">MÉDIA</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody-gradebook">
                         <%# students.forEach(student => { %>
                         <tr>
                             <td class="student-number"><%#= student.number %></th>
@@ -175,6 +184,8 @@
                     </tbody>
                 </table>
             </section>
+
+            <button type="submit" class="special">Salvar</button>
         </form>
     </main>
 
