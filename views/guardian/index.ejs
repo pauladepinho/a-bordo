@@ -6,9 +6,11 @@
 
     <nav>
         <div class="navbar select">
-            <select name="school" id="school" required>
+            <select name="student" id="student" required>
                 <option disabled selected>Aluno</option>
-                <option value="0">123 de Oliveira 4</option>
+                <% for(student of data.students) { %>
+                <option value="<%= student.id %>"><%= student.name %></option>
+                <% } %>
             </select>
 
             <select name="school" id="school" required>
@@ -19,21 +21,31 @@
 
             <select name="school" id="school" required>
                 <option disabled selected>Escola</option>
-                <option value="0">Colégio Pedro II</option>
-                <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá</option>
+                <% for(school of data.schools) { %>
+                <option value="<%= school.id %>"><%= school.name %></option>
+                <% } %>
             </select>
 
             <select name="class" id="class" required>
                 <option value="" disabled selected>Turma</option>
-                <option value="2223">Turma 2223</option>
-                <option value="1121">Turma 1121</option>
+                <% for(clas of data.classes) { %>
+                <option value="<%= clas.id %>">Turma <%= clas.code %></option>
+                <% } %>
             </select>
 
             <select name="term" id="term" required>
-                <option value="all" selected>Todos os trimestres</option>
+                <% if (data.schools[0].academicTerms == 4) { %>
+                <option value="all" selected>Todos os Bimestres</option>
+                <option value="1">1º Bimestre</option>
+                <option value="2">2º Bimestre</option>
+                <option value="3">3º Bimestre</option>
+                <option value="4">4º Bimestre</option>
+                <% } else if (data.schools[0].academicTerms == 3) { %>
+                <option value="all" selected>Todos os Trimestres</option>
                 <option value="1">1º Trimestre</option>
                 <option value="2">2º Trimestre</option>
                 <option value="3">3º Trimestre</option>
+                <% } %>
             </select>
         </div>
 
