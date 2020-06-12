@@ -1010,7 +1010,7 @@ main#attendance-sheet section.table {
   overflow: auto;
 }
 
-
+section.table th, section.table td { border: none; }
 
 
 

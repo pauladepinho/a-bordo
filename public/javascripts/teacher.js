@@ -1,10 +1,5 @@
 const endpoint = "http://localhost:3000/api/";
 
-let teacher;
-let classes;
-let course;
-let lessons;
-
 // NAV SELECTS
 const schoolSelect = document.getElementById("school");
 const classSelect = document.getElementById("class");
@@ -23,10 +18,11 @@ const navButtons = [btnAttendanceSheet, btnGradebook, btnRecords, btnStatistics,
 // MAINS
 const mainHome = document.getElementById("home");
 const mainAttendanceSheet = document.getElementById("attendance-sheet");
+const mainGradebook = document.getElementById("grade");
 
-const mains = [mainHome, mainAttendanceSheet];
+const mains = [mainHome, mainAttendanceSheet, mainGradebook];
 
-// MAINS' CHILD ELEMENTS
+// MAINS' CHILDREN ELEMENTS
 
 // MAIN HOME
 const ulStudents = document.getElementById("ul-students");
@@ -39,6 +35,10 @@ const inputCourseId = document.getElementById("input-courseId");
 const checkboxEvaluationDay = document.getElementById("evaluation-day"); // new-evaluation-related
 const sectionSetEvaluation = document.getElementById("set-evaluation");
 const divEvaluationInfo = document.getElementById("evaluation-info");
+
+// MAIN GRADEBOOK
+const qntBarsSelect = document.getElementById("qnt-bars");
+const divContainer = document.getElementById("container");
 
 
 
@@ -63,12 +63,13 @@ subjectSelect.addEventListener("change",
     () => {
         enableTermSelect(),
             enableNavReportsAndContactBtns(),
-            fetchCourseAndLessons(),
+            fetchCourseLessonsAndEvaluations(),
             removeEvaluationFromAttendanceSheet()
     });
 termSelect.addEventListener("change", () => {
     enableNavFormsBtns(),
-        removeEvaluationFromAttendanceSheet()
+        removeEvaluationFromAttendanceSheet(),
+        getTermEvaluations()
 });
 
 // form btn
@@ -77,7 +78,20 @@ btnAttendanceSheet.addEventListener("click", () => toggleMainVisibility(mainAtte
 periodsSelect.addEventListener("change", () => populateAttendanceSheetWithMarks());
 checkboxEvaluationDay.addEventListener("change", () => createEvaluation());
 
+// form btn
+btnGradebook.addEventListener("click", () => {
+    toggleMainVisibility(mainGradebook, btnGradebook)
+});
 
+// qntBarsSelect.addEventListener("change", );
+
+
+
+let teacher = {};
+let classes = [];
+let course = {};
+let lessons = [];
+let termEvaluations = [];
 
 
 
@@ -94,7 +108,7 @@ const fetchData = () => {
         .catch(error => console.log(error))
 };
 
-const fetchCourseAndLessons = async () => {
+const fetchCourseLessonsAndEvaluations = async () => {
     const teacherId = teacher.id;
     const subjectId = getSelectedOption(subjectSelect).value;
     const classId = getSelectedOption(classSelect).value;
@@ -106,10 +120,24 @@ const fetchCourseAndLessons = async () => {
 
             // ATTENDANCE SHEET NECESSARY DATA
             inputCourseId.value = course.id;
+
+            getTermEvaluations();
         })
         .catch(error => console.log(error))
 };
 
+const getTermEvaluations = () => {
+    termEvaluations = [];
+    const term = getSelectedOption(termSelect).value;
+    if (!term) { return; }
+    lessons.forEach(lesson => {
+        if (lesson.academicTerm == term && lesson.evaluations.length) {
+            termEvaluations.push(lesson.evaluations);
+        }
+    });
+    populateQntBarsSelect();
+    populateDivContainer();
+};
 
 
 
@@ -153,6 +181,7 @@ const removeChildNodes = (elem) => {
 
 const setSelectTitle = (title, select) => { // must be called only after other select options are created
     const option = document.createElement("option");
+    option.value = "";
     option.innerText = title;
     option.disabled = true;
     if (select.options.length != 1) { // else, if select has only one available enabled option, that option will be automatically selected
@@ -190,7 +219,7 @@ const populateSchoolSelect = () => {
     setSelectTitle("Etapa", termSelect);
 }
 
-const populateClassSelect = () => {
+const populateClassSelect = () => { // when a school is selected
     const selectedSchool = getSelectedOption(schoolSelect);
     removeChildNodes(classSelect);
     removeChildNodes(ulStudents);
@@ -218,7 +247,7 @@ const populateClassSelect = () => {
     classSelect.disabled = false;
 };
 
-const populateSubjectSelect = () => {
+const populateSubjectSelect = () => { // when a class is selected
     const selectedClass = getSelectedOption(classSelect);
     removeChildNodes(subjectSelect);
     classes.forEach(c => {
@@ -232,7 +261,7 @@ const populateSubjectSelect = () => {
     if (subjectSelect.options.length < 2) {  // there is only one subject
         enableTermSelect();
         enableNavReportsAndContactBtns();
-        fetchCourseAndLessons();
+        fetchCourseLessonsAndEvaluations();
         removeEvaluationFromAttendanceSheet();
     }
     else {
@@ -243,7 +272,7 @@ const populateSubjectSelect = () => {
     subjectSelect.disabled = false;
 };
 
-const populateTermSelect = () => {
+const populateTermSelect = () => { // when a school is selected
     const selectedSchool = getSelectedOption(schoolSelect);
     removeChildNodes(termSelect);
     let yearDivision;
@@ -263,7 +292,7 @@ const populateTermSelect = () => {
     removeEvaluationFromAttendanceSheet();
 };
 
-const enableTermSelect = () => {
+const enableTermSelect = () => { // when a subject is selected
     termSelect.disabled = false;
 };
 
@@ -587,3 +616,129 @@ const toggleColorPicker = (colorPicker) => {
     if (colorPicker.hidden) { colorPicker.hidden = false; }
     else { colorPicker.hidden = true; }
 };
+
+/*****************
+    MAIN GRADE
+*****************/
+
+const populateQntBarsSelect = () => {
+    removeChildNodes(qntBarsSelect);
+    termEvaluations.forEach(eval => {
+        createSelectOption(eval[0].id, eval[0].title, qntBarsSelect);
+    });
+    sortSelect(qntBarsSelect);
+    setSelectTitle("Selecione uma avaliação", qntBarsSelect);
+
+    const optionDivider = document.createElement("option");
+    optionDivider.value = "";
+    optionDivider.innerText = "•-•-•-•-•";
+    optionDivider.disabled = true;
+
+    const optionAdd = document.createElement("option");
+    optionAdd.value = "add";
+    optionAdd.innerText = "Adicionar uma nova avaliação";
+
+    const optionDel = document.createElement("option");
+    optionDel.value = "del";
+    optionDel.innerText = "Excluir avaliação selecionada";
+
+    qntBarsSelect.append(optionDivider, optionAdd, optionDel);
+};
+
+const populateDivContainer = () => {
+    removeChildNodes(divContainer);
+    let possibleTotalPoints = 0;
+    termEvaluations.forEach(eval => {
+        possibleTotalPoints += Number(eval[0].maxGrade);
+    });
+    termEvaluations.forEach(eval => {
+        createChartBar(eval, possibleTotalPoints);
+    });
+};
+
+const createChartBar = (eval, possibleTotalPoints) => {
+    const bar = document.createElement("div");
+    bar.classList.add("bar", `evaluation${eval[0].id}`);
+    bar.style.width = Math.round(100 * Number(eval[0].maxGrade) / possibleTotalPoints) + "%";
+    bar.style.backgroundColor = eval[0].color;
+
+    divContainer.append(bar);
+};
+
+
+/*
+
+    <div id="input-fields">
+        <% evaluations.forEach(evaluation => { %>
+            <div>
+                <label class="title" style=< <%= evaluation.title %></label>
+
+                <input class="<%= 'max-grade evaluation' + evaluation.number %>" type='number'
+                value="<%= evaluation.maxGrade.toFixed(1) %>" step='0.5' min='0' max='10'
+                name=<%= "max-grade-evaluation" + evaluation.number %>>
+            </div>
+        <% }) %>
+    </div >
+
+
+    <section class="table">
+
+        <table class="table-striped">
+            <thead>
+                <tr>
+                    <th class="student-number">Nº</th>
+                    <th class="student-name">ALUNO</th>
+
+                    <% evaluations.forEach(evaluation => { %>
+                        <th class="<%= 'evaluation evaluation' + evaluation.id %>">
+                            <label class="title" style=< <%= evaluation.title %></label>
+                        </th>
+                    <% }) %>
+
+                    <th class="not-evaluated" id="not-evaluated-header">N/A</th>
+                    <th class="term-final-grade">MÉDIA</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% students.forEach(student => { %>
+                    <tr>
+                        <td class="student-number"><%= student.number %></th>
+                        <td class="student-name"><%= student.name %></td>
+
+                        <% evaluations.forEach(evaluation => {
+                            this.student_id = student.id;
+                        %>
+                            <td class="<%= 'evaluation evaluation' + evaluation.id %>" %>>
+                                <input type="number" name=<%= "student" + student.id + "-grades[]" %> max="10" min="0" step="0.5" value="<%= evaluation.grade %>" placeholder="Nota" disabled>
+                            </td>
+                        <% }) %>
+
+                        <td class="not-evaluated" id=<%= "student" + student.id + "not-evaluated-check" %>>
+                            <label for="not-evaluated" class="checkbox-container">
+                                <input type="checkbox" name="not-evaluated" id="not-evaluated" />
+                                <span class="checkmark"></span>
+                            </label>
+                        </td>
+
+                        <%
+                            let totalPoints = 0;
+                            let gradedEvaluations = 0;
+                            evaluations.forEach(evaluation => {
+                                if(evaluation.grade != null) {
+                                    totalPoints += Number(evaluation.grade);
+                                    gradedEvaluations++;
+                                }
+                            });
+                        %>
+
+                        <td class="term-final-grade" id=<%= "student" + student.id + "-term-final-grade" %>>
+                            <%= Math.round(totalPoints / gradedEvaluations).toFixed(1) %>
+                        </td>
+                    </tr >
+                <% }) %>
+            </tbody >
+        </table >
+    </section >
+
+*/

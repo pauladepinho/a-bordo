@@ -73,5 +73,110 @@
         </form>
     </main>
 
+    <main id="grade" hidden>
+        <form action="/professor/lancar-nota" method="POST">
+
+            <section class="table-settings">
+                <div class="selectors">
+                    <!-- OBS. CHANGE SELECT ID -->
+                    <select name="evaluation" id="qnt-bars">
+                        <!-- <option selected disabled>Selecione uma avaliação</option>
+                        <%# evaluations.forEach(evaluation => { %>
+                        <option value=<%#= evaluation.number %>>
+                            <%#= evaluation.title %>
+                        </option>
+                        <%# }) %>
+                        <option value="+">Adicionar uma nova avaliação</option>
+                        <option value="-" disabled>Excluir avaliação selecionada</option> -->
+                    </select>
+                </div>
+
+                <div class="chart">
+                    <div id="instructions">
+                        <p>Valor de cada avaliação:</p>
+                        <div id="disclaimer"></div>
+                    </div>
+                    <div id="input-fields">
+                        <%# evaluations.forEach(evaluation => { %>
+                        <div>
+                            <label class="title" style=<%#= "color:" + evaluation.color %>> <%#= evaluation.title %>
+                            </label>
+                            <input class="<%#= 'max-grade evaluation' + evaluation.number %>" type='number'
+                                value="<%#= evaluation.maxGrade.toFixed(1) %>" step='0.5' min='0' max='10'
+                                name=<%#= "max-grade-evaluation" + evaluation.number %>>
+                        </div>
+                        <%# }) %>
+                    </div>
+                    <div id="container">
+                        <%# evaluations.forEach(evaluation => { %>
+                        <div class="<%#= 'bar evaluation' + evaluation.number %>"
+                            style="<%#= 'width:' + Math.round(100 * (evaluation.maxGrade / possibleTotalPoints)) + '%; background-color:' + evaluation.color %>">
+                        </div>
+                        <%# }) %>
+                    </div>
+                </div>
+            </section>
+
+            <section class="table">
+                <table class="table-striped">
+                    <thead>
+                        <tr>
+                            <th class="student-number">Nº</th>
+                            <th class="student-name">ALUNO</th>
+
+                            <%# evaluations.forEach(evaluation => { %>
+                            <th class="<%#= 'evaluation evaluation' + evaluation.id %>"><label class="title"
+                                    style=<%#= 'color:' + evaluation.color %>><%#= evaluation.title %></label></th>
+                            <%# }) %>
+
+                            <th class="not-evaluated" id="not-evaluated-header">N/A</th>
+                            <th class="term-final-grade">MÉDIA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%# students.forEach(student => { %>
+                        <tr>
+                            <td class="student-number"><%#= student.number %></th>
+                            <td class="student-name"><%#= student.name %></td>
+
+
+                            <%# evaluations.forEach(evaluation => { 
+                            this.student_id = student.id;
+                            %>
+
+                            <td class="<%#= 'evaluation evaluation' + evaluation.id %>" %>>
+                                <input type="number" name=<%#= "student" + student.id + "-grades[]" %> max="10" min="0"
+                                    step="0.5" value="<%#= evaluation.grade %>" placeholder="Nota" disabled></td>
+
+                            <%# }) %>
+
+
+                            <td class="not-evaluated" id=<%#= "student" + student.id + "not-evaluated-check" %>>
+                                <label for="not-evaluated" class="checkbox-container">
+                                    <input type="checkbox" name="not-evaluated" id="not-evaluated" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+
+                            <%# 
+                                let totalPoints = 0;
+                                let gradedEvaluations = 0;
+                                evaluations.forEach(evaluation => {
+                                    if(evaluation.grade != null) {
+                                    totalPoints += Number(evaluation.grade);
+                                    gradedEvaluations++;
+                                    }
+                                });
+                            %>
+                            <td class="term-final-grade" id=<%#= "student" + student.id + "-term-final-grade" %>>
+                                <%#= Math.round(totalPoints / gradedEvaluations).toFixed(1) %> </td>
+                        </tr>
+                        <%# }) %>
+                    </tbody>
+                </table>
+            </section>
+        </form>
+    </main>
+
     <script src="../../javascripts/teacher.js"></script>
     <%- include("../partials/footer.ejs") %>

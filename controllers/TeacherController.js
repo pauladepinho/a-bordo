@@ -295,9 +295,10 @@ module.exports = {
         // USER IS LOGGED IN
         const user = req.session.user;
         // GET TEACHER'S DATAS
-        let data = await getTeacherData(user);
+        // let data = await getTeacherData(user);
         // RENDER PAGE WITH DATA
-        return res.render("teacher/grade", data);
+        // return res.render("teacher/grade", data);
+        return res.render("teacher/grade", {user});
     },
 
     // POST professor/lancar-notas

@@ -130,7 +130,11 @@ module.exports = {
             include: {
                 model: Lesson, as: "lessons",
                 attributes: { exclude: ["CourseId"] },
-                include: { model: Evaluation, as: "evaluations" }
+                include:
+                {
+                    model: Evaluation, as: "evaluations",
+                    attributes: { exclude: ["LessonId"] }
+                }
             },
             attributes: { exclude: ["TeacherId"] }
         })
