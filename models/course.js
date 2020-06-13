@@ -26,9 +26,16 @@ module.exports = (sequelize, DataTypes) => {
     Course.belongsTo(models.Class, {
       as: "class"
     });
+
     Course.hasMany(models.Lesson, {
       as: "lessons",
       foreignkey: "courseId"
+    });
+
+    Course.belongsToMany(models.Student, {
+      as: "repeaters",
+      foreignkey: "courseId",
+      through: models.Repeater
     });
   };
   return Course;

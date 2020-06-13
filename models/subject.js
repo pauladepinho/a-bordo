@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     });
   Subject.associate = function (models) {
     // associations can be defined here
-
+    Subject.hasMany(models.Course, {
+      as: "courses",
+      foreignKey: "subjectId"
+    });
     Subject.belongsToMany(models.Teacher, {
       as: "teachers",
       through: models.Course,
@@ -26,10 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       through: models.Course,
       foreignKey: "subjectId"
     });
-    Subject.hasMany(models.Course, {
-      as: "courses",
-      foreignKey: "subjectId"
-    });
+
   };
   return Subject;
 };

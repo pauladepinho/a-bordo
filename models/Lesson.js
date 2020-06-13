@@ -22,14 +22,21 @@ module.exports = (sequelize, DataTypes) => {
     Lesson.belongsTo(models.Course, {
       as: "course"
     });
+
     Lesson.hasMany(models.Attendance, {
       as: "attendances",
       foreignkey: "lessonId"
     });
+    Lesson.belongsToMany(models.Student, {
+      as: "students",
+      foreignkey: "lessonId",
+      through: models.Attendance
+    });
+
     Lesson.hasMany(models.Evaluation, {
       as: "evaluations",
       foreignkey: "lessonId"
-    })
+    });
   };
   return Lesson;
 };

@@ -54,7 +54,14 @@ module.exports = {
 
     // GET /students
     students: async (req, res) => {
-        await Student.findAll()
+        await Student.findAll(
+            {
+                include:
+                {
+                    model: Student_Evaluation, as: "studentEvaluations"
+                }
+            }
+        )
             .then(students => res.status(200).json(students))
             .catch(error => res.status(400).json(error))
     },
@@ -66,7 +73,13 @@ module.exports = {
     },
 
     evaluations: async (req, res) => {
-        await Evaluation.findAll()
+        await Evaluation.findAll(
+            {
+                include: {
+                    model: Student_Evaluation, as: "studentsGrades"
+                }
+            }
+        )
             .then(evaluations => res.status(200).json(evaluations))
             .catch(error => res.status(400).json(error))
     },
@@ -119,7 +132,7 @@ module.exports = {
             .catch(error => res.status(400).json(error))
     },
 
-    // router.get("/lessons/teacher/:teacherId/subject/:subjectId/class/:classId", API_Controller.lessons);
+    // GET /lessons/teacher/:teacherId/subject/:subjectId/class/:classId"
     courseAndlessons: async (req, res) => {
         await Course.findOne({
             where: {
@@ -131,10 +144,20 @@ module.exports = {
                 model: Lesson, as: "lessons",
                 attributes: { exclude: ["CourseId"] },
                 include:
-                {
-                    model: Evaluation, as: "evaluations",
-                    attributes: { exclude: ["LessonId"] }
-                }
+                    [
+                        {
+                            model: Evaluation, as: "evaluations",
+                            attributes: { exclude: ["LessonId"] },
+                            include: {
+                                model: Student_Evaluation,
+                                as: "studentsGrades"
+                            }
+                        },
+                        {
+                            model: Attendance, as: "attendances",
+                            attributes: { exclude: ["LessonId"] }
+                        }
+                    ]
             },
             attributes: { exclude: ["TeacherId"] }
         })

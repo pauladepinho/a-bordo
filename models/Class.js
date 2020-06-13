@@ -23,29 +23,28 @@ module.exports = (sequelize, DataTypes) => {
       as: "school"
     });
 
+    Class.hasMany(models.Course, {
+      as: "courses",
+      foreignKey: "classId"
+    });
     Class.belongsToMany(models.Teacher, {
       as: "teachers",
       through: models.Course,
       foreignKey: "classId"
     });
-
     Class.belongsToMany(models.Subject, {
       as: "subjects",
       through: models.Course,
       foreignKey: "classId"
     });
-    Class.hasMany(models.Course, {
-      as: "courses",
+
+    Class.hasMany(models.Class_Student, {
+      as: "classStudents",
       foreignKey: "classId"
     });
-
     Class.belongsToMany(models.Student, {
       as: "students",
       through: models.Class_Student,
-      foreignKey: "classId"
-    });
-    Class.hasMany(models.Class_Student, {
-      as: "classStudents",
       foreignKey: "classId"
     });
   };

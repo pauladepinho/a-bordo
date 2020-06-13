@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
     });
   Guardian.associate = function (models) {
     // associations can be defined here
+    Guardian.belongsTo(models.User, {
+      as: "user"
+    });
+    Guardian.belongsToMany(models.Student, {
+      as: "kids",
+      foreignkey: "guardianId",
+      through: models.Student_Guardian
+    })
   };
   return Guardian;
 };

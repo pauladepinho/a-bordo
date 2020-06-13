@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       as: "user"
     });
 
+    Teacher.hasMany(models.Course, {
+      as: "courses",
+      foreignkey: "teacherId"
+    });
     Teacher.belongsToMany(models.Class, {
       as: "classes",
       through: models.Course,
@@ -27,10 +31,6 @@ module.exports = (sequelize, DataTypes) => {
     Teacher.belongsToMany(models.Subject, {
       as: "subjects",
       through: models.Course,
-      foreignkey: "teacherId"
-    });
-    Teacher.hasMany(models.Course, {
-      as: "courses",
       foreignkey: "teacherId"
     });
   };

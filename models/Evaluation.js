@@ -21,7 +21,17 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Evaluation.belongsTo(models.Lesson, {
       as: "lesson"
-    })
+    });
+
+    Evaluation.hasMany(models.Student_Evaluation, {
+      as: "studentsGrades",
+      foreignkey: "evaluationId"
+    });
+    Evaluation.belongsToMany(models.Student, {
+      as: "students",
+      foreignkey: "evaluationId",
+      through: models.Student_Evaluation
+    });
   };
   return Evaluation;
 };

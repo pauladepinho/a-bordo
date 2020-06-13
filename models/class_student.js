@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
     });
   Class_Student.associate = function (models) {
     // associations can be defined here
+    Class_Student.belongsTo(models.Class, {
+      as: "class"
+    });
+    Class_Student.belongsTo(models.Student, {
+      as: "student"
+    });
   };
   return Class_Student;
 };

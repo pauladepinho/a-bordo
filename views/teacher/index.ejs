@@ -5,6 +5,7 @@
     <%- include("../partials/teacher-topMenu.ejs") %>
 
     <nav>
+        <!-- <div> -->
         <div class="navbar select">
             <select id="school" required></select>
             <select id="class" required disabled></select>
@@ -21,6 +22,7 @@
                 <li><button id="btn-contact" type="button" disabled>Contactar responsáveis</button></li>
             </ul>
         </div>
+        <!-- </div> -->
     </nav>
 
 
@@ -127,20 +129,23 @@
             </section>
 
             <section class="table">
+
                 <table class="table-striped">
-                    <thead>
-                        <tr>
+                    <thead id="thead-gradebook">
+                        <!-- <tr>
                             <th class="student-number">Nº</th>
                             <th class="student-name">ALUNO</th>
 
                             <%# evaluations.forEach(evaluation => { %>
-                            <th class="<%#= 'evaluation evaluation' + evaluation.id %>"><label class="title"
-                                    style=<%#= 'color:' + evaluation.color %>><%#= evaluation.title %></label></th>
+                            <th class="<%#= 'evaluation evaluation' + evaluation.id %>">
+                                <label class="title"
+                                    style=<%#= 'color:' + evaluation.color %>><%#= evaluation.title %></label>
+                            </th>
                             <%# }) %>
 
                             <th class="not-evaluated" id="not-evaluated-header">N/A</th>
                             <th class="term-final-grade">MÉDIA</th>
-                        </tr>
+                        </tr> -->
                     </thead>
                     <tbody id="tbody-gradebook">
                         <%# students.forEach(student => { %>

@@ -20,7 +20,10 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     Attendance.belongsTo(models.Lesson, {
       as: "lesson"
-    })
+    });
+    Attendance.belongsTo(models.Student, {
+      as: "student"
+    });
   };
   return Attendance;
 };
