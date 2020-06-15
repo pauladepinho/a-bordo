@@ -84,52 +84,27 @@
 
 
 
-    <main id="grade" hidden>
-        <form action="/professor/lancar-nota" method="POST">
+    <main id="gradebook" hidden>
+        <form id="form-gradebook" action="/professor/lancar-notas" method="POST">
 
-            <section class="table-settings">
+            <!-- <section class="table-settings"> -->
+            <section id="term-course-evaluations-data">
                 <div class="selectors">
-                    <!-- OBS. CHANGE SELECT ID -->
-                    <select name="evaluation" id="qnt-bars">
-                        <!-- <option selected disabled>Selecione uma avaliação</option>
-                        <%# evaluations.forEach(evaluation => { %>
-                        <option value=<%#= evaluation.number %>>
-                            <%#= evaluation.title %>
-                        </option>
-                        <%# }) %>
-                        <option value="+">Adicionar uma nova avaliação</option>
-                        <option value="-" disabled>Excluir avaliação selecionada</option> -->
-                    </select>
+                    <!-- <select name="evaluation" id="gradebook-evaluation-select"></select> -->
+                    <select id="gradebook-evaluation-select"></select>
                 </div>
 
-                <div class="chart">
+                <div class="chart" id="gradebook-chart" hidden>
                     <div id="instructions">
-                        <p>Valor de cada avaliação:</p>
+                        <p>Valor (pontos máximos) de cada avaliação:</p>
                         <div id="disclaimer"></div>
                     </div>
-                    <div id="input-fields">
-                        <!-- <%# evaluations.forEach(evaluation => { %>
-                        <div>
-                            <label class="title" style=<%#= "color:" + evaluation.color %>> <%#= evaluation.title %>
-                            </label>
-                            <input class="<%#= 'max-grade evaluation' + evaluation.number %>" type='number'
-                                value="<%#= evaluation.maxGrade.toFixed(1) %>" step='0.5' min='0' max='10'
-                                name=<%#= "max-grade-evaluation" + evaluation.number %>>
-                        </div>
-                        <%# }) %> -->
-                    </div>
-                    <div id="container">
-                        <!-- <%# evaluations.forEach(evaluation => { %>
-                        <div class="<%#= 'bar evaluation' + evaluation.number %>"
-                            style="<%#= 'width:' + Math.round(100 * (evaluation.maxGrade / possibleTotalPoints)) + '%; background-color:' + evaluation.color %>">
-                        </div>
-                        <%# }) %> -->
-                    </div>
+                    <div id="input-fields"></div>
+                    <div id="container"></div>
                 </div>
             </section>
 
             <section class="table">
-
                 <table class="table-striped">
                     <thead id="thead-gradebook">
                         <!-- <tr>
@@ -148,7 +123,7 @@
                         </tr> -->
                     </thead>
                     <tbody id="tbody-gradebook">
-                        <%# students.forEach(student => { %>
+                        <!-- <%# students.forEach(student => { %>
                         <tr>
                             <td class="student-number"><%#= student.number %></th>
                             <td class="student-name"><%#= student.name %></td>
@@ -185,7 +160,7 @@
                             <td class="term-final-grade" id=<%#= "student" + student.id + "-term-final-grade" %>>
                                 <%#= Math.round(totalPoints / gradedEvaluations).toFixed(1) %> </td>
                         </tr>
-                        <%# }) %>
+                        <%# }) %> -->
                     </tbody>
                 </table>
             </section>

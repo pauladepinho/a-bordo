@@ -149,8 +149,8 @@ module.exports = {
                             model: Evaluation, as: "evaluations",
                             attributes: { exclude: ["LessonId"] },
                             include: {
-                                model: Student_Evaluation,
-                                as: "studentsGrades"
+                                model: Student_Evaluation, as: "studentsGrades",
+                                attributes: { exclude: ["EvaluationId"] }
                             }
                         },
                         {

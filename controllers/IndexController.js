@@ -5,7 +5,7 @@ const redirectHome = async (req, res) => {
 
     const user = req.session.user;
     const isTeacher = await Teacher.findOne({ where: { userId: user.id }, attributes: { exclude: ["teacherId"] } });
-    const isGuardian = await Guardian.findOne({ where: { userId: user.id } });
+    const isGuardian = await Guardian.findOne({ where: { userId: user.id }, attributes: { exclude: ["guardianId"] } });
 
     if (isTeacher && isGuardian) {
         return res.redirect("/professor/home");
@@ -61,7 +61,7 @@ module.exports = {
         }
         // MANAGE REDIRECTIONS
         const isTeacher = await Teacher.findOne({ where: { userId: user.id }, attributes: { exclude: ["teacherId"] } });
-        const isGuardian = await Guardian.findOne({ where: { userId: user.id } });
+        const isGuardian = await Guardian.findOne({ where: { userId: user.id }, attributes: { exclude: ["guardianId"] } });
 
         if (isTeacher && isGuardian) {
             return res.redirect(`/${userType}/home`);

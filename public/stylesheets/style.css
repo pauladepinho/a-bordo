@@ -856,7 +856,8 @@ nav .select {
 .select select { width: 100%; }
 
 /* main#attendance-sheet, main#record-book, main#grade { */
-main#record-book, main#grade {
+  /* main#record-book, main#grade { */
+main#record-book {
   width: 75vw;
   margin-top: 4rem;
 }
@@ -892,7 +893,7 @@ main#home > ul {
 
 main#attendance-sheet select { margin-bottom: 0; }
 
-section#lesson {
+section#lesson, section#term-course-evaluations-data {
   margin: 3rem;
   margin-bottom: 0;
 
@@ -901,6 +902,7 @@ section#lesson {
 
 /* #ATTENDANCE TABLE-SETTINGS CONTENT */
 
+section#term-course-evaluations-data > div.selectors,
 section#lesson > div.selectors {
   flex-grow: 1;
   margin-right: 1.5rem;
@@ -908,6 +910,7 @@ section#lesson > div.selectors {
   display: flex;
   flex-direction: column;
 }
+section#term-course-evaluations-data > div.chart,
 section#lesson > textarea#observations { 
   flex-grow: 4;
 
@@ -1005,7 +1008,8 @@ div#evaluation-info > .eval-data {
 
 /* GENERAL SECTION TABLE */
 
-main#attendance-sheet section.table {
+main#attendance-sheet section.table,
+main#gradebook section.table {
   margin-top: 0;
   overflow: auto;
 }
@@ -1077,30 +1081,23 @@ div.attendance-check label input {
 }
 
 /* SETTING GRADE INPUTS */
-
-#grade td.evaluation, #grade th.evaluation {
-  width: 7rem;
+td.evaluation input, th.evaluation {
+    width: 7rem;
 }
-
-#grade td.evaluation:last-of-type, #grade th.evaluation:last-of-type {
-  width: 8rem;
-}
-
 /* SETTING #GRADE "NOT EVALUATED" CHECKBOXES */
-
 td.not-evaluated {
   width: 4.5rem;
   height: 4.5rem;
   position: relative;
 }
-
 td.not-evaluated label {
   position: absolute;
   top: 1.5rem;
 }
-
 /* SETTING "AVERAGE" FIELDS */
-
+td.avg, th.avg {
+  width: 8rem;
+}
 td.avg {
   font-weight: 600;
   padding: 1.5rem;
@@ -1108,15 +1105,9 @@ td.avg {
 
 /* SETTING GRADE CHART */
 
-main#grade section.table-settings .selectors { width: 25%; }
-
-main#grade section.table-settings select { width: 100%; }
-
 .chart { width: 75%; }
 
 #instructions { display: flex; }
-
-main#grade div.selectors p { margin-bottom: .5rem; }
 
 div#instructions p {
   margin-bottom: 0;
@@ -1145,12 +1136,12 @@ div#instructions p {
 
 .text { font-weight: 600; }
 
-.text.blue { color: #54A2EB; }
+/* .text.blue { color: #54A2EB; }
 .text.pink { color: #ff92aa; }
 .text.yellow { color: #fae155; }
 .text.violet { color: #C979FB; }
 .text.orange { color: #FFAC60; }
-.text.green { color: #41E5AA; }
+.text.green { color: #41E5AA; } */
 
 
 #input-fields input {
@@ -1179,12 +1170,12 @@ div#instructions p {
   border-bottom-right-radius: 12px; 
 }
 
-.bar.blue { background-color: #54A2EB; }
+/* .bar.blue { background-color: #54A2EB; }
 .bar.pink { background-color: #ff92aa; }
 .bar.yellow { background-color: #fae155; }
 .bar.violet { background-color: #C979FB; }
 .bar.orange { background-color: #FFAC60; }
-.bar.green { background-color: #41E5AA; }
+.bar.green { background-color: #41E5AA; } */
 
 /* SCROLLBAR PERSONALIZADO ----------------*/
 ::-webkit-scrollbar {

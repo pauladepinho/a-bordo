@@ -121,7 +121,6 @@ module.exports = {
         for (school of reqBodySchool) { // req.body[ school ] = [ 0=state, 1=municipality, 2=name, 3=passingGrade, 4=academicTerms ]
             schoolsList.push(
                 {
-                    userId: user.id,
                     name: req.body[school][2],
                     passingGrade: req.body[school][3],
                     academicTerms: req.body[school][4],
@@ -287,7 +286,7 @@ module.exports = {
                 type: req.body["evaluation-type"]
             }
         );
-        return res.redirect("/professor/home");
+        return res.redirect("/professor/");
     },
 
     // GET professor/lancar-notas
@@ -298,12 +297,71 @@ module.exports = {
         // let data = await getTeacherData(user);
         // RENDER PAGE WITH DATA
         // return res.render("teacher/grade", data);
-        return res.render("teacher/grade", {user});
+        return res.render("teacher/grade", { user });
     },
 
     // POST professor/lancar-notas
     recordGrades: async (req, res) => {
 
+        // UPDATE EVALUATION DATA
+        const reqBodyEvaluationMaxGrade = Object.keys(req.body).filter( // [ "max-grade-evaluation1", "max-grade-evaluation2", ... ]
+            key => key.substr(0, 9) == "max-grade"
+        );
+        for (maxGrade of reqBodyEvaluationMaxGrade) {
+            const evaluationId = maxGrade.slice(maxGrade.indexOf("evaluation") + "evaluation".length);
+            const evaluation = await Evaluation.findByPk(evaluationId);
+
+            if (evaluation.maxGrade != req.body[maxGrade]) {
+                evaluation.maxGrade = req.body[maxGrade];
+                await evaluation.save();
+            }
+        }
+        // SET STUDENTS' GRADES
+        const reqBodyStudentEvaluation = Object.keys(req.body).filter( // [ "student1-evaluation1", "student1-evaluation2", "student2-evaluation1", ... ]
+            key => key.substr(0, 7) == "student"
+        );
+        let studentsEvaluations = [];
+        for (evaluation of reqBodyStudentEvaluation) {
+            const studentId = evaluation.slice("student".length, evaluation.indexOf("-"));
+            const evaluationId = evaluation.slice(evaluation.indexOf("evaluation") + "evaluation".length);
+
+            const reqBodyGrade = req.body[evaluation];
+
+            let grade = null;
+            let evaluated;
+            if (reqBodyGrade == "N/A") {
+                grade = 0;
+                evaluated = 0; // false
+            } else if (reqBodyGrade != "") {
+                grade = reqBodyGrade;
+                evaluated = 1; // true
+            }
+            if (grade != null) {
+                const gradedEvaluation = await Student_Evaluation.findOne({ where: { studentId, evaluationId } });
+                if (gradedEvaluation &&
+                    (
+                        gradedEvaluation.grade != grade ||
+                        gradedEvaluation.evaluated != evaluated
+                    )
+                ) {
+                    gradedEvaluation.grade = grade;
+                    gradedEvaluation.evaluated = evaluated;
+                    await gradedEvaluation.save();
+                }
+                else if (!gradedEvaluation) {
+                    studentsEvaluations.push(
+                        {
+                            studentId,
+                            evaluationId,
+                            grade,
+                            evaluated
+                        }
+                    );
+                }
+            }
+        }
+        await Student_Evaluation.bulkCreate(studentsEvaluations);
+        return res.redirect("/professor/");
     },
 
     // GET professor/diario-de-classe

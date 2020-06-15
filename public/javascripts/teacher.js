@@ -18,7 +18,7 @@ const navButtons = [btnAttendanceSheet, btnGradebook, btnRecords, btnStatistics,
 // MAINS
 const mainHome = document.getElementById("home");
 const mainAttendanceSheet = document.getElementById("attendance-sheet");
-const mainGradebook = document.getElementById("grade");
+const mainGradebook = document.getElementById("gradebook");
 
 const mains = [mainHome, mainAttendanceSheet, mainGradebook];
 
@@ -37,7 +37,10 @@ const sectionSetEvaluation = document.getElementById("set-evaluation");
 const divEvaluationInfo = document.getElementById("evaluation-info");
 
 // MAIN GRADEBOOK
-const gradebookEvaluationSelect = document.getElementById("qnt-bars");
+const formGradebook = document.getElementById("form-gradebook");
+
+const gradebookEvaluationSelect = document.getElementById("gradebook-evaluation-select");
+const gradebookChart = document.getElementById("gradebook-chart");
 const divContainer = document.getElementById("container");
 const divInputFields = document.getElementById("input-fields");
 
@@ -63,11 +66,10 @@ checkboxEvaluationDay.addEventListener("change", () => createEvaluation());
 // form btn
 btnGradebook.addEventListener("click", () => toggleMainVisibility(mainGradebook, btnGradebook));
 
-gradebookEvaluationSelect.addEventListener("change", () => enableSelectedEvaluationGradeInputs());
+gradebookEvaluationSelect.addEventListener("change", () => enableSelectedStudentGradeInputs());
+formGradebook.addEventListener("submit", () => enableAllStudentGradeInputs());
 
-
-
-// DATABASE DATA
+// DATABASE DATA FROM API
 
 let teacher = {};
 let classes = [];
@@ -186,18 +188,20 @@ const getSelectedOption = (select) => {
 // NAV SELECTS AGGREGATE FUNCTIONS
 
 const callSelectedSchoolRelatedFunctions = () => {
-    toggleMainVisibility(mainHome);
-    populateClassSelect();
-    populateTermSelect();
-
+    // order of functions matters
     disableNavReportsAndContactBtns();
     disableNavFormsBtns();
     removeEvaluationFromAttendanceSheet();
+
+    toggleMainVisibility(mainHome);
+    populateTermSelect();
+    populateClassSelect();
 };
 
 const callSelectedClassRelatedFunctions = () => {
     populateSubjectSelect();
     listStudents(); // main home
+
     populateTbody(tbodyAttendanceSheet);
     populateTbody(tbodyGradebook);
     removeEvaluationFromAttendanceSheet();
@@ -213,11 +217,12 @@ const callSelectedSubjectRelatedFunctions = () => {
 const callSelectedTermRelatedFunctions = () => {
     enableNavFormsBtns();
     removeEvaluationFromAttendanceSheet();
-    getTermEvaluations();
+    getTermEvaluations(); // calls important functions
 };
 
 
 
+// POPULATE NAV SELECTS
 
 const populateSchoolSelect = () => {
     classes.forEach(c => {
@@ -307,6 +312,7 @@ const enableTermSelect = () => { // when a subject is selected
 
 
 
+// TOGGLE NAV BUTTONS
 
 const enableNavReportsAndContactBtns = () => {
     btnRecords.disabled = false;
@@ -331,6 +337,9 @@ const disableNavFormsBtns = () => {
 
 
 
+const hideDropDownMenu = (dropdownMenu) => {
+    dropdownMenu.hidden = true;
+};
 
 /*************** 
     ALL MAINS
@@ -386,6 +395,12 @@ const populateTHead = (thead) => {
     studentName.className = "student-name";
     studentName.innerText = "ALUNO";
 
+    row.prepend(studentNumber, studentName);
+    thead.append(row);
+
+    if (!termEvaluations.length) {
+        return;
+    }
     termEvaluations.forEach(eval => {
         const th = document.createElement("th");
         th.classList.add("evaluation", `evaluation${eval[0].id}`);
@@ -409,8 +424,6 @@ const populateTHead = (thead) => {
     avg.innerText = "MÉDIA";
 
     row.append(notEval, avg);
-    row.prepend(studentNumber, studentName);
-    thead.append(row);
 };
 
 const populateTbody = (tbody) => {
@@ -440,7 +453,10 @@ const populateTbody = (tbody) => {
         }
     });
     if (termEvaluations.length) {
-        populateGradebookTbody(tbody);
+        populateGradebookTbody(tbodyGradebook);
+        gradebookChart.hidden = false;
+    } else {
+        gradebookChart.hidden = true;
     }
 };
 
@@ -592,12 +608,9 @@ const createEvaluation = async () => {
         setSelectTitle("Tipo", evalType);
 
         // EVALUATION VALUE
-        const evalValue = document.createElement("input");
-        evalValue.type = "number";
-        evalValue.name = "evaluation-value";
+        const evalValue = createGradeInput();
         evalValue.className = "eval-data";
-        evalValue.min = "0.5";
-        evalValue.step = "0.5";
+        evalValue.name = "evaluation-value";
         evalValue.placeholder = "Valor máx.";
         evalValue.required = true;
 
@@ -643,6 +656,7 @@ const createColorBox = () => {
     colorBox.append(evalColor, selectedColor, colorPicker);
     // LISTEN TO EVENT
     colorBox.addEventListener("mousedown", () => toggleColorPicker(colorPicker));
+    colorBox.addEventListener("mouseleave", () => hideDropDownMenu(colorPicker));
     // RETURN
     return colorBox;
 };
@@ -673,24 +687,140 @@ const toggleColorPicker = (colorPicker) => {
     else { colorPicker.hidden = true; }
 };
 
+const createGradeInput = (evalMaxGrade) => {
+    const input = document.createElement("input");
+    input.type = "number";
+
+    const schoolMaxGrade = getSelectedSchoolMaxGrade(); // 100 or 10
+    input.step = 0.05 * schoolMaxGrade;
+    if (evalMaxGrade) { // input for student grade
+        input.min = 0;
+        input.max = evalMaxGrade;
+    }
+    else { // input for evaluation maximum grade
+        input.min = 0.05 * schoolMaxGrade; // 5 or 0.5
+        input.max = schoolMaxGrade;
+    }
+    return input;
+};
+
+const getSelectedSchoolPassingGrade = () => {
+    const schoolId = getSelectedOption(schoolSelect).value;
+    let passingGrade;
+    for (let i = 0; i < classes.length; i++) {
+        if (schoolId == classes[i].school.id) {
+            const school = classes[i].school;
+            passingGrade = school.passingGrade;
+        }
+    }
+    return passingGrade;
+};
+
+const getSelectedSchoolMaxGrade = () => {
+    const passingGrade = getSelectedSchoolPassingGrade();
+    let schoolMaxGrade;
+
+    switch (passingGrade % 10) { // 70 % 10 == 0 // 7 % 10 != 0
+        case 0:
+            schoolMaxGrade = 100;
+            break;
+        default:
+            schoolMaxGrade = 10;
+    }
+    return schoolMaxGrade;
+};
+
 /*****************
     MAIN GRADE
 *****************/
+
+const populateGradebookTbody = (tbody) => {
+    const rows = tbody.childNodes;
+    rows.forEach(row => {
+        const studentId = row.childNodes[1].id;
+
+        let totalPoints = null;
+        let gradedEvaluations = 0;
+
+        termEvaluations.forEach(eval => {
+            let grade;
+            eval[0].studentsGrades.forEach(studentEval => {
+                if (studentEval.studentId == studentId) {
+
+                    gradedEvaluations++;
+
+                    if (studentEval.evaluated == 1) {
+                        grade = Number(studentEval.grade);
+                        const normalizedGrade = grade / eval[0].maxGrade;
+
+                        totalPoints += normalizedGrade;
+                    }
+                    else {
+                        grade = "N/A"
+                    }
+                }
+            });
+            const td = document.createElement("td");
+            td.className = "evaluation";
+
+            const input = createGradeInput(eval[0].maxGrade);
+            input.classList.add("grade", `student${studentId}`, `evaluation${eval[0].id}`);
+            input.name = `student${studentId}-evaluation${eval[0].id}`;
+            input.placeholder = "Nota";
+            if (grade == "N/A") {
+                input.type = "text";
+            }
+            input.value = grade;
+            input.disabled = true;
+
+            td.append(input);
+            row.append(td);
+        });
+        // NOT EVALUATED CHECKBOX
+        const notEval = document.createElement("td");
+        notEval.className = "not-evaluated";
+
+        const label = document.createElement("label");
+        label.className = "checkbox-container";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "not-evaluated";
+        checkbox.disabled = true;
+
+        const checkmark = document.createElement("span");
+        checkmark.className = "checkmark";
+
+        // AVERAGE GRADE
+        const avg = document.createElement("td");
+        avg.className = "term-final-grade";
+
+        if (totalPoints != null) {
+            const schoolMaxGrade = getSelectedSchoolMaxGrade();
+            avg.innerText = (totalPoints * schoolMaxGrade / gradedEvaluations).toFixed(1);
+        } else {
+            avg.innerText = "-";
+        }
+
+        label.append(checkbox, checkmark);
+        notEval.append(label);
+        row.append(notEval, avg);
+
+        checkbox.addEventListener("change", () => markAsNotEvaluated(checkbox, `input.grade.student${studentId}`));
+    });
+};
 
 const populateGradebookEvaluationSelect = () => {
     removeChildNodes(gradebookEvaluationSelect);
     termEvaluations.forEach(eval => {
         createSelectOption(eval[0].id, eval[0].title, gradebookEvaluationSelect);
     });
-    /* WHY ISN'T THIS WORKING???? */
     if (gradebookEvaluationSelect.options.length == 1) { // there is only one evaluation
-        enableSelectedEvaluationGradeInputs(); // function is called but doesn't work properly
+        enableSelectedStudentGradeInputs();
     } else {
         sortSelect(gradebookEvaluationSelect);
     }
-    // sortSelect(gradebookEvaluationSelect);
     setSelectTitle("Selecione uma avaliação", gradebookEvaluationSelect);
-    // gradebookEvaluationSelect.options[0].selected = true;
 
     const optionDivider = document.createElement("option");
     optionDivider.value = "";
@@ -708,14 +838,43 @@ const populateGradebookEvaluationSelect = () => {
     gradebookEvaluationSelect.append(optionDivider, optionAdd, optionDel);
 };
 
-const enableSelectedEvaluationGradeInputs = () => {
-    const allGradeInputs = document.querySelectorAll("#tbody-gradebook input.evaluation");
+const enableSelectedStudentGradeInputs = () => {
+    const allGradeInputs = document.querySelectorAll("input.grade");
     allGradeInputs.forEach(input => input.disabled = true);
 
     const selectedEvaluation = getSelectedOption(gradebookEvaluationSelect);
-    const gradeInputs = document.querySelectorAll(`#tbody-gradebook input.evaluation${selectedEvaluation.value}`);
+    const gradeInputs = document.querySelectorAll(`input.evaluation${selectedEvaluation.value}`);
     gradeInputs.forEach(input => input.disabled = false);
+
+    const notEvalCheckbokes = document.querySelectorAll("input.not-evaluated");
+    notEvalCheckbokes.forEach(checkbox => {
+        checkbox.disabled = false;
+        if (checkbox.checked) { checkbox.checked = false; }
+    });
 };
+
+const enableAllStudentGradeInputs = () => {
+    const allGradeInputs = document.querySelectorAll("input.grade");
+    allGradeInputs.forEach(input => input.disabled = false);
+};
+
+const markAsNotEvaluated = (checkbox, inputSelector) => {
+    const studentGradesInputs = document.querySelectorAll(inputSelector);
+    let targetInput;
+    studentGradesInputs.forEach(input => {
+        if (input.disabled == false) {
+            targetInput = input;
+        }
+    });
+    if (checkbox.checked) {
+        targetInput.type = "text";
+        targetInput.value = "N/A";
+    } else {
+        targetInput.type = "number";
+    }
+};
+
+/**** CHART ****/
 
 const setGradebookChart = () => {
     populateDivContainer();
@@ -752,102 +911,12 @@ const createChartControllers = () => {
         label.style.color = eval[0].color;
         label.innerText = eval[0].title;
 
-        const input = document.createElement("input");
-        input.type = "number";
-        input.min = 0;
-        input.max = 10; /////////////////////////////////////////////////////////////////////////
-        input.step = 0.5;
+        const input = createGradeInput();
         input.classList.add("max-grade", `evaluation${eval[0].id}`);
         input.name = `max-grade-evaluation${eval[0].id}`;
-        input.value = `${Number(eval[0].maxGrade).toFixed(1)}`;
+        input.value = `${Number(eval[0].maxGrade)}`;
 
         divInputFields.append(div);
-        div.append(label);
-        label.append(input);
-    });
-};
-
-const populateGradebookTbody = (tbody) => {
-    const rows = tbody.childNodes;
-    rows.forEach(row => {
-        const studentId = row.childNodes[1].id;
-        let totalPoints;
-        let gradedEvaluations;
-        termEvaluations.forEach(eval => {
-
-            let grade;
-            eval[0].studentsGrades.forEach(studentEval => {
-                if (studentEval.studentId == studentId) {
-                    grade = Number(studentEval.grade);
-                    totalPoints += grade;
-                    gradedEvaluations++;
-                }
-            });
-
-            const td = document.createElement("td");
-
-            const input = document.createElement("input");
-            input.type = "number";
-            input.min = 0;
-            input.max = 10; ///////////////////////////////////////////////////
-            input.step = 0.5;
-            input.name = `student${studentId}[]`;
-            // input.value = studentEvaluations.grade //////////// FAZER API PARA PEGAR ESSA TABELA!!
-            input.placeholder = "Nota";
-            input.disabled = true;
-            input.classList.add("evaluation", `evaluation${eval[0].id}`);
-
-            if (grade) {
-                input.value = grade;
-            }
-
-            td.append(input);
-            row.append(td);
-        });
-        const notEval = document.createElement("td");
-        // notEval.className = "not-evaluated";
-
-        const label = document.createElement("label");
-        label.className = "checkbox-container";
-
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        input.className = "not-evaluated";
-        input.name = `student${studentId}-not-evaluated`;
-        input.disabled = true;
-
-        const span = document.createElement("span");
-        span.className = "checkmark";
-
-        const avg = document.createElement("td");
-        // avg.className = "term-final-grade";
-        // avg.id = `student${studentId}-term-final-grade`
-        if (totalPoints) {
-            avg.innerText = Math.round(totalPoints / gradedEvaluations).toFixed(1);
-        } else {
-            avg.innerText = "-";
-        }
-
-        label.append(input, span);
-        notEval.append(label);
-        row.append(notEval, avg);
-
-        /*
-            <%
-                let totalPoints = 0;
-                let gradedEvaluations = 0;
-                evaluations.forEach(evaluation => {
-                    if(evaluation.grade != null) {     //////////// FAZER API PARA PEGAR ESSA TABELA!!
-                        totalPoints += Number(evaluation.grade);
-                        gradedEvaluations++;
-                    }
-                });
-            %>
-
-            <td class="term-final-grade" id=<%= "student" + student.id + "-term-final-grade" %>>
-                <%= Math.round(totalPoints / gradedEvaluations).toFixed(1) %>
-            </td>
-        */
-
+        div.append(label, input);
     });
 };
