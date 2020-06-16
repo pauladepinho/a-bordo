@@ -276,16 +276,17 @@ module.exports = {
         const reqBodyEvaluation = Object.keys(req.body).filter( // [ "evaluation-title", "evaluation-color", "evaluation-type", "evaluation-value" ]
             key => key.substr(0, 10) == "evaluation"
         );
-        if (!reqBodyEvaluation) { return res.redirect("/professor/home"); }
-        await Evaluation.create(
-            {
-                lessonId: lesson.id,
-                maxGrade: req.body["evaluation-value"],
-                title: req.body["evaluation-title"],
-                color: req.body["evaluation-color"],
-                type: req.body["evaluation-type"]
-            }
-        );
+        if (reqBodyEvaluation.length) {
+            await Evaluation.create(
+                {
+                    lessonId: lesson.id,
+                    maxGrade: req.body["evaluation-value"],
+                    title: req.body["evaluation-title"],
+                    color: req.body["evaluation-color"],
+                    type: req.body["evaluation-type"]
+                }
+            );
+        }
         return res.redirect("/professor/");
     },
 

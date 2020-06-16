@@ -28,6 +28,9 @@ const mains = [mainHome, mainAttendanceSheet, mainGradebook];
 const ulStudents = document.getElementById("ul-students");
 
 // MAIN ATTENDANCE SHEET
+const formAttendanceSheet = document.getElementById("form-attendance-sheet");
+const btnSubmitAttendanceSheet = document.getElementById("btn-submit-attendance-sheet");
+
 const periodsSelect = document.getElementById("periods"); // attendance-related
 const inputCourseId = document.getElementById("input-courseId");
 const tbodyAttendanceSheet = document.getElementById("tbody-attendance-sheet");
@@ -38,6 +41,7 @@ const divEvaluationInfo = document.getElementById("evaluation-info");
 
 // MAIN GRADEBOOK
 const formGradebook = document.getElementById("form-gradebook");
+const btnSubmitGradebook = document.getElementById("btn-submit-gradebook");
 
 const gradebookEvaluationSelect = document.getElementById("gradebook-evaluation-select");
 const gradebookChart = document.getElementById("gradebook-chart");
@@ -59,15 +63,20 @@ termSelect.addEventListener("change", () => callSelectedTermRelatedFunctions());
 
 // form btn
 btnAttendanceSheet.addEventListener("click", () => toggleMainVisibility(mainAttendanceSheet, btnAttendanceSheet));
+formAttendanceSheet.addEventListener("submit", (evt) => confirmFormSubmition(evt));
 
-periodsSelect.addEventListener("change", () => populateAttendanceSheetWithMarks());
+periodsSelect.addEventListener("change", () => { populateAttendanceSheetWithMarks(); enableSubmitionButton(btnSubmitAttendanceSheet) });
 checkboxEvaluationDay.addEventListener("change", () => createEvaluation());
 
 // form btn
 btnGradebook.addEventListener("click", () => toggleMainVisibility(mainGradebook, btnGradebook));
+formGradebook.addEventListener("submit", (evt) => confirmFormSubmition(evt, true));
 
 gradebookEvaluationSelect.addEventListener("change", () => enableSelectedStudentGradeInputs());
-formGradebook.addEventListener("submit", () => enableAllStudentGradeInputs());
+
+
+
+
 
 // DATABASE DATA FROM API
 
@@ -460,6 +469,22 @@ const populateTbody = (tbody) => {
     }
 };
 
+/**** MAINS WITH FORMS */
+
+const confirmFormSubmition = (evt, isGradebook) => {
+    const res = confirm("Tem certeza que deseja salvar as alterações?");
+    if (!res) {
+        evt.preventDefault();
+    }
+    else if (isGradebook) {
+        enableAllStudentGradeInputs();
+    }
+};
+
+const enableSubmitionButton = (submitBtn) => {
+    if (submitBtn.disabled) { submitBtn.disabled = false };
+};
+
 /**************************** 
     MAIN ATTENDANCE SHEET
 ****************************/
@@ -760,6 +785,7 @@ const populateGradebookTbody = (tbody) => {
                     }
                 }
             });
+            // STUDENT GRADES INPUTS
             const td = document.createElement("td");
             td.className = "evaluation";
 
@@ -769,12 +795,15 @@ const populateGradebookTbody = (tbody) => {
             input.placeholder = "Nota";
             if (grade == "N/A") {
                 input.type = "text";
+                input.addEventListener("keydown", (evt) => { if (input.type == "text") { evt.preventDefault() } });
             }
             input.value = grade;
             input.disabled = true;
 
             td.append(input);
             row.append(td);
+
+            input.addEventListener("change", () => enableSubmitionButton(btnSubmitGradebook));
         });
         // NOT EVALUATED CHECKBOX
         const notEval = document.createElement("td");
@@ -785,7 +814,7 @@ const populateGradebookTbody = (tbody) => {
 
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
-        checkbox.className = "not-evaluated";
+        checkbox.classList.add("not-evaluated", `student${studentId}`);
         checkbox.disabled = true;
 
         const checkmark = document.createElement("span");
@@ -850,6 +879,13 @@ const enableSelectedStudentGradeInputs = () => {
     notEvalCheckbokes.forEach(checkbox => {
         checkbox.disabled = false;
         if (checkbox.checked) { checkbox.checked = false; }
+    });
+
+    gradeInputs.forEach(input => {
+        if (input.value == "N/A") {
+            const checkbox = document.querySelector(`input.not-evaluated.${input.classList[1]}`);
+            checkbox.checked = true;
+        }
     });
 };
 

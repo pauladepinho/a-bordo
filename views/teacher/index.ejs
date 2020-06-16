@@ -76,8 +76,7 @@
                 </table>
             </section>
 
-            <button type="submit" class="special">Salvar</button>
-
+            <button type="submit" class="special" id="btn-submit-attendance-sheet" disabled>Salvar</button>
         </form>
     </main>
 
@@ -87,10 +86,8 @@
     <main id="gradebook" hidden>
         <form id="form-gradebook" action="/professor/lancar-notas" method="POST">
 
-            <!-- <section class="table-settings"> -->
             <section id="term-course-evaluations-data">
                 <div class="selectors">
-                    <!-- <select name="evaluation" id="gradebook-evaluation-select"></select> -->
                     <select id="gradebook-evaluation-select"></select>
                 </div>
 
@@ -106,66 +103,12 @@
 
             <section class="table">
                 <table class="table-striped">
-                    <thead id="thead-gradebook">
-                        <!-- <tr>
-                            <th class="student-number">Nº</th>
-                            <th class="student-name">ALUNO</th>
-
-                            <%# evaluations.forEach(evaluation => { %>
-                            <th class="<%#= 'evaluation evaluation' + evaluation.id %>">
-                                <label class="title"
-                                    style=<%#= 'color:' + evaluation.color %>><%#= evaluation.title %></label>
-                            </th>
-                            <%# }) %>
-
-                            <th class="not-evaluated" id="not-evaluated-header">N/A</th>
-                            <th class="term-final-grade">MÉDIA</th>
-                        </tr> -->
-                    </thead>
-                    <tbody id="tbody-gradebook">
-                        <!-- <%# students.forEach(student => { %>
-                        <tr>
-                            <td class="student-number"><%#= student.number %></th>
-                            <td class="student-name"><%#= student.name %></td>
-
-
-                            <%# evaluations.forEach(evaluation => { 
-                            this.student_id = student.id;
-                            %>
-
-                            <td class="<%#= 'evaluation evaluation' + evaluation.id %>" %>>
-                                <input type="number" name=<%#= "student" + student.id + "-grades[]" %> max="10" min="0"
-                                    step="0.5" value="<%#= evaluation.grade %>" placeholder="Nota" disabled></td>
-
-                            <%# }) %>
-
-
-                            <td class="not-evaluated" id=<%#= "student" + student.id + "not-evaluated-check" %>>
-                                <label for="not-evaluated" class="checkbox-container">
-                                    <input type="checkbox" name="not-evaluated" id="not-evaluated" />
-                                    <span class="checkmark"></span>
-                                </label>
-                            </td>
-
-                            <%# 
-                                let totalPoints = 0;
-                                let gradedEvaluations = 0;
-                                evaluations.forEach(evaluation => {
-                                    if(evaluation.grade != null) {
-                                    totalPoints += Number(evaluation.grade);
-                                    gradedEvaluations++;
-                                    }
-                                });
-                            %>
-                            <td class="term-final-grade" id=<%#= "student" + student.id + "-term-final-grade" %>>
-                                <%#= Math.round(totalPoints / gradedEvaluations).toFixed(1) %> </td>
-                        </tr>
-                        <%# }) %> -->
-                    </tbody>
+                    <thead id="thead-gradebook"></thead>
+                    <tbody id="tbody-gradebook"></tbody>
                 </table>
             </section>
 
-            <button type="submit" class="special">Salvar</button>
+            <button type="submit" class="special" id="btn-submit-gradebook" disabled>Salvar</button>
         </form>
     </main>
 
