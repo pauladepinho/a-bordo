@@ -5,106 +5,169 @@
     <%- include("../partials/teacher-topMenu.ejs") %>
 
     <nav>
+        <!-- <div> -->
         <div class="navbar select">
-
-            <select name="school" required>
-                <option disabled selected>Escola</option>
-                <% schools.forEach(school => { %>
-                <option value="<%= school.id %>"><%= school.name %></option>
-                <% }) %>
-            </select>
-
-            <select name=" subject" required>
-                <option disabled selected>Disciplina</option>
-                <% subjects.forEach(subject => { %>
-                <option value="<%= subject.id %>"><%= subject.name %></option>
-                <% }) %>
-            </select>
-
-            <select name="class" required>
-                <option disabled selected>Turma</option>
-                <% classes.forEach(c => { %>
-                <option value="<%= c.id %>"><%= c.code %></option>
-                <% }) %>
-            </select>
-
-            <select name="term" required>
-                <% 
-                    schools.forEach(school => { 
-                        let terms = school.academicTerms;
-                        let termType;
-
-                        if (terms == 4) { termType = "Bimestre" }
-                        else if (terms == 3) { termType = "Trimestre" }
-                %>
-                <option disabled selected><%= termType %></option>
-                <% 
-                        for (let term = 1; term <= terms; term++) { 
-                %>
-                <option value="<%= term %>"><%= term + "º " + termType %></option>
-                <% 
-                        }
-                    }) 
-                %>
-            </select>
-
+            <select id="school" required></select>
+            <select id="class" required disabled></select>
+            <select id="subject" required disabled></select>
+            <select id="term" name="academicTerm" form="form-attendance-sheet" required disabled></select>
         </div>
 
         <div class="navbar">
             <ul class="nav">
-                <li><a class="nav-link" href="/professor/fazer-chamada">
-                        Fazer chamada
-                    </a></li>
-                <li><a class="nav-link" href="/professor/lancar-notas">
-                        Lançar notas
-                    </a></li>
-                <li><a class="nav-link" href="/professor/diario-de-classe">
-                        Diário de classe
-                    </a></li>
-                <li><a class="nav-link" href="#">
-                        Estatísticas
-                    </a></li>
-                <li><a class="nav-link" href="#">
-                        Contatar responsáveis
-                    </a></li>
+                <li><button id="btn-attendance-sheet" type="button" disabled>Fazer chamada</button></li>
+                <li><button id="btn-gradebook" type="button" disabled>Lançar notas</button></li>
+                <li><button id="btn-records" type="button" disabled>Diário de classe</button></li>
+                <li><button id="btn-statistics" type="button" disabled>Estatísticas</button></li>
+                <li><button id="btn-contact" type="button" disabled>Contactar responsáveis</button></li>
             </ul>
         </div>
+        <!-- </div> -->
     </nav>
 
-    <main id="home" style="margin-left: 450px;margin-top: 56px;">
-        <div>
 
-            <h3>Lista de dados</h3>
-            <br>
-            <ul style="margin-bottom: 48px;"> <% for (school of schools) { %>
 
-                <li style="margin-bottom: 18px;"><button type="button"><%= school.name %></button></li>
 
-                <% } %>
-            </ul>
-
-            <ul style="margin-bottom: 48px;"> <% for (subject of subjects) { %>
-
-                <li style="margin-bottom: 18px;"><button type="button"><%= subject.name %></button></li>
-
-                <% } %>
-            </ul>
-
-            <ul style="margin-bottom: 48px;"> <% for (c of classes) { %>
-
-                <li style="margin-bottom: 18px;"><button type="button"><%= c.code %></button></li>
-
-                <% } %>
-            </ul>
-
-            <ul style="margin-bottom: 48px;"> <% for (student of students) { %>
-
-                <li style="margin-bottom: 18px;"><button type="button"><%= student.name %></button></li>
-
-                <% } %>
-            </ul>
-
-        </div>
+    <main id="home">
+        <ul id="ul-students"></ul>
     </main>
 
+
+
+
+    <main id="attendance-sheet" hidden>
+        <form id="form-attendance-sheet" action="/professor/fazer-chamada" method="POST">
+
+            <section id="lesson">
+                <input type="hidden" name="courseId" id="input-courseId" required>
+                <div class="selectors">
+                    <input type="date" name="date" id="date" required
+                        value=<%= new Date().toISOString().substr(0, 10) %> />
+                    <select name="periods" id="periods" required>
+                        <option selected disabled>Tempos de aula</option>
+                        <option value="1">1 tempo</option>
+                        <option value="2">2 tempos</option>
+                        <option value="3">3 tempos</option>
+                        <option value="4">4 tempos</option>
+                        <option value="5">5 tempos</option>
+                    </select>
+                </div>
+                <textarea name="observations" id="observations" placeholder="Observações"></textarea>
+            </section>
+
+            <section id="set-evaluation">
+                <div id="evaluation-info"></div>
+                <label class="checkbox-container">Dia de avaliação
+                    <input type="checkbox" id="evaluation-day" />
+                    <span class="checkmark"></span>
+                </label>
+            </section>
+
+            <section class="table">
+                <table class="table-striped">
+                    <thead>
+                        <tr>
+                            <th class="student-number">Nº</th>
+                            <th class="student-name">ALUNO</th>
+                            <th class="attendance-check"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-attendance-sheet"></tbody>
+                </table>
+            </section>
+
+            <button type="submit" class="special">Salvar</button>
+
+        </form>
+    </main>
+
+
+
+
+    <main id="gradebook" hidden>
+        <form id="form-gradebook" action="/professor/lancar-notas" method="POST">
+
+            <!-- <section class="table-settings"> -->
+            <section id="term-course-evaluations-data">
+                <div class="selectors">
+                    <!-- <select name="evaluation" id="gradebook-evaluation-select"></select> -->
+                    <select id="gradebook-evaluation-select"></select>
+                </div>
+
+                <div class="chart" id="gradebook-chart" hidden>
+                    <div id="instructions">
+                        <p>Valor (pontos máximos) de cada avaliação:</p>
+                        <div id="disclaimer"></div>
+                    </div>
+                    <div id="input-fields"></div>
+                    <div id="container"></div>
+                </div>
+            </section>
+
+            <section class="table">
+                <table class="table-striped">
+                    <thead id="thead-gradebook">
+                        <!-- <tr>
+                            <th class="student-number">Nº</th>
+                            <th class="student-name">ALUNO</th>
+
+                            <%# evaluations.forEach(evaluation => { %>
+                            <th class="<%#= 'evaluation evaluation' + evaluation.id %>">
+                                <label class="title"
+                                    style=<%#= 'color:' + evaluation.color %>><%#= evaluation.title %></label>
+                            </th>
+                            <%# }) %>
+
+                            <th class="not-evaluated" id="not-evaluated-header">N/A</th>
+                            <th class="term-final-grade">MÉDIA</th>
+                        </tr> -->
+                    </thead>
+                    <tbody id="tbody-gradebook">
+                        <!-- <%# students.forEach(student => { %>
+                        <tr>
+                            <td class="student-number"><%#= student.number %></th>
+                            <td class="student-name"><%#= student.name %></td>
+
+
+                            <%# evaluations.forEach(evaluation => { 
+                            this.student_id = student.id;
+                            %>
+
+                            <td class="<%#= 'evaluation evaluation' + evaluation.id %>" %>>
+                                <input type="number" name=<%#= "student" + student.id + "-grades[]" %> max="10" min="0"
+                                    step="0.5" value="<%#= evaluation.grade %>" placeholder="Nota" disabled></td>
+
+                            <%# }) %>
+
+
+                            <td class="not-evaluated" id=<%#= "student" + student.id + "not-evaluated-check" %>>
+                                <label for="not-evaluated" class="checkbox-container">
+                                    <input type="checkbox" name="not-evaluated" id="not-evaluated" />
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+
+                            <%# 
+                                let totalPoints = 0;
+                                let gradedEvaluations = 0;
+                                evaluations.forEach(evaluation => {
+                                    if(evaluation.grade != null) {
+                                    totalPoints += Number(evaluation.grade);
+                                    gradedEvaluations++;
+                                    }
+                                });
+                            %>
+                            <td class="term-final-grade" id=<%#= "student" + student.id + "-term-final-grade" %>>
+                                <%#= Math.round(totalPoints / gradedEvaluations).toFixed(1) %> </td>
+                        </tr>
+                        <%# }) %> -->
+                    </tbody>
+                </table>
+            </section>
+
+            <button type="submit" class="special">Salvar</button>
+        </form>
+    </main>
+
+    <script src="../../javascripts/teacher.js"></script>
     <%- include("../partials/footer.ejs") %>

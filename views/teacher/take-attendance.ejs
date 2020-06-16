@@ -7,46 +7,10 @@
   <nav>
     <div class="navbar select">
 
-      <select name="school" required>
-        <option disabled selected>Escola</option>
-        <% schools.forEach(school => { %>
-        <option value="<%= school.id %>"><%= school.name %></option>
-        <% }) %>
-      </select>
-
-      <select name=" subject" required>
-        <option disabled selected>Disciplina</option>
-        <% subjects.forEach(subject => { %>
-        <option value="<%= subject.id %>"><%= subject.name %></option>
-        <% }) %>
-      </select>
-
-      <select name="class" required>
-        <option disabled selected>Turma</option>
-        <% classes.forEach(c => { %>
-        <option value="<%= c.id %>"><%= c.code %></option>
-        <% }) %>
-      </select>
-
-      <select name="term" required>
-        <% 
-            schools.forEach(school => { 
-                let terms = school.academicTerms;
-                let termType;
-
-                if (terms == 4) { termType = "Bimestre" }
-                else if (terms == 3) { termType = "Trimestre" }
-        %>
-        <option disabled selected><%= termType %></option>
-        <% 
-                for (let term = 1; term <= terms; term++) { 
-        %>
-        <option value="<%= term %>"><%= term + "º " + termType %></option>
-        <% 
-                }
-            }) 
-        %>
-      </select>
+      <select name="school" required></select>
+      <select name=" subject" required></select>
+      <select name="class" required></select>
+      <select name="term" required></select>
 
     </div>
 
@@ -133,4 +97,5 @@
     </section>
   </main>
 
+  <script src="../../javascripts/teacher.js"></script>
   <%- include("../partials/footer.ejs") %>

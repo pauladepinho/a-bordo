@@ -36,13 +36,15 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+app.use("/api", API_Router);
+
 // MIDDLEWARE
 app.use(CookieLogin);
 
 app.use('/', IndexRouter);
 app.use('/professor', TeacherRouter);
 app.use('/responsavel', GuardianRouter);
-app.use("/api", API_Router);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

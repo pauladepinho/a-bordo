@@ -55,6 +55,19 @@ const getTeacherData = async (user) => {
     };
 }
 
+const getTeacher = async (user) => {
+    const teacher = await Teacher.findOne({
+        where: {
+            userId: user.id
+        },
+        attributes: { exclude: ["teacherId"] },
+        include: {
+            model: User, as: "user"
+        }
+    });
+    return teacher;
+};
+
 module.exports = {
 
     // GET professor/
@@ -62,10 +75,9 @@ module.exports = {
     renderHome: async (req, res) => {
         // USER IS LOGGED IN
         const user = req.session.user;
-        // GET TEACHER'S DATA
-        let data = await getTeacherData(user);
+        const teacher = await getTeacher(user);
         // RENDER PAGE WITH DATA
-        return res.render("teacher", data);
+        return res.render("teacher", { user, teacher });
     },
 
     // GET professor/cadastrar
@@ -179,7 +191,7 @@ module.exports = {
 
                 let newStudent = await Student.create(
                     {
-                        name: req.body[aStudent][1].trim().toUpperCase()
+                        name: req.body[aStudent][1].trim()
                     }
                 );
 
@@ -233,8 +245,48 @@ module.exports = {
     },
 
     // POST professor/fazer-chamada
-    recordAttendances: (req, res) => {
-
+    recordAttendances: async (req, res) => {
+        // CREATE LESSON
+        const lesson = await Lesson.create(
+            {
+                courseId: req.body.courseId,
+                academicTerm: req.body.academicTerm,
+                date: req.body.date,
+                periods: req.body.periods,
+                observations: req.body.observations
+            }
+        );
+        // CREATE ATTENDANCE
+        const reqBodyAttendance = Object.keys(req.body).filter( // [ "attendance_student1-period1", "attendance_student1-period2", "attendance_student2-period1", "attendance_student2-period2" ]
+            key => key.substr(0, 10) == "attendance"
+        );
+        for (attendance of reqBodyAttendance) {
+            const studentId = attendance.slice(attendance.indexOf("student") + "student".length, attendance.indexOf("-"));
+            const period = attendance.slice(attendance.indexOf("period") + "period".length);
+            await Attendance.create(
+                {
+                    lessonId: lesson.id,
+                    studentId,
+                    mark: req.body[attendance], // present, absent or late
+                    period
+                }
+            );
+        }
+        // CREATE EVALUATION
+        const reqBodyEvaluation = Object.keys(req.body).filter( // [ "evaluation-title", "evaluation-color", "evaluation-type", "evaluation-value" ]
+            key => key.substr(0, 10) == "evaluation"
+        );
+        if (!reqBodyEvaluation) { return res.redirect("/professor/home"); }
+        await Evaluation.create(
+            {
+                lessonId: lesson.id,
+                maxGrade: req.body["evaluation-value"],
+                title: req.body["evaluation-title"],
+                color: req.body["evaluation-color"],
+                type: req.body["evaluation-type"]
+            }
+        );
+        return res.redirect("/professor/");
     },
 
     // GET professor/lancar-notas
@@ -242,14 +294,74 @@ module.exports = {
         // USER IS LOGGED IN
         const user = req.session.user;
         // GET TEACHER'S DATAS
-        let data = await getTeacherData(user);
+        // let data = await getTeacherData(user);
         // RENDER PAGE WITH DATA
-        return res.render("teacher/grade", data);
+        // return res.render("teacher/grade", data);
+        return res.render("teacher/grade", { user });
     },
 
     // POST professor/lancar-notas
-    recordGrades: (req, res) => {
+    recordGrades: async (req, res) => {
 
+        // UPDATE EVALUATION DATA
+        const reqBodyEvaluationMaxGrade = Object.keys(req.body).filter( // [ "max-grade-evaluation1", "max-grade-evaluation2", ... ]
+            key => key.substr(0, 9) == "max-grade"
+        );
+        for (maxGrade of reqBodyEvaluationMaxGrade) {
+            const evaluationId = maxGrade.slice(maxGrade.indexOf("evaluation") + "evaluation".length);
+            const evaluation = await Evaluation.findByPk(evaluationId);
+
+            if (evaluation.maxGrade != req.body[maxGrade]) {
+                evaluation.maxGrade = req.body[maxGrade];
+                await evaluation.save();
+            }
+        }
+        // SET STUDENTS' GRADES
+        const reqBodyStudentEvaluation = Object.keys(req.body).filter( // [ "student1-evaluation1", "student1-evaluation2", "student2-evaluation1", ... ]
+            key => key.substr(0, 7) == "student"
+        );
+        let studentsEvaluations = [];
+        for (evaluation of reqBodyStudentEvaluation) {
+            const studentId = evaluation.slice("student".length, evaluation.indexOf("-"));
+            const evaluationId = evaluation.slice(evaluation.indexOf("evaluation") + "evaluation".length);
+
+            const reqBodyGrade = req.body[evaluation];
+
+            let grade = null;
+            let evaluated;
+            if (reqBodyGrade == "N/A") {
+                grade = 0;
+                evaluated = 0; // false
+            } else if (reqBodyGrade != "") {
+                grade = reqBodyGrade;
+                evaluated = 1; // true
+            }
+            if (grade != null) {
+                const gradedEvaluation = await Student_Evaluation.findOne({ where: { studentId, evaluationId } });
+                if (gradedEvaluation &&
+                    (
+                        gradedEvaluation.grade != grade ||
+                        gradedEvaluation.evaluated != evaluated
+                    )
+                ) {
+                    gradedEvaluation.grade = grade;
+                    gradedEvaluation.evaluated = evaluated;
+                    await gradedEvaluation.save();
+                }
+                else if (!gradedEvaluation) {
+                    studentsEvaluations.push(
+                        {
+                            studentId,
+                            evaluationId,
+                            grade,
+                            evaluated
+                        }
+                    );
+                }
+            }
+        }
+        await Student_Evaluation.bulkCreate(studentsEvaluations);
+        return res.redirect("/professor/");
     },
 
     // GET professor/diario-de-classe

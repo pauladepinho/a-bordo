@@ -9,10 +9,8 @@
   font-family: "Work Sans", sans-serif;
   font-size: 16px;
 }
-
-body{
-  overflow: hidden;
-}
+li { list-style: none; }
+body{ overflow: hidden; }
 
 /* :focus { outline: none; } */
 /* button:focus { outline: none; } */
@@ -301,7 +299,8 @@ div.navbar ul.nav {
   width: 100%;
 }
 
-a.nav-link {
+a.nav-link, 
+ul.nav button {
   background-color: #30c1f9;
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 
@@ -309,6 +308,7 @@ a.nav-link {
   border-radius: 5px;
 
   min-height: 48px;
+  width: 100%;
 
   margin-bottom: 1.5rem;
 
@@ -318,8 +318,22 @@ a.nav-link {
   font-weight: 600;
 }
 
-li .nav-link:hover {
+li .nav-link:hover,
+ul.nav button:hover {
   background-color: #f95f2f !important;
+  color: #ffffff;
+}
+
+ul.nav button:disabled {
+  background-color: #c4c4c4;
+  box-shadow: none;
+  color: #eaeaea;
+}
+
+
+ul.nav button.selected {
+  background-color: #f95f2f;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.25);
   color: #ffffff;
 }
 
@@ -841,7 +855,9 @@ nav .select {
 
 .select select { width: 100%; }
 
-main#take-attendance, main#record-book, main#grade {
+/* main#attendance-sheet, main#record-book, main#grade { */
+  /* main#record-book, main#grade { */
+main#record-book {
   width: 75vw;
   margin-top: 4rem;
 }
@@ -850,8 +866,10 @@ main#take-attendance, main#record-book, main#grade {
 
 main section.table-settings {
   background-color: #fff;
+  
   width: 75vw;
   height: 30%;
+  
   margin-left: 0;
   padding: 3rem;
   padding-bottom: 1.5rem;
@@ -863,32 +881,146 @@ main section.table-settings {
   display: flex;
 }
 
+
+
+
+
+main#home > ul {
+  margin-top: 7rem;
+  margin-left: 7rem;
+}
+
+
+main#attendance-sheet select { margin-bottom: 0; }
+
+section#lesson, section#term-course-evaluations-data {
+  margin: 3rem;
+  margin-bottom: 0;
+
+  display: flex;
+}
+
 /* #ATTENDANCE TABLE-SETTINGS CONTENT */
 
-div.selectors,
-div.observations {
+section#term-course-evaluations-data > div.selectors,
+section#lesson > div.selectors {
+  flex-grow: 1;
+  margin-right: 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+}
+section#term-course-evaluations-data > div.chart,
+section#lesson > textarea#observations { 
+  flex-grow: 4;
+
   display: flex;
   flex-direction: column;
 }
 
-div.selectors {
-  flex-grow: 1;
-  margin-right: 1.5rem;
-}
-
-div.observations { flex-grow: 4; }
-
-div.selectors input,
-div.observations textarea { margin-bottom: 0.75rem; }
-
-div.observations textarea {
+div.selectors > input:first-child { margin-bottom: 0.75rem; }
+textarea#observations {
   height: 6.75rem;
   padding-top: .75rem;
 }
 
-div.observations label { width: fit-content; }
+section#set-evaluation {
+  /* background-color: #b6ecfd; */
+  min-height: 3rem;
+
+  /* margin: 0.75rem 0; */
+  padding: 0.75rem 3rem;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+section#set-evaluation > div#evaluation-info {
+  flex-grow: 1;
+  margin-right: .75rem;
+
+  display: flex;
+  justify-content: space-between;
+}
+section#set-evaluation > label { margin: 0; }
+
+div#evaluation-info > .eval-data { 
+  width: 25%; 
+  margin-right: .75rem;
+}
+#color-box {
+  background-color: #FFF;
+
+  border: 1px solid;
+  border-radius: 10px;
+  box-shadow: inset 0 4px 4px rgba(0,0,0,0.25);
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+#selected-color {
+  box-shadow: inset 0 4px 4px rgba(0,0,0,0.25);
+  border: 4px solid rgba(0, 0, 0, 0);
+  border-radius: 10px;
+
+  height: 100%;
+  width: 100%;
+}
+#color-picker {
+  position: absolute;
+  top: 3rem;
+  z-index: 2;
+
+  background-color: #FFF;
+  border: 1px solid;
+  border-radius: 10px;
+
+  height: fit-content;
+  padding: 1rem;
+  padding-right: .25rem;
+  padding-bottom: .25rem;
+
+  cursor: default;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.color-option {
+  border-radius: 5px;
+  height: 3rem;
+  width: 3rem;
+
+  margin-right: .75rem;
+  margin-bottom: .75rem;
+  cursor: pointer;
+}
+.color-option.selected{
+  border: 2px solid #f95f2f;
+  cursor: default;
+}
 
 /* GENERAL SECTION TABLE */
+
+main#attendance-sheet section.table,
+main#gradebook section.table {
+  margin-top: 0;
+  overflow: auto;
+}
+
+section.table th, section.table td { border: none; }
+
+
+
+
+
+
 
 main section.table {
   margin-top: 14rem;
@@ -949,30 +1081,23 @@ div.attendance-check label input {
 }
 
 /* SETTING GRADE INPUTS */
-
-#grade td.evaluation, #grade th.evaluation {
-  width: 7rem;
+td.evaluation input, th.evaluation {
+    width: 7rem;
 }
-
-#grade td.evaluation:last-of-type, #grade th.evaluation:last-of-type {
-  width: 8rem;
-}
-
 /* SETTING #GRADE "NOT EVALUATED" CHECKBOXES */
-
 td.not-evaluated {
   width: 4.5rem;
   height: 4.5rem;
   position: relative;
 }
-
 td.not-evaluated label {
   position: absolute;
   top: 1.5rem;
 }
-
 /* SETTING "AVERAGE" FIELDS */
-
+td.avg, th.avg {
+  width: 8rem;
+}
 td.avg {
   font-weight: 600;
   padding: 1.5rem;
@@ -980,15 +1105,9 @@ td.avg {
 
 /* SETTING GRADE CHART */
 
-main#grade section.table-settings .selectors { width: 25%; }
-
-main#grade section.table-settings select { width: 100%; }
-
 .chart { width: 75%; }
 
 #instructions { display: flex; }
-
-main#grade div.selectors p { margin-bottom: .5rem; }
 
 div#instructions p {
   margin-bottom: 0;
@@ -1017,12 +1136,12 @@ div#instructions p {
 
 .text { font-weight: 600; }
 
-.text.blue { color: #54A2EB; }
+/* .text.blue { color: #54A2EB; }
 .text.pink { color: #ff92aa; }
 .text.yellow { color: #fae155; }
 .text.violet { color: #C979FB; }
 .text.orange { color: #FFAC60; }
-.text.green { color: #41E5AA; }
+.text.green { color: #41E5AA; } */
 
 
 #input-fields input {
@@ -1051,12 +1170,12 @@ div#instructions p {
   border-bottom-right-radius: 12px; 
 }
 
-.bar.blue { background-color: #54A2EB; }
+/* .bar.blue { background-color: #54A2EB; }
 .bar.pink { background-color: #ff92aa; }
 .bar.yellow { background-color: #fae155; }
 .bar.violet { background-color: #C979FB; }
 .bar.orange { background-color: #FFAC60; }
-.bar.green { background-color: #41E5AA; }
+.bar.green { background-color: #41E5AA; } */
 
 /* SCROLLBAR PERSONALIZADO ----------------*/
 ::-webkit-scrollbar {

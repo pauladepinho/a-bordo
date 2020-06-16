@@ -31,7 +31,7 @@ router.use(isTeacher);
 router.get("/", TeacherController.renderHome);
 router.get("/home", TeacherController.renderHome);
 /*****************************************************************************/
-router.get("/fazer-chamada", TeacherController.renderAttendanceSheet);
+// router.get("/fazer-chamada", TeacherController.renderAttendanceSheet);
 router.post("/fazer-chamada", TeacherController.recordAttendances);
 /*****************************************************************************/
 router.get('/lancar-notas', TeacherController.renderGradeBook);
