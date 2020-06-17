@@ -19,15 +19,16 @@ const navButtons = [btnAttendanceSheet, btnGradebook, btnRecords, btnStatistics,
 const mainHome = document.getElementById("home");
 const mainAttendanceSheet = document.getElementById("attendance-sheet");
 const mainGradebook = document.getElementById("gradebook");
+const mainRecordsBook = document.getElementById("record-book");
 
-const mains = [mainHome, mainAttendanceSheet, mainGradebook];
+const mains = [mainHome, mainAttendanceSheet, mainGradebook, mainRecordsBook];
 
-// MAINS' CHILDREN ELEMENTS
+// ELEMENTS IN MAIN...
 
-// MAIN HOME
+// ...HOME
 const ulStudents = document.getElementById("ul-students");
 
-// MAIN ATTENDANCE SHEET
+// ...ATTENDANCE SHEET
 const formAttendanceSheet = document.getElementById("form-attendance-sheet");
 const btnSubmitAttendanceSheet = document.getElementById("btn-submit-attendance-sheet");
 
@@ -39,7 +40,7 @@ const checkboxEvaluationDay = document.getElementById("evaluation-day"); // new-
 const sectionSetEvaluation = document.getElementById("set-evaluation");
 const divEvaluationInfo = document.getElementById("evaluation-info");
 
-// MAIN GRADEBOOK
+// ...GRADEBOOK
 const formGradebook = document.getElementById("form-gradebook");
 const btnSubmitGradebook = document.getElementById("btn-submit-gradebook");
 
@@ -48,30 +49,42 @@ const gradebookChart = document.getElementById("gradebook-chart");
 const divContainer = document.getElementById("container");
 const divInputFields = document.getElementById("input-fields");
 
-const tbodyGradebook = document.getElementById("tbody-gradebook");
 const theadGradebook = document.getElementById("thead-gradebook");
+const tbodyGradebook = document.getElementById("tbody-gradebook");
+
+// ...RECORDS BOOK
+const theadAttendancesRecords = document.getElementById("thead-attendances-table");
+const tbodyAttendancesRecords = document.getElementById("tbody-attendances-table");
+
+const theadGradesRecords = document.getElementById("thead-grades-table");
+const tbodyGradesRecords = document.getElementById("tbody-grades-table");
+
 
 
 
 
 window.addEventListener("load", () => fetchData());
 
+// ELEMENTS IN NAV
+
 schoolSelect.addEventListener("change", () => callSelectedSchoolRelatedFunctions());
 classSelect.addEventListener("change", () => callSelectedClassRelatedFunctions());
 subjectSelect.addEventListener("change", () => callSelectedSubjectRelatedFunctions());
 termSelect.addEventListener("change", () => callSelectedTermRelatedFunctions());
 
-// form btn
-btnAttendanceSheet.addEventListener("click", () => toggleMainVisibility(mainAttendanceSheet, btnAttendanceSheet));
-formAttendanceSheet.addEventListener("submit", (evt) => confirmFormSubmition(evt));
+btnAttendanceSheet.addEventListener("click", () => toggleMainVisibility(mainAttendanceSheet, btnAttendanceSheet)); // form btn
+btnGradebook.addEventListener("click", () => toggleMainVisibility(mainGradebook, btnGradebook)); // form btn
+btnRecords.addEventListener("click", () => toggleMainVisibility(mainRecordsBook, btnRecords)); // reports btn
 
+// ELEMENTS IN MAIN...
+
+// ...ATTENDANCE SHEET
+formAttendanceSheet.addEventListener("submit", (evt) => confirmFormSubmition(evt));
 periodsSelect.addEventListener("change", () => { populateAttendanceSheetWithMarks(); enableSubmitionButton(btnSubmitAttendanceSheet) });
 checkboxEvaluationDay.addEventListener("change", () => createEvaluation());
 
-// form btn
-btnGradebook.addEventListener("click", () => toggleMainVisibility(mainGradebook, btnGradebook));
+// ...GRADEBOOK
 formGradebook.addEventListener("submit", (evt) => confirmFormSubmition(evt, true));
-
 gradebookEvaluationSelect.addEventListener("change", () => enableSelectedStudentGradeInputs());
 
 
@@ -112,7 +125,13 @@ const fetchCourseLessonsAndEvaluations = async () => {
             // ATTENDANCE SHEET NECESSARY DATA
             inputCourseId.value = course.id;
 
-            getTermEvaluations();
+            getTermEvaluations(); // if a term is selected
+
+            populateTHead(theadAttendancesRecords);
+            populateTHead(theadGradesRecords);
+
+            populateTbody(tbodyAttendancesRecords);
+            populateTbody(tbodyGradesRecords);
         })
         .catch(error => console.log(error))
 };
@@ -211,15 +230,19 @@ const callSelectedClassRelatedFunctions = () => {
     populateSubjectSelect();
     listStudents(); // main home
 
+    populateTbody(tbodyAttendancesRecords);
+    populateTbody(tbodyGradesRecords);
+
     populateTbody(tbodyAttendanceSheet);
     populateTbody(tbodyGradebook);
+
     removeEvaluationFromAttendanceSheet();
 };
 
 const callSelectedSubjectRelatedFunctions = () => {
     enableTermSelect();
     enableNavReportsAndContactBtns();
-    fetchCourseLessonsAndEvaluations();
+    fetchCourseLessonsAndEvaluations(); // calls important functions
     removeEvaluationFromAttendanceSheet();
 };
 
@@ -316,10 +339,10 @@ const populateTermSelect = () => { // when a school is selected
 };
 
 const enableTermSelect = () => { // when a subject is selected
-    termSelect.disabled = false;
+    if (termSelect.disabled) {
+        termSelect.disabled = false;
+    }
 };
-
-
 
 // TOGGLE NAV BUTTONS
 
@@ -386,9 +409,11 @@ const listStudents = () => {
     });
 };
 
-/****************** 
-    OTHER MAINS
-******************/
+/********************
+    MAINS' TABLES
+********************/
+
+// TABLE HEAD
 
 const populateTHead = (thead) => {
 
@@ -407,9 +432,25 @@ const populateTHead = (thead) => {
     row.prepend(studentNumber, studentName);
     thead.append(row);
 
-    if (!termEvaluations.length) {
-        return;
+    if (termEvaluations.length) {
+        if (thead == theadGradebook) { populateTheadGradebook(row); }
     }
+    if (lessons.length) {
+        switch (thead) {
+            case theadAttendancesRecords:
+                populateTheadAttendancesRecords(row);
+                break;
+            case theadGradesRecords:
+                populateTheadGradesRecords(row);
+                break;
+            default:
+                console.log("lessons.length > 0 && (thead != theadAttendancesRecords || thead != theadGradesRecords)");
+
+        }
+    }
+};
+
+const populateTheadGradebook = (row) => {
     termEvaluations.forEach(eval => {
         const th = document.createElement("th");
         th.classList.add("evaluation", `evaluation${eval[0].id}`);
@@ -435,8 +476,71 @@ const populateTHead = (thead) => {
     row.append(notEval, avg);
 };
 
-const populateTbody = (tbody) => {
+const populateTheadAttendancesRecords = (row) => {
 
+    const weekDays = ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sáb."];
+
+    lessons.forEach(lesson => {
+        const date = new Date(lesson.date);
+        const weekDay = weekDays[date.getDay()];
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+
+        const th = document.createElement("th");
+        th.innerText = `${weekDay}\n${day}/${month}`;
+        row.append(th);
+    });
+};
+
+const populateTheadGradesRecords = (row) => {
+    const schoolId = getSelectedOption(schoolSelect).value;
+    const schoolMaxGrade = getSelectedSchoolMaxGrade();
+    let academicTerms;
+    classes.forEach(c => {
+        if (c.school.id == schoolId) {
+            academicTerms = c.school.academicTerms;
+        }
+    });
+    for (let term = 1; term <= academicTerms; term++) {
+
+        let evalThisTerm = false; // teacher didn't fill student's grade input field
+
+        lessons.forEach(lesson => {
+
+            if (lesson.evaluations.length && lesson.academicTerm == term) {
+                evalThisTerm = true;
+
+                const title = lesson.evaluations[0].title;
+                const evalMaxGrade = lesson.evaluations[0].maxGrade;
+                const color = lesson.evaluations[0].color;
+
+                const th = document.createElement("th");
+                th.innerText = title;
+                th.style.color = color;
+
+                const div = document.createElement("div");
+                div.innerText = `${evalMaxGrade} pts.`
+
+                th.append(div);
+                row.append(th);
+            }
+        });
+        if (evalThisTerm) {
+            const th = document.createElement("th");
+            th.innerText = "MÉDIA";
+
+            const div = document.createElement("div");
+            div.innerText = `${schoolMaxGrade} pts.`
+
+            th.append(div);
+            row.append(th);
+        }
+    }
+};
+
+// TABLE BODY
+
+const populateTbody = (tbody) => {
     const selectedClass = getSelectedOption(classSelect);
     removeChildNodes(tbody);
     classes.forEach(c => {
@@ -444,29 +548,235 @@ const populateTbody = (tbody) => {
             const students = c.students;
             students.forEach(student => {
                 if (student.name) {
-                    const tr = document.createElement("tr");
-
-                    const number = document.createElement("td");
-                    number.className = "student-number";
-                    number.innerText = student.number.number;
-
-                    const name = document.createElement("td");
-                    name.id = student.id;
-                    name.className = "student-name";
-                    name.innerText = student.name;
-
-                    tbody.append(tr);
-                    tr.append(number, name);
+                    populateTbodyWithStudents(student, tbody);
                 }
             });
         }
     });
     if (termEvaluations.length) {
-        populateGradebookTbody(tbodyGradebook);
+        if (tbody == tbodyGradebook) { populateTbodyGradebook(); }
         gradebookChart.hidden = false;
     } else {
         gradebookChart.hidden = true;
     }
+    if (lessons.length) {
+        switch (tbody) {
+            case tbodyAttendancesRecords:
+                populateTbodyAttendancesRecords();
+                break;
+            case tbodyGradesRecords:
+                populateTbodyGradesRecords();
+                break;
+            default:
+                console.log("lessons.length > 0 && (tbody != tbodyAttendancesRecords || tbody != tbodyGradesRecords)");
+        }
+    }
+};
+
+const populateTbodyWithStudents = (student, tbody) => {
+    const tr = document.createElement("tr");
+
+    const number = document.createElement("td");
+    number.className = "student-number";
+    number.innerText = student.number.number;
+
+    const name = document.createElement("td");
+    name.id = student.id;
+    name.className = "student-name";
+    name.innerText = student.name;
+
+    tbody.append(tr);
+    tr.append(number, name);
+};
+
+const populateTbodyGradebook = () => {
+    const rows = tbodyGradebook.childNodes;
+    rows.forEach(row => {
+        const studentId = row.childNodes[1].id;
+
+        let totalPoints = null;
+        let gradedEvaluations = 0;
+
+        termEvaluations.forEach(eval => {
+            let grade;
+            eval[0].studentsGrades.forEach(studentEval => {
+                if (studentEval.studentId == studentId) {
+
+                    gradedEvaluations++;
+
+                    if (studentEval.evaluated == 1) {
+                        grade = Number(studentEval.grade);
+                        const normalizedGrade = grade / eval[0].maxGrade;
+
+                        totalPoints += normalizedGrade;
+                    }
+                    else { grade = "N/A" }
+                }
+            });
+            // STUDENT GRADES INPUTS
+            const td = document.createElement("td");
+            td.className = "evaluation";
+
+            const input = createGradeInput(eval[0].maxGrade);
+            input.classList.add("grade", `student${studentId}`, `evaluation${eval[0].id}`);
+            input.name = `student${studentId}-evaluation${eval[0].id}`;
+            input.placeholder = "Nota";
+            if (grade == "N/A") {
+                input.type = "text";
+                input.addEventListener("keydown", (evt) => { if (input.type == "text") { evt.preventDefault() } });
+            }
+            input.value = grade;
+            input.disabled = true;
+
+            td.append(input);
+            row.append(td);
+
+            input.addEventListener("change", () => enableSubmitionButton(btnSubmitGradebook));
+        });
+        // NOT EVALUATED CHECKBOX
+        const notEval = document.createElement("td");
+        notEval.className = "not-evaluated";
+
+        const label = document.createElement("label");
+        label.className = "checkbox-container";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.classList.add("not-evaluated", `student${studentId}`);
+        checkbox.disabled = true;
+
+        const checkmark = document.createElement("span");
+        checkmark.className = "checkmark";
+
+        // AVERAGE GRADE
+        const avg = document.createElement("td");
+        avg.className = "term-final-grade";
+
+        if (totalPoints != null) {
+            const schoolMaxGrade = getSelectedSchoolMaxGrade();
+            avg.innerText = (totalPoints * schoolMaxGrade / gradedEvaluations).toFixed(1);
+        } else {
+            avg.innerText = "-";
+        }
+
+        label.append(checkbox, checkmark);
+        notEval.append(label);
+        row.append(notEval, avg);
+
+        checkbox.addEventListener("change", () => markAsNotEvaluated(checkbox, `input.grade.student${studentId}`));
+    });
+};
+
+const populateTbodyAttendancesRecords = () => {
+    const rows = tbodyAttendancesRecords.childNodes;
+    rows.forEach(row => {
+        const studentId = row.childNodes[1].id;
+        lessons.forEach(lesson => {
+
+            const td = document.createElement("td");
+            const div = document.createElement("div");
+            div.className = "attendance";
+            td.append(div);
+
+            lesson.attendances.forEach(attendance => {
+                if (attendance.studentId == studentId) {
+                    const span = document.createElement("span");
+                    span.className = attendance.mark;
+
+                    switch (attendance.mark) {
+                        case "present":
+                            span.innerText = "P"
+                            break;
+                        case "absent":
+                            span.innerText = "F"
+                            break;
+                        default: // late
+                            span.innerText = "A"
+                    }
+                    div.append(span);
+                }
+            });
+            row.append(td);
+        });
+    });
+};
+
+const populateTbodyGradesRecords = () => {
+
+    const rows = tbodyGradesRecords.childNodes;
+    rows.forEach(row => {
+        const studentId = row.childNodes[1].id;
+        const schoolId = getSelectedOption(schoolSelect).value;
+        let academicTerms;
+        classes.forEach(c => {
+            if (c.school.id == schoolId) {
+                academicTerms = c.school.academicTerms;
+            }
+        });
+        for (let term = 1; term <= academicTerms; term++) {
+
+            let evalThisTerm = false;
+
+            let totalPoints = null;
+            let gradedEvaluations = 0;
+
+            lessons.forEach(lesson => {
+                if (lesson.evaluations.length && lesson.academicTerm == term) {
+
+                    const studentsEvaluations = lesson.evaluations[0].studentsGrades;
+                    let thereWasAnEntry = false; // teacher didn't fill student's grade input field
+
+                    if (studentsEvaluations.length) {
+                        for (let i = 0; i < studentsEvaluations.length; i++) {
+
+                            if (studentsEvaluations[i].studentId == studentId) {
+
+                                evalThisTerm = true;
+
+                                gradedEvaluations++;
+                                const grade = studentsEvaluations[i].grade;
+                                const normalizedGrade = grade / lesson.evaluations[0].maxGrade;
+                                totalPoints += normalizedGrade;
+
+                                const td = document.createElement("td"); // must be created inside the if statement
+                                const div = document.createElement("div");
+                                studentsEvaluations[i].evaluated == 1 ? div.innerText = grade : div.innerText = "N/A";
+
+                                td.append(div);
+                                row.append(td);
+                                thereWasAnEntry = true;
+                            }
+                            else if (i == studentsEvaluations.length - 1 && !thereWasAnEntry) {
+                                const td = document.createElement("td");
+                                const div = document.createElement("div");
+                                div.innerText = "-";
+                                td.append(div);
+                                row.append(td);
+                            }
+                        }
+                    } else {
+                        const td = document.createElement("td");
+                        const div = document.createElement("div");
+                        div.innerText = "-";
+                        td.append(div);
+                        row.append(td);
+                    }
+                }
+            });
+            if (evalThisTerm) {
+                const avg = document.createElement("td");
+                const div = document.createElement("div");
+                if (totalPoints != null) {
+                    const schoolMaxGrade = getSelectedSchoolMaxGrade();
+                    div.innerText = (totalPoints * schoolMaxGrade / gradedEvaluations).toFixed(1);
+                } else {
+                    div.innerText = "-";
+                }
+                avg.append(div);
+                row.append(avg);
+            }
+        }
+    });
 };
 
 /**** MAINS WITH FORMS */
@@ -755,89 +1065,9 @@ const getSelectedSchoolMaxGrade = () => {
     return schoolMaxGrade;
 };
 
-/*****************
-    MAIN GRADE
-*****************/
-
-const populateGradebookTbody = (tbody) => {
-    const rows = tbody.childNodes;
-    rows.forEach(row => {
-        const studentId = row.childNodes[1].id;
-
-        let totalPoints = null;
-        let gradedEvaluations = 0;
-
-        termEvaluations.forEach(eval => {
-            let grade;
-            eval[0].studentsGrades.forEach(studentEval => {
-                if (studentEval.studentId == studentId) {
-
-                    gradedEvaluations++;
-
-                    if (studentEval.evaluated == 1) {
-                        grade = Number(studentEval.grade);
-                        const normalizedGrade = grade / eval[0].maxGrade;
-
-                        totalPoints += normalizedGrade;
-                    }
-                    else {
-                        grade = "N/A"
-                    }
-                }
-            });
-            // STUDENT GRADES INPUTS
-            const td = document.createElement("td");
-            td.className = "evaluation";
-
-            const input = createGradeInput(eval[0].maxGrade);
-            input.classList.add("grade", `student${studentId}`, `evaluation${eval[0].id}`);
-            input.name = `student${studentId}-evaluation${eval[0].id}`;
-            input.placeholder = "Nota";
-            if (grade == "N/A") {
-                input.type = "text";
-                input.addEventListener("keydown", (evt) => { if (input.type == "text") { evt.preventDefault() } });
-            }
-            input.value = grade;
-            input.disabled = true;
-
-            td.append(input);
-            row.append(td);
-
-            input.addEventListener("change", () => enableSubmitionButton(btnSubmitGradebook));
-        });
-        // NOT EVALUATED CHECKBOX
-        const notEval = document.createElement("td");
-        notEval.className = "not-evaluated";
-
-        const label = document.createElement("label");
-        label.className = "checkbox-container";
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.classList.add("not-evaluated", `student${studentId}`);
-        checkbox.disabled = true;
-
-        const checkmark = document.createElement("span");
-        checkmark.className = "checkmark";
-
-        // AVERAGE GRADE
-        const avg = document.createElement("td");
-        avg.className = "term-final-grade";
-
-        if (totalPoints != null) {
-            const schoolMaxGrade = getSelectedSchoolMaxGrade();
-            avg.innerText = (totalPoints * schoolMaxGrade / gradedEvaluations).toFixed(1);
-        } else {
-            avg.innerText = "-";
-        }
-
-        label.append(checkbox, checkmark);
-        notEval.append(label);
-        row.append(notEval, avg);
-
-        checkbox.addEventListener("change", () => markAsNotEvaluated(checkbox, `input.grade.student${studentId}`));
-    });
-};
+/*********************
+    MAIN GRADEBOOK
+*********************/
 
 const populateGradebookEvaluationSelect = () => {
     removeChildNodes(gradebookEvaluationSelect);

@@ -1136,14 +1136,6 @@ div#instructions p {
 
 .text { font-weight: 600; }
 
-/* .text.blue { color: #54A2EB; }
-.text.pink { color: #ff92aa; }
-.text.yellow { color: #fae155; }
-.text.violet { color: #C979FB; }
-.text.orange { color: #FFAC60; }
-.text.green { color: #41E5AA; } */
-
-
 #input-fields input {
   width: 100%;
 }
@@ -1169,13 +1161,6 @@ div#instructions p {
   border-top-right-radius: 12px; 
   border-bottom-right-radius: 12px; 
 }
-
-/* .bar.blue { background-color: #54A2EB; }
-.bar.pink { background-color: #ff92aa; }
-.bar.yellow { background-color: #fae155; }
-.bar.violet { background-color: #C979FB; }
-.bar.orange { background-color: #FFAC60; }
-.bar.green { background-color: #41E5AA; } */
 
 /* SCROLLBAR PERSONALIZADO ----------------*/
 ::-webkit-scrollbar {
@@ -1205,3 +1190,66 @@ div#instructions p {
 #set-child select { width: 100%; }
 #set-child p { margin-top: 12px; }
 #set-child span#term { font-weight: 700; }
+
+
+
+/* RECORDS BOOK */
+
+/* TABLE-SETTINGS SECTION */
+
+main#record-book div.switch-table {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+
+main#record-book div.switch-table button { width: 100%; }
+main#record-book div.switch-table button:first-child { margin-bottom: .75rem; }
+
+main#record-book div.selectors {
+  width: 30%;
+  margin-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+main#record-book div.selectors select { width: 100%; }
+
+main#record-book div.chart { width: 40%; }
+main#record-book div#chart { opacity: 0; }
+
+/* TABLE SECTION */
+
+/* CREATE VERTICAL LINES */
+main#record-book th, main#record-book td { border-right: 2px solid #eaeaea; }
+main#record-book th:first-child, main#record-book td:first-child { border-right: none; }
+
+/* GRADE TABLE */
+
+main#record-book th div{ font-size: .75rem; }
+
+/* ATTENDANCE TABLE */
+
+main#record-book td div.attendance {
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+main#record-book div.attendance span {
+  min-width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 2.25rem;
+  
+  margin-right: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  font-weight: 700;
+}
+
+main#record-book div.attendance span.present { background-color: #30C1F9; }
+main#record-book div.attendance span.absent { background-color: #fe539b; }
+main#record-book div.attendance span.late { background-color: #ffcc33; }
