@@ -52,7 +52,20 @@ const getGuardianData = async (user) => {
         subjects,
         schools
     }
-}
+};
+
+const getGuardian = async (user) => {
+    const guardian = await Guardian.findOne({
+        where: {
+            userId: user.id
+        },
+        attributes: { exclude: ["guardianId"] },
+        include: {
+            model: User, as: "user"
+        }
+    });
+    return guardian;
+};
 
 module.exports = {
 
@@ -60,10 +73,9 @@ module.exports = {
     // GET responsavel/home
     renderHome: async (req, res) => {
         const user = req.session.user;
+        const guardian = await getGuardian(user);
 
-        let data = await getGuardianData(user);
-
-        return res.render("guardian", { user, data });
+        return res.render("guardian", { user, guardian });
     },
 
     // GET responsavel/cadastrar
