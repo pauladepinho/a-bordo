@@ -6,63 +6,24 @@
 
     <nav>
         <div class="navbar select">
-            <select name="student" id="student" required>
-                <option disabled selected>Aluno</option>
-                <% for(student of data.students) { %>
-                <option value="<%= student.id %>"><%= student.name %></option>
-                <% } %>
-            </select>
-
-            <select name="school" id="school" required>
-                <option disabled selected>Ano letivo</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-            </select>
-
-            <select name="school" id="school" required>
-                <option disabled selected>Escola</option>
-                <% for(school of data.schools) { %>
-                <option value="<%= school.id %>"><%= school.name %></option>
-                <% } %>
-            </select>
-
-            <select name="class" id="class" required>
-                <option value="" disabled selected>Turma</option>
-                <% for(clas of data.classes) { %>
-                <option value="<%= clas.id %>">Turma <%= clas.code %></option>
-                <% } %>
-            </select>
-
-            <select name="term" id="term" required>
-                <% if (data.schools[0].academicTerms == 4) { %>
-                <option value="all" selected>Todos os Bimestres</option>
-                <option value="1">1º Bimestre</option>
-                <option value="2">2º Bimestre</option>
-                <option value="3">3º Bimestre</option>
-                <option value="4">4º Bimestre</option>
-                <% } else if (data.schools[0].academicTerms == 3) { %>
-                <option value="all" selected>Todos os Trimestres</option>
-                <option value="1">1º Trimestre</option>
-                <option value="2">2º Trimestre</option>
-                <option value="3">3º Trimestre</option>
-                <% } %>
-            </select>
+            <select name="student" id="student" required></select>
+            <select name="year" id="year" required></select>
+            <select name="school" id="school" required></select>
+            <select name="class" id="class" required disabled></select>
+            <select id="term" name="academicTerm" form="form-attendance-sheet" required disabled></select>
         </div>
 
         <div class="navbar">
             <ul class="nav">
-                <li><a class="nav-link" href="#">
-                        Contatar responsáveis
-                    </a></li>
-                <li><a class="nav-link" href="#">
-                        Justificar faltas
-                    </a></li>
+                <li><button id="btn-contact" type="button" disabled>Contactar professores</button></li>
+                <li><button id="btn-justify" type="button" disabled>Justificar faltas</button></li>
             </ul>
         </div>
     </nav>
 
-    <main id="">
+    <main id="home">
         Home do responsável/Boletim escolar
     </main>
 
+    <script src="../../javascripts/guardian.js"></script>
     <%- include("../partials/footer.ejs") %>

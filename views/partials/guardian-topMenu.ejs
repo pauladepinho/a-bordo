@@ -1,5 +1,6 @@
 <header>
-    <a href="/responsavel/home" id="logo">
+    <input type="hidden" id="userId" value="<%= user.id %>"></span>
+    <a href="/" id="logo">
         <img class="logo" src="../images/airplane.svg" alt="">
         <h1 class="logo">aBordo</h1>
     </a>
@@ -9,7 +10,7 @@
         </div>
 
         <div id="user-options">
-            <img src="../<%= user.picture %>" alt="">
+            <img src="../<%= user.picture %>" alt="avatar">
             <span>
                 <p><%= user.forename + " " + user.surname %></p>
                 <p>RESPONSÁVEL</p>
