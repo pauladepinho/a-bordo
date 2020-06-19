@@ -93,7 +93,7 @@
 
                 <div class="chart" id="gradebook-chart" hidden>
                     <div id="instructions">
-                        <p>Valor (pontos máximos) de cada avaliação:</p>
+                        <p>Pontuação máxima de cada avaliação:</p>
                         <div id="disclaimer"></div>
                     </div>
                     <div id="input-fields"></div>
@@ -118,8 +118,8 @@
     <main id="record-book" hidden>
         <section class="table-settings">
             <div class="switch-table">
-                <button class="selected" type="button" id="chamada" onclick="showAttendanceSheet()">Chamada</button>
-                <button type="button" id="nota" onclick="showGradebook()">Notas</button>
+                <button class="selected" type="button" id="attendances">Chamadas</button>
+                <button type="button" id="grades">Notas</button>
             </div>
 
             <div class="selectors">
@@ -154,22 +154,19 @@
         </section>
 
         <section class="table">
-            <table class="table-striped" id="attendance-table">
+            <table class="table-striped" id="table-attendances">
                 <thead id="thead-attendances-table"></thead>
                 <tbody id="tbody-attendances-table"></tbody>
             </table>
 
-            <table class="table table-striped" id="grades-table" hidden>
+            <table class="table table-striped" id="table-grades" hidden>
                 <thead id="thead-grades-table"></thead>
                 <tbody id="tbody-grades-table"></tbody>
             </table>
         </section>
     </main>
 
-    <script src="../../javascripts/teacher.js"></script>
 
-    <!-- APEXCHARTS JS -->
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <!-- DAILY JS -->
-    <script src="/javascripts/daily.js"></script>
+    <script src="../../javascripts/teacherScript.js"></script>
+
     <%- include("../partials/footer.ejs") %>

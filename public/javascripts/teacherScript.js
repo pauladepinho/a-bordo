@@ -53,6 +53,12 @@ const theadGradebook = document.getElementById("thead-gradebook");
 const tbodyGradebook = document.getElementById("tbody-gradebook");
 
 // ...RECORDS BOOK
+const btnAttendances = document.getElementById("attendances");
+const btnGrades = document.getElementById("grades");
+
+const tableAttendances = document.getElementById("table-attendances");
+const tableGrades = document.getElementById("table-grades");
+
 const theadAttendancesRecords = document.getElementById("thead-attendances-table");
 const tbodyAttendancesRecords = document.getElementById("tbody-attendances-table");
 
@@ -86,6 +92,10 @@ checkboxEvaluationDay.addEventListener("change", () => createEvaluation());
 // ...GRADEBOOK
 formGradebook.addEventListener("submit", (evt) => confirmFormSubmition(evt, true));
 gradebookEvaluationSelect.addEventListener("change", () => enableSelectedStudentGradeInputs());
+
+// ...RECORDS BOOK
+btnAttendances.addEventListener("mouseup", () => switchViewedTable(tableAttendances, btnAttendances));
+btnGrades.addEventListener("mouseup", () => switchViewedTable(tableGrades, btnGrades));
 
 
 
@@ -432,21 +442,18 @@ const populateTHead = (thead) => {
     row.prepend(studentNumber, studentName);
     thead.append(row);
 
-    if (termEvaluations.length) {
-        if (thead == theadGradebook) { populateTheadGradebook(row); }
-    }
-    if (lessons.length) {
-        switch (thead) {
-            case theadAttendancesRecords:
-                populateTheadAttendancesRecords(row);
-                break;
-            case theadGradesRecords:
-                populateTheadGradesRecords(row);
-                break;
-            default:
-                console.log("lessons.length > 0 && (thead != theadAttendancesRecords || thead != theadGradesRecords)");
-
-        }
+    switch (thead) {
+        case theadGradebook:
+            populateTheadGradebook(row);
+            break;
+        case theadAttendancesRecords:
+            populateTheadAttendancesRecords(row);
+            break;
+        case theadGradesRecords:
+            populateTheadGradesRecords(row);
+            break;
+        default:
+            console.log("thead", thead);
     }
 };
 
@@ -457,8 +464,9 @@ const populateTheadGradebook = (row) => {
 
         const label = document.createElement("label");
         label.className = "title";
-        label.style.color = eval[0].color;
         label.innerText = eval[0].title;
+        label.style.color = eval[0].color;
+        label.style.fontWeight = 500;
 
         th.append(label);
         row.append(th);
@@ -517,6 +525,7 @@ const populateTheadGradesRecords = (row) => {
                 const th = document.createElement("th");
                 th.innerText = title;
                 th.style.color = color;
+                th.style.fontWeight = 500;
 
                 const div = document.createElement("div");
                 div.innerText = `${evalMaxGrade} pts.`
@@ -526,14 +535,15 @@ const populateTheadGradesRecords = (row) => {
             }
         });
         if (evalThisTerm) {
-            const th = document.createElement("th");
-            th.innerText = "MÉDIA";
+            const avg = document.createElement("th");
+            avg.innerText = "MÉDIA";
+            avg.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
 
             const div = document.createElement("div");
             div.innerText = `${schoolMaxGrade} pts.`
 
-            th.append(div);
-            row.append(th);
+            avg.append(div);
+            row.append(avg);
         }
     }
 };
@@ -553,23 +563,21 @@ const populateTbody = (tbody) => {
             });
         }
     });
-    if (termEvaluations.length) {
-        if (tbody == tbodyGradebook) { populateTbodyGradebook(); }
-        gradebookChart.hidden = false;
-    } else {
-        gradebookChart.hidden = true;
-    }
-    if (lessons.length) {
-        switch (tbody) {
-            case tbodyAttendancesRecords:
-                populateTbodyAttendancesRecords();
-                break;
-            case tbodyGradesRecords:
-                populateTbodyGradesRecords();
-                break;
-            default:
-                console.log("lessons.length > 0 && (tbody != tbodyAttendancesRecords || tbody != tbodyGradesRecords)");
-        }
+    if (termEvaluations.length) { gradebookChart.hidden = false; }
+    else { gradebookChart.hidden = true; }
+
+    switch (tbody) {
+        case tbodyGradebook:
+            populateTbodyGradebook();
+            break;
+        case tbodyAttendancesRecords:
+            populateTbodyAttendancesRecords();
+            break;
+        case tbodyGradesRecords:
+            populateTbodyGradesRecords();
+            break;
+        default:
+        // tbodyAttendanceSheet
     }
 };
 
@@ -715,7 +723,7 @@ const populateTbodyGradesRecords = () => {
         });
         for (let term = 1; term <= academicTerms; term++) {
 
-            let evalThisTerm = false;
+            let evalThisTerm = false; // teacher didn't fill student's grade input field
 
             let totalPoints = null;
             let gradedEvaluations = 0;
@@ -723,57 +731,72 @@ const populateTbodyGradesRecords = () => {
             lessons.forEach(lesson => {
                 if (lesson.evaluations.length && lesson.academicTerm == term) {
 
-                    const studentsEvaluations = lesson.evaluations[0].studentsGrades;
+                    evalThisTerm = true;
                     let thereWasAnEntry = false; // teacher didn't fill student's grade input field
 
+                    const studentsEvaluations = lesson.evaluations[0].studentsGrades;
                     if (studentsEvaluations.length) {
                         for (let i = 0; i < studentsEvaluations.length; i++) {
-
                             if (studentsEvaluations[i].studentId == studentId) {
 
-                                evalThisTerm = true;
-
-                                gradedEvaluations++;
-                                const grade = studentsEvaluations[i].grade;
-                                const normalizedGrade = grade / lesson.evaluations[0].maxGrade;
-                                totalPoints += normalizedGrade;
-
-                                const td = document.createElement("td"); // must be created inside the if statement
-                                const div = document.createElement("div");
-                                studentsEvaluations[i].evaluated == 1 ? div.innerText = grade : div.innerText = "N/A";
-
-                                td.append(div);
-                                row.append(td);
                                 thereWasAnEntry = true;
+
+                                const maxGrade = lesson.evaluations[0].maxGrade;
+                                const grade = studentsEvaluations[i].grade;
+                                const normalizedGrade = grade / maxGrade;
+                                totalPoints += normalizedGrade;
+                                gradedEvaluations++;
+
+                                const td = document.createElement("td"); // must be created inside of the if statement
+                                td.className = "recorded-grade";
+
+                                const color = lesson.evaluations[0].color;
+                                const text = studentsEvaluations[i].evaluated == 1 ? grade : "N/A";
+
+                                const pieChart = createPieChart(normalizedGrade, color, text);
+
+                                td.append(pieChart);
+                                row.append(td);
                             }
-                            else if (i == studentsEvaluations.length - 1 && !thereWasAnEntry) {
+                            else if (i == studentsEvaluations.length - 1 && !thereWasAnEntry) { // this student's evaluation has not been graded yet, although others may have
                                 const td = document.createElement("td");
-                                const div = document.createElement("div");
-                                div.innerText = "-";
-                                td.append(div);
+                                td.className = "recorded-grade";
+                                td.innerText = "-";
                                 row.append(td);
                             }
                         }
-                    } else {
+                    } else { // there is an evaluation, but no student has been graded yet
                         const td = document.createElement("td");
-                        const div = document.createElement("div");
-                        div.innerText = "-";
-                        td.append(div);
+                        td.className = "recorded-grade";
+                        td.innerText = "-";
                         row.append(td);
                     }
                 }
             });
-            if (evalThisTerm) {
+            if (evalThisTerm) { // calculate the average for this term
+                const colors = { success: "#30C1f9", warning: "#FE539B" };
+
                 const avg = document.createElement("td");
-                const div = document.createElement("div");
-                if (totalPoints != null) {
-                    const schoolMaxGrade = getSelectedSchoolMaxGrade();
-                    div.innerText = (totalPoints * schoolMaxGrade / gradedEvaluations).toFixed(1);
-                } else {
-                    div.innerText = "-";
-                }
-                avg.append(div);
+                avg.className = "recorded-grade";
+                // avg.style.backgroundColor = "#B6ECFD";
+                avg.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
                 row.append(avg);
+
+                if (totalPoints != null) {
+                    const normalizedGrade = totalPoints / gradedEvaluations;
+                    const schoolMaxGrade = getSelectedSchoolMaxGrade();
+
+                    const avgGrade = normalizedGrade * schoolMaxGrade;
+                    const passGrade = getSelectedSchoolPassingGrade();
+
+                    const color = avgGrade >= passGrade ? colors.success : colors.warning;
+                    const text = schoolMaxGrade == 100 && avgGrade % 1 == 0 ? avgGrade : avgGrade.toFixed(1);
+
+                    const pieChart = createPieChart(normalizedGrade, color, text);
+                    avg.append(pieChart);
+                } else {
+                    avg.innerText = "-";
+                }
             }
         }
     });
@@ -1140,21 +1163,46 @@ const markAsNotEvaluated = (checkbox, inputSelector) => {
     }
 };
 
+/************************
+    MAIN RECORDS BOOK
+************************/
+
+
+const switchViewedTable = (table, btn) => {
+    if (btn.classList.contains("selected")) { return; }
+    btn.className = "selected";
+    switch (table) {
+        case tableAttendances:
+            tableAttendances.hidden = false;
+            tableGrades.hidden = true;
+            btnGrades.classList.remove("selected");
+            break;
+        case tableGrades:
+            tableGrades.hidden = false;
+            tableAttendances.hidden = true;
+            btnAttendances.classList.remove("selected");
+            break;
+        default:
+            console.log(`error: table ${table} is invalid.`);
+    }
+};
+
+
+
 /**** CHART ****/
 
 const setGradebookChart = () => {
-    populateDivContainer();
-    createChartControllers();
-};
-
-const populateDivContainer = () => {
     removeChildNodes(divContainer);
+    removeChildNodes(divInputFields);
+
     let possibleTotalPoints = 0;
     termEvaluations.forEach(eval => {
         possibleTotalPoints += Number(eval[0].maxGrade);
     });
+
     termEvaluations.forEach(eval => {
         createChartBar(eval, possibleTotalPoints);
+        createChartController(eval);
     });
 };
 
@@ -1163,26 +1211,98 @@ const createChartBar = (eval, possibleTotalPoints) => {
     bar.classList.add("bar", `evaluation${eval[0].id}`);
     bar.style.width = Math.round(100 * Number(eval[0].maxGrade) / possibleTotalPoints) + "%";
     bar.style.backgroundColor = eval[0].color;
-
     divContainer.append(bar);
 };
 
-const createChartControllers = () => {
-    removeChildNodes(divInputFields);
-    termEvaluations.forEach(eval => {
-        const div = document.createElement("div");
+const createChartController = (eval) => {
+    const div = document.createElement("div");
 
-        const label = document.createElement("label");
-        label.className = "title";
-        label.style.color = eval[0].color;
-        label.innerText = eval[0].title;
+    const label = document.createElement("label");
+    label.className = "title";
+    label.style.color = eval[0].color;
+    label.innerText = eval[0].title;
 
-        const input = createGradeInput();
-        input.classList.add("max-grade", `evaluation${eval[0].id}`);
-        input.name = `max-grade-evaluation${eval[0].id}`;
-        input.value = `${Number(eval[0].maxGrade)}`;
+    const input = createGradeInput();
+    input.classList.add("max-grade", `evaluation${eval[0].id}`);
+    input.name = `max-grade-evaluation${eval[0].id}`;
+    input.value = `${Number(eval[0].maxGrade)}`;
 
-        divInputFields.append(div);
-        div.append(label, input);
-    });
+    divInputFields.append(div);
+    div.append(label, input);
+
+    input.addEventListener("change", () => { changeBarWidth(input); enableSubmitionButton(btnSubmitGradebook) });
+};
+
+const changeBarWidth = (input) => {
+    if (input.value > 0) {
+        // RESET FRACTION DENOMINATOR
+        let totalPoints = 0;
+        const otherinputs = document.querySelectorAll("input.max-grade");
+        otherinputs.forEach(input => {
+            totalPoints += Number(input.value);
+        });
+        console.log(totalPoints);
+        // REDEFINE BARS WIDTHS
+        otherinputs.forEach(input => {
+            let width = input.value / totalPoints;
+            const bars = document.querySelectorAll(".bar");
+            bars.forEach(bar => {
+                if (bar.classList.contains(input.classList[1])) {
+                    bar.style.width = `${width * 100}%`;
+                }
+            });
+        });
+    } else {
+        const disclaimer = document.getElementById("disclaimer");
+        const error = "Digite um número maior que zero!"
+        const p = document.createElement("p");
+        p.innerText = error;
+        disclaimer.append(p);
+        setTimeout(() => {
+            p.remove();
+        }, 4000);
+    }
+}
+
+/**** PIE CHART ****/
+
+const createPieChart = (normalizedGrade, color, text) => {
+
+    const pieContainer = document.createElement("div");
+    pieContainer.className = "pie-container";
+
+    const cutterRightHalf = document.createElement("div");
+    cutterRightHalf.classList.add("cutter", "right-half");
+
+    const sliceRightHalf = document.createElement("div");
+    sliceRightHalf.classList.add("slice", "right-half");
+    sliceRightHalf.style.backgroundColor = color;
+
+    const cutterLeftHalf = document.createElement("div");
+    cutterLeftHalf.classList.add("cutter", "left-half");
+
+    const sliceLeftHalf = document.createElement("div");
+    sliceLeftHalf.classList.add("slice", "left-half");
+    sliceLeftHalf.style.backgroundColor = color;
+
+    const innerCircle = document.createElement("div");
+    innerCircle.className = "inner-circle";
+    innerCircle.innerText = text;
+    innerCircle.style.color = color;
+
+    cutterRightHalf.append(sliceRightHalf);
+    cutterLeftHalf.append(sliceLeftHalf);
+    pieContainer.append(cutterRightHalf, cutterLeftHalf, innerCircle);
+
+    const eachPoint = 3.6; // 3.6 degrees in a circle
+    const totalDegrees = normalizedGrade * eachPoint * 100;
+
+    if (totalDegrees <= 180) {
+        sliceRightHalf.style.transform = `rotate(${totalDegrees}deg)`;
+    } else {
+        sliceRightHalf.style.transform = "rotate(180deg)";
+        sliceLeftHalf.style.transform = `rotate(${totalDegrees - 180}deg)`;
+    }
+
+    return pieContainer;
 };

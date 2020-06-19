@@ -210,7 +210,7 @@ module.exports = {
                     let classCourses = courses.filter(
                         course => course.classId == classes[i].id
                     );
-                    for (let j = 3; j < aStudent.length; j++) { // from index 3, there's a list of subjects ids the student is repeating
+                    for (let j = 3; j < aStudent.length; j++) { // from index 3, there's a ids list of subjects the student is repeating
 
                         for (course of classCourses) {
 

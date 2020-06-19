@@ -84,8 +84,51 @@ module.exports = {
             .catch(error => res.status(400).json(error))
     },
 
-
-
+    guardians: async (req, res) => {
+        await Guardian.findAll({
+            include: [
+                {
+                    model: User, as: "user"
+                },
+                {
+                    model: Student, as: "kids",
+                    include: [
+                        {
+                            model: Lesson, as: "lessons",
+                            through: { attributes: [] },
+                            include: {
+                                model: Course, as: "course",
+                                include: {
+                                    model: Subject, as: "subject"
+                                }
+                            }
+                        },
+                        {
+                            model: Attendance, as: "attendances"
+                        },
+                        {
+                            model: Student_Evaluation, as: "studentEvaluations",
+                            include: {
+                                model: Evaluation, as: "evaluation"
+                            }
+                        },
+                        {
+                            model: Class_Student, as: "classStudents",
+                            include: {
+                                model: Class, as: "class",
+                                include: {
+                                    model: School, as: "school"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            attributes: { exclude: ["guardianId"] }
+        })
+            .then(guardians => res.status(200).json(guardians))
+            .catch(error => res.status(400).json(error))
+    },
 
     // TEACHER HOME
 

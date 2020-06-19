@@ -10,7 +10,11 @@
   font-size: 16px;
 }
 li { list-style: none; }
-body{ overflow: hidden; }
+/* body{ overflow: hidden; } */
+body{ 
+  overflow-y: auto; 
+  overflow-x: hidden;
+}
 
 /* :focus { outline: none; } */
 /* button:focus { outline: none; } */
@@ -26,7 +30,7 @@ header {
 
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
 
   display: flex;
   align-items: center;
@@ -876,7 +880,7 @@ main section.table-settings {
 
   position: fixed;
   top: 4rem;
-  z-index: 1;
+  z-index: 5;
 
   display: flex;
 }
@@ -1011,7 +1015,7 @@ div#evaluation-info > .eval-data {
 main#attendance-sheet section.table,
 main#gradebook section.table {
   margin-top: 0;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 section.table th, section.table td { border: none; }
@@ -1024,7 +1028,7 @@ section.table th, section.table td { border: none; }
 
 main section.table {
   margin-top: 14rem;
-  overflow: auto;
+  width: 0;
 }
 
 section.table th { font-weight: normal; }
@@ -1082,7 +1086,7 @@ div.attendance-check label input {
 
 /* SETTING GRADE INPUTS */
 td.evaluation input, th.evaluation {
-    width: 7rem;
+  width: 6rem;
 }
 /* SETTING #GRADE "NOT EVALUATED" CHECKBOXES */
 td.not-evaluated {
@@ -1096,7 +1100,8 @@ td.not-evaluated label {
 }
 /* SETTING "AVERAGE" FIELDS */
 td.avg, th.avg {
-  width: 8rem;
+  /* width: 8rem; */
+  width: 20rem; /*///////////////////////////////////////////////////////////////////////////////////////*/
 }
 td.avg {
   font-weight: 600;
@@ -1224,10 +1229,6 @@ main#record-book div#chart { opacity: 0; }
 main#record-book th, main#record-book td { border-right: 2px solid #eaeaea; }
 main#record-book th:first-child, main#record-book td:first-child { border-right: none; }
 
-/* GRADE TABLE */
-
-main#record-book th div{ font-size: .75rem; }
-
 /* ATTENDANCE TABLE */
 
 main#record-book td div.attendance {
@@ -1253,3 +1254,70 @@ main#record-book div.attendance span {
 main#record-book div.attendance span.present { background-color: #30C1F9; }
 main#record-book div.attendance span.absent { background-color: #fe539b; }
 main#record-book div.attendance span.late { background-color: #ffcc33; }
+
+/* GRADE TABLE */
+
+main#record-book th div{ font-size: .75rem; }
+
+main#record-book #tbody-grades-table td.recorded-grade { 
+  min-width: 6rem;
+}
+
+/* PIE CHART */
+
+.pie-container {
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner-circle {
+  background-color: white;
+  width: calc( 60px * 2 / 3 );
+  height: calc( 60px * 2 / 3 );
+  z-index: 2;
+  border-radius: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 500;
+}
+
+.cutter {
+  background-color: #eaeaea;
+  width: inherit;
+  height: inherit;
+  border-radius: 100%;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.25);
+  position: absolute;
+}
+.cutter.right-half {
+  clip: rect(0px, 60px, 60px, calc( 60px / 2 ));
+}
+.cutter.left-half {
+  clip: rect(0px, calc( 60px / 2 ), 60px, 0px);
+}
+
+.slice {
+  background-color: #30c1f9;
+  width: inherit;
+  height: inherit;
+  border-radius: 100%;
+  /* box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.25); */
+  position: absolute;
+}
+.slice.right-half {
+  clip: rect(0px, calc( 60px / 2 ), 60px, 0px);
+  transform: rotate(0deg); /* cada ponto na nota equivale a 3.6deg */
+}
+.slice.left-half {
+  clip: rect(0px, 60px, 60px, calc( 60px / 2 ));
+  transform: rotate(0deg);
+}
