@@ -86,12 +86,12 @@
     <main id="gradebook" hidden>
         <form id="form-gradebook" action="/professor/lancar-notas" method="POST">
 
-            <section id="term-course-evaluations-data">
+            <section id="course-term-evaluations-data">
                 <div class="selectors">
                     <select id="gradebook-evaluation-select"></select>
                 </div>
 
-                <div class="chart" id="gradebook-chart" hidden>
+                <div id="gradebook-chart" hidden>
                     <div id="instructions">
                         <p>Pontuação máxima de cada avaliação:</p>
                         <div id="disclaimer"></div>
@@ -148,8 +148,13 @@
                 </select>
             </div>
 
-            <div class="chart">
-                <div id="chart"></div>
+            <div id="recorded-grades-chart-container">
+                <div id="recorded-grades-chart" hidden>
+                    <div id="terms-bars-container"></div>
+                    <div id="final-grade-bar-container">
+                        <div id="final-grade-bar"></div>
+                    </div>
+                </div>
             </div>
         </section>
 

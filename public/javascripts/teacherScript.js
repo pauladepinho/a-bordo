@@ -142,6 +142,7 @@ const fetchCourseLessonsAndEvaluations = async () => {
 
             populateTbody(tbodyAttendancesRecords);
             populateTbody(tbodyGradesRecords);
+            setRecordedGradesChart();
         })
         .catch(error => console.log(error))
 };
@@ -242,6 +243,7 @@ const callSelectedClassRelatedFunctions = () => {
 
     populateTbody(tbodyAttendancesRecords);
     populateTbody(tbodyGradesRecords);
+    setRecordedGradesChart();
 
     populateTbody(tbodyAttendanceSheet);
     populateTbody(tbodyGradebook);
@@ -1175,10 +1177,12 @@ const switchViewedTable = (table, btn) => {
         case tableAttendances:
             tableAttendances.hidden = false;
             tableGrades.hidden = true;
+            recordedGradesChart.hidden = true;
             btnGrades.classList.remove("selected");
             break;
         case tableGrades:
             tableGrades.hidden = false;
+            recordedGradesChart.hidden = false;
             tableAttendances.hidden = true;
             btnAttendances.classList.remove("selected");
             break;
@@ -1201,17 +1205,17 @@ const setGradebookChart = () => {
     });
 
     termEvaluations.forEach(eval => {
-        createChartBar(eval, possibleTotalPoints);
+        createEvaluationChartBar(eval, possibleTotalPoints, divContainer);
         createChartController(eval);
     });
 };
 
-const createChartBar = (eval, possibleTotalPoints) => {
+const createEvaluationChartBar = (eval, possibleTotalPoints, parent) => {
     const bar = document.createElement("div");
     bar.classList.add("bar", `evaluation${eval[0].id}`);
     bar.style.width = Math.round(100 * Number(eval[0].maxGrade) / possibleTotalPoints) + "%";
     bar.style.backgroundColor = eval[0].color;
-    divContainer.append(bar);
+    parent.append(bar);
 };
 
 const createChartController = (eval) => {
@@ -1220,6 +1224,7 @@ const createChartController = (eval) => {
     const label = document.createElement("label");
     label.className = "title";
     label.style.color = eval[0].color;
+    label.style.fontWeight = 500;
     label.innerText = eval[0].title;
 
     const input = createGradeInput();
@@ -1262,7 +1267,7 @@ const changeBarWidth = (input) => {
             p.remove();
         }, 4000);
     }
-}
+};
 
 /**** PIE CHART ****/
 
@@ -1305,4 +1310,53 @@ const createPieChart = (normalizedGrade, color, text) => {
     }
 
     return pieContainer;
+};
+
+
+
+
+const recordedGradesChart = document.getElementById("recorded-grades-chart");
+const termsBarsContainer = document.getElementById("terms-bars-container");
+const finalGradeBar = document.getElementById("final-grade-bar"); // it's width will change depending on how many terms have had graded evaluations
+
+
+const setRecordedGradesChart = () => {
+
+    removeChildNodes(termsBarsContainer);
+
+    const schoolId = getSelectedOption(schoolSelect).value;
+    let academicTerms;
+    classes.forEach(c => {
+        if (c.school.id == schoolId) {
+            academicTerms = c.school.academicTerms;
+        }
+    });
+    let termsAndGradedEvaluations = [];
+    for (let i = 0; i < academicTerms; i++) {
+        const termBar = document.createElement("div");
+        termBar.className = "term-bar";
+        termsBarsContainer.append(termBar);
+
+        termsAndGradedEvaluations.push({
+            term: i + 1,
+            gradedEval: false
+        });
+        let possibleTotalPoints = 0;
+        lessons.forEach(lesson => {
+            if (lesson.academicTerm == i + 1 && lesson.evaluations.length) {
+                termsAndGradedEvaluations[i].gradedEval = true;
+                possibleTotalPoints += Number(lesson.evaluations[0].maxGrade);
+            }
+        });
+        lessons.forEach(lesson => {
+            if (lesson.academicTerm == i + 1 && lesson.evaluations.length) {
+                createEvaluationChartBar(lesson.evaluations, possibleTotalPoints, termBar);
+            }
+        });
+    }
+    let qntOfTermsWithGradedEval = 0;
+    termsAndGradedEvaluations.forEach(term => {
+        if (term.gradedEval) { qntOfTermsWithGradedEval++; }
+    });
+    finalGradeBar.style.width = `${qntOfTermsWithGradedEval / academicTerms * 100}%`
 };
