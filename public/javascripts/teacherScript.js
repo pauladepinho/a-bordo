@@ -65,6 +65,14 @@ const tbodyAttendancesRecords = document.getElementById("tbody-attendances-table
 const theadGradesRecords = document.getElementById("thead-grades-table");
 const tbodyGradesRecords = document.getElementById("tbody-grades-table");
 
+const recordedGradesChart = document.getElementById("recorded-grades-chart");
+const termsBarsContainer = document.getElementById("terms-bars-container");
+const finalGradeBar = document.getElementById("final-grade-bar");
+
+
+
+
+const colors = { present: "#30C1F9", late: "#FFCC33", absent: "#FE539B" };
 
 
 
@@ -487,17 +495,53 @@ const populateTheadGradebook = (row) => {
 };
 
 const populateTheadAttendancesRecords = (row) => {
+    const presences = document.createElement("th");
+    presences.innerText = "P";
+    presences.style.color = "white";
+    presences.style.fontWeight = 700;
+    presences.style.backgroundColor = colors.present;
 
-    const weekDays = ["Dom.", "Seg.", "Ter.", "Qua.", "Qui.", "Sex.", "Sáb."];
+    let percentage = document.createElement("div");
+    percentage.innerText = "(em %)";
+    presences.append(percentage);
+
+    const absences = document.createElement("th");
+    absences.innerText = "F";
+    absences.style.color = "white";
+    absences.style.fontWeight = 700;
+    absences.style.backgroundColor = colors.absent;
+
+    percentage = document.createElement("div");
+    percentage.innerText = "(em %)";
+    absences.append(percentage);
+
+    const latenesses = document.createElement("th");
+    latenesses.innerText = "A";
+    latenesses.style.color = "white";
+    latenesses.style.fontWeight = 700;
+    latenesses.style.backgroundColor = colors.late;
+
+    percentage = document.createElement("div");
+    percentage.innerText = "(em %)";
+    latenesses.append(percentage);
+
+    row.append(presences, absences, latenesses);
+
+    const weekDays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
     lessons.forEach(lesson => {
         const date = new Date(lesson.date);
-        const weekDay = weekDays[date.getDay()];
+        const weekDay = weekDays[date.getDay()].toUpperCase().substr(0, 3);
         const day = date.getDate();
         const month = date.getMonth() + 1;
 
         const th = document.createElement("th");
-        th.innerText = `${weekDay}\n${day}/${month}`;
+        th.innerText = `${weekDay}`;
+
+        const div = document.createElement("div");
+        div.innerText = `${day}/${month}`;
+        th.append(div);
+
         row.append(th);
     });
 };
@@ -679,10 +723,15 @@ const populateTbodyGradebook = () => {
 
 const populateTbodyAttendancesRecords = () => {
     const rows = tbodyAttendancesRecords.childNodes;
+
     rows.forEach(row => {
         const studentId = row.childNodes[1].id;
-        lessons.forEach(lesson => {
+        let presenceCount = 0;
+        let absentCount = 0;
+        let lateCount = 0;
+        let marksCount = 0;
 
+        lessons.forEach(lesson => {
             const td = document.createElement("td");
             const div = document.createElement("div");
             div.className = "attendance";
@@ -692,22 +741,45 @@ const populateTbodyAttendancesRecords = () => {
                 if (attendance.studentId == studentId) {
                     const span = document.createElement("span");
                     span.className = attendance.mark;
-
                     switch (attendance.mark) {
                         case "present":
-                            span.innerText = "P"
+                            span.innerText = "P";
+                            presenceCount++;
                             break;
                         case "absent":
-                            span.innerText = "F"
+                            span.innerText = "F";
+                            absentCount++;
                             break;
-                        default: // late
-                            span.innerText = "A"
+                        case "late":
+                            span.innerText = "A";
+                            lateCount++;
+                            break;
+                        default:
                     }
                     div.append(span);
+                    marksCount++;
                 }
             });
             row.append(td);
         });
+        const presences = document.createElement("td");
+        let pieChart = createPieChart(presenceCount / marksCount, colors.present, `${(presenceCount / marksCount * 100).toFixed()}`);
+        presences.append(pieChart);
+        presences.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
+
+        const absences = document.createElement("td");
+        pieChart = createPieChart(absentCount / marksCount, colors.absent, `${(absentCount / marksCount * 100).toFixed()}`);
+        absences.append(pieChart);
+        absences.style.backgroundColor = "rgba(254, 83, 155, 0.2)";
+
+        const latenesses = document.createElement("td");
+        pieChart = createPieChart(lateCount / marksCount, colors.late, `${(lateCount / marksCount * 100).toFixed()}`);
+        latenesses.append(pieChart);
+        latenesses.style.backgroundColor = "rgba(255, 204, 51, 0.2)";
+
+        row.insertBefore(presences, row.children[2]);
+        row.insertBefore(absences, row.children[3]);
+        row.insertBefore(latenesses, row.children[4]);
     });
 };
 
@@ -723,12 +795,16 @@ const populateTbodyGradesRecords = () => {
                 academicTerms = c.school.academicTerms;
             }
         });
+        const schoolMaxGrade = getSelectedSchoolMaxGrade();
+        const passGrade = getSelectedSchoolPassingGrade();
+
         for (let term = 1; term <= academicTerms; term++) {
 
             let evalThisTerm = false; // teacher didn't fill student's grade input field
 
-            let totalPoints = null;
+            let totalPossiblePoints = null;
             let gradedEvaluations = 0;
+            let termAchievedGrades = [];
 
             lessons.forEach(lesson => {
                 if (lesson.evaluations.length && lesson.academicTerm == term) {
@@ -741,17 +817,18 @@ const populateTbodyGradesRecords = () => {
                         for (let i = 0; i < studentsEvaluations.length; i++) {
                             if (studentsEvaluations[i].studentId == studentId) {
 
-                                thereWasAnEntry = true;
-
-                                const maxGrade = lesson.evaluations[0].maxGrade;
+                                const maxGrade = Number(lesson.evaluations[0].maxGrade);
                                 const grade = studentsEvaluations[i].grade;
-                                const normalizedGrade = grade / maxGrade;
-                                totalPoints += normalizedGrade;
+
+                                totalPossiblePoints += maxGrade;
+                                termAchievedGrades.push(grade);
+                                thereWasAnEntry = true;
                                 gradedEvaluations++;
 
                                 const td = document.createElement("td"); // must be created inside of the if statement
                                 td.className = "recorded-grade";
 
+                                const normalizedGrade = grade / maxGrade;
                                 const color = lesson.evaluations[0].color;
                                 const text = studentsEvaluations[i].evaluated == 1 ? grade : "N/A";
 
@@ -780,16 +857,16 @@ const populateTbodyGradesRecords = () => {
 
                 const avg = document.createElement("td");
                 avg.className = "recorded-grade";
-                // avg.style.backgroundColor = "#B6ECFD";
                 avg.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
                 row.append(avg);
 
-                if (totalPoints != null) {
-                    const normalizedGrade = totalPoints / gradedEvaluations;
-                    const schoolMaxGrade = getSelectedSchoolMaxGrade();
+                if (totalPossiblePoints != null) {
 
-                    const avgGrade = normalizedGrade * schoolMaxGrade;
-                    const passGrade = getSelectedSchoolPassingGrade();
+                    let normalizedGrade = 0;
+                    termAchievedGrades.forEach(grade => {
+                        normalizedGrade += (grade / totalPossiblePoints);
+                    });
+                    const avgGrade = Number(normalizedGrade * schoolMaxGrade);
 
                     const color = avgGrade >= passGrade ? colors.success : colors.warning;
                     const text = schoolMaxGrade == 100 && avgGrade % 1 == 0 ? avgGrade : avgGrade.toFixed(1);
@@ -1192,8 +1269,52 @@ const switchViewedTable = (table, btn) => {
 };
 
 
+/*************
+    CHARTS
+*************/
 
-/**** CHART ****/
+/**** BARS CHARTS ****/
+
+const setRecordedGradesChart = () => {
+
+    removeChildNodes(termsBarsContainer);
+
+    const schoolId = getSelectedOption(schoolSelect).value;
+    let academicTerms;
+    classes.forEach(c => {
+        if (c.school.id == schoolId) {
+            academicTerms = c.school.academicTerms;
+        }
+    });
+    let termsAndGradedEvaluations = [];
+    for (let i = 0; i < academicTerms; i++) {
+        const termBar = document.createElement("div");
+        termBar.className = "term-bar";
+        termsBarsContainer.append(termBar);
+
+        termsAndGradedEvaluations.push({
+            term: i + 1,
+            gradedEval: false
+        });
+        let possibleTotalPoints = 0;
+        lessons.forEach(lesson => {
+            if (lesson.academicTerm == i + 1 && lesson.evaluations.length) {
+                termsAndGradedEvaluations[i].gradedEval = true;
+                possibleTotalPoints += Number(lesson.evaluations[0].maxGrade);
+            }
+        });
+        lessons.forEach(lesson => {
+            if (lesson.academicTerm == i + 1 && lesson.evaluations.length) {
+                createEvaluationChartBar(lesson.evaluations, possibleTotalPoints, termBar);
+            }
+        });
+    }
+    let qntOfTermsWithGradedEval = 0;
+    termsAndGradedEvaluations.forEach(term => {
+        if (term.gradedEval) { qntOfTermsWithGradedEval++; }
+    });
+    finalGradeBar.style.width = `${qntOfTermsWithGradedEval / academicTerms * 100}%`
+};
 
 const setGradebookChart = () => {
     removeChildNodes(divContainer);
@@ -1310,53 +1431,4 @@ const createPieChart = (normalizedGrade, color, text) => {
     }
 
     return pieContainer;
-};
-
-
-
-
-const recordedGradesChart = document.getElementById("recorded-grades-chart");
-const termsBarsContainer = document.getElementById("terms-bars-container");
-const finalGradeBar = document.getElementById("final-grade-bar"); // it's width will change depending on how many terms have had graded evaluations
-
-
-const setRecordedGradesChart = () => {
-
-    removeChildNodes(termsBarsContainer);
-
-    const schoolId = getSelectedOption(schoolSelect).value;
-    let academicTerms;
-    classes.forEach(c => {
-        if (c.school.id == schoolId) {
-            academicTerms = c.school.academicTerms;
-        }
-    });
-    let termsAndGradedEvaluations = [];
-    for (let i = 0; i < academicTerms; i++) {
-        const termBar = document.createElement("div");
-        termBar.className = "term-bar";
-        termsBarsContainer.append(termBar);
-
-        termsAndGradedEvaluations.push({
-            term: i + 1,
-            gradedEval: false
-        });
-        let possibleTotalPoints = 0;
-        lessons.forEach(lesson => {
-            if (lesson.academicTerm == i + 1 && lesson.evaluations.length) {
-                termsAndGradedEvaluations[i].gradedEval = true;
-                possibleTotalPoints += Number(lesson.evaluations[0].maxGrade);
-            }
-        });
-        lessons.forEach(lesson => {
-            if (lesson.academicTerm == i + 1 && lesson.evaluations.length) {
-                createEvaluationChartBar(lesson.evaluations, possibleTotalPoints, termBar);
-            }
-        });
-    }
-    let qntOfTermsWithGradedEval = 0;
-    termsAndGradedEvaluations.forEach(term => {
-        if (term.gradedEval) { qntOfTermsWithGradedEval++; }
-    });
-    finalGradeBar.style.width = `${qntOfTermsWithGradedEval / academicTerms * 100}%`
 };
