@@ -72,7 +72,7 @@ const finalGradeBar = document.getElementById("final-grade-bar");
 
 
 
-const colors = { present: "#30C1F9", late: "#FFCC33", absent: "#FE539B" };
+const colors = { present: "#30C1F9", late: "#FFCC33", absent: "#FE539B", success: "#30C1f9", warning: "#FE539B" };
 
 
 
@@ -495,41 +495,14 @@ const populateTheadGradebook = (row) => {
 };
 
 const populateTheadAttendancesRecords = (row) => {
-    const presences = document.createElement("th");
-    presences.innerText = "P";
-    presences.style.color = "white";
-    presences.style.fontWeight = 700;
-    presences.style.backgroundColor = colors.present;
-
-    let percentage = document.createElement("div");
-    percentage.innerText = "(em %)";
-    presences.append(percentage);
-
-    const absences = document.createElement("th");
-    absences.innerText = "F";
-    absences.style.color = "white";
-    absences.style.fontWeight = 700;
-    absences.style.backgroundColor = colors.absent;
-
-    percentage = document.createElement("div");
-    percentage.innerText = "(em %)";
-    absences.append(percentage);
-
-    const latenesses = document.createElement("th");
-    latenesses.innerText = "A";
-    latenesses.style.color = "white";
-    latenesses.style.fontWeight = 700;
-    latenesses.style.backgroundColor = colors.late;
-
-    percentage = document.createElement("div");
-    percentage.innerText = "(em %)";
-    latenesses.append(percentage);
-
-    row.append(presences, absences, latenesses);
 
     const weekDays = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+    let thereWasAnEntry = false;
 
     lessons.forEach(lesson => {
+
+        thereWasAnEntry = true;
+
         const date = new Date(lesson.date);
         const weekDay = weekDays[date.getDay()].toUpperCase().substr(0, 3);
         const day = date.getDate();
@@ -544,6 +517,41 @@ const populateTheadAttendancesRecords = (row) => {
 
         row.append(th);
     });
+    if (thereWasAnEntry) {
+        const presences = document.createElement("th");
+        presences.innerText = "P";
+        presences.style.color = "white";
+        presences.style.fontWeight = 700;
+        presences.style.backgroundColor = colors.present;
+
+        let percentage = document.createElement("div");
+        percentage.innerText = "(em %)";
+        presences.append(percentage);
+
+        const absences = document.createElement("th");
+        absences.innerText = "F";
+        absences.style.color = "white";
+        absences.style.fontWeight = 700;
+        absences.style.backgroundColor = colors.absent;
+
+        percentage = document.createElement("div");
+        percentage.innerText = "(em %)";
+        absences.append(percentage);
+
+        const latenesses = document.createElement("th");
+        latenesses.innerText = "A";
+        latenesses.style.color = "white";
+        latenesses.style.fontWeight = 700;
+        latenesses.style.backgroundColor = colors.late;
+
+        percentage = document.createElement("div");
+        percentage.innerText = "(em %)";
+        latenesses.append(percentage);
+
+        row.insertBefore(presences, row.children[2]);
+        row.insertBefore(absences, row.children[3]);
+        row.insertBefore(latenesses, row.children[4]);
+    }
 };
 
 const populateTheadGradesRecords = (row) => {
@@ -645,26 +653,31 @@ const populateTbodyWithStudents = (student, tbody) => {
 
 const populateTbodyGradebook = () => {
     const rows = tbodyGradebook.childNodes;
+    const schoolMaxGrade = getSelectedSchoolMaxGrade();
+    const passGrade = getSelectedSchoolPassingGrade();
+
     rows.forEach(row => {
         const studentId = row.childNodes[1].id;
 
-        let totalPoints = null;
-        let gradedEvaluations = 0;
+        let totalPossiblePoints = null;
+        let termAchievedGrades = [];
 
         termEvaluations.forEach(eval => {
             let grade;
+
             eval[0].studentsGrades.forEach(studentEval => {
                 if (studentEval.studentId == studentId) {
 
-                    gradedEvaluations++;
+                    totalPossiblePoints += Number(eval[0].maxGrade);
 
                     if (studentEval.evaluated == 1) {
                         grade = Number(studentEval.grade);
-                        const normalizedGrade = grade / eval[0].maxGrade;
-
-                        totalPoints += normalizedGrade;
+                        termAchievedGrades.push(grade);
                     }
-                    else { grade = "N/A" }
+                    else {
+                        grade = "N/A";
+                        termAchievedGrades.push(0);
+                    }
                 }
             });
             // STUDENT GRADES INPUTS
@@ -703,15 +716,7 @@ const populateTbodyGradebook = () => {
         checkmark.className = "checkmark";
 
         // AVERAGE GRADE
-        const avg = document.createElement("td");
-        avg.className = "term-final-grade";
-
-        if (totalPoints != null) {
-            const schoolMaxGrade = getSelectedSchoolMaxGrade();
-            avg.innerText = (totalPoints * schoolMaxGrade / gradedEvaluations).toFixed(1);
-        } else {
-            avg.innerText = "-";
-        }
+        const avg = createAverageGrade(totalPossiblePoints, termAchievedGrades, schoolMaxGrade, passGrade);
 
         label.append(checkbox, checkmark);
         notEval.append(label);
@@ -723,6 +728,7 @@ const populateTbodyGradebook = () => {
 
 const populateTbodyAttendancesRecords = () => {
     const rows = tbodyAttendancesRecords.childNodes;
+    let thereWasAnEntry = false;
 
     rows.forEach(row => {
         const studentId = row.childNodes[1].id;
@@ -738,6 +744,9 @@ const populateTbodyAttendancesRecords = () => {
             td.append(div);
 
             lesson.attendances.forEach(attendance => {
+
+                thereWasAnEntry = true;
+
                 if (attendance.studentId == studentId) {
                     const span = document.createElement("span");
                     span.className = attendance.mark;
@@ -762,24 +771,26 @@ const populateTbodyAttendancesRecords = () => {
             });
             row.append(td);
         });
-        const presences = document.createElement("td");
-        let pieChart = createPieChart(presenceCount / marksCount, colors.present, `${(presenceCount / marksCount * 100).toFixed()}`);
-        presences.append(pieChart);
-        presences.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
+        if (thereWasAnEntry) {
+            const presences = document.createElement("td");
+            let pieChart = createPieChart(presenceCount / marksCount, colors.present, `${(presenceCount / marksCount * 100).toFixed()}`);
+            presences.append(pieChart);
+            presences.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
 
-        const absences = document.createElement("td");
-        pieChart = createPieChart(absentCount / marksCount, colors.absent, `${(absentCount / marksCount * 100).toFixed()}`);
-        absences.append(pieChart);
-        absences.style.backgroundColor = "rgba(254, 83, 155, 0.2)";
+            const absences = document.createElement("td");
+            pieChart = createPieChart(absentCount / marksCount, colors.absent, `${(absentCount / marksCount * 100).toFixed()}`);
+            absences.append(pieChart);
+            absences.style.backgroundColor = "rgba(254, 83, 155, 0.2)";
 
-        const latenesses = document.createElement("td");
-        pieChart = createPieChart(lateCount / marksCount, colors.late, `${(lateCount / marksCount * 100).toFixed()}`);
-        latenesses.append(pieChart);
-        latenesses.style.backgroundColor = "rgba(255, 204, 51, 0.2)";
+            const latenesses = document.createElement("td");
+            pieChart = createPieChart(lateCount / marksCount, colors.late, `${(lateCount / marksCount * 100).toFixed()}`);
+            latenesses.append(pieChart);
+            latenesses.style.backgroundColor = "rgba(255, 204, 51, 0.2)";
 
-        row.insertBefore(presences, row.children[2]);
-        row.insertBefore(absences, row.children[3]);
-        row.insertBefore(latenesses, row.children[4]);
+            row.insertBefore(presences, row.children[2]);
+            row.insertBefore(absences, row.children[3]);
+            row.insertBefore(latenesses, row.children[4]);
+        }
     });
 };
 
@@ -801,9 +812,7 @@ const populateTbodyGradesRecords = () => {
         for (let term = 1; term <= academicTerms; term++) {
 
             let evalThisTerm = false; // teacher didn't fill student's grade input field
-
             let totalPossiblePoints = null;
-            let gradedEvaluations = 0;
             let termAchievedGrades = [];
 
             lessons.forEach(lesson => {
@@ -820,10 +829,9 @@ const populateTbodyGradesRecords = () => {
                                 const maxGrade = Number(lesson.evaluations[0].maxGrade);
                                 const grade = studentsEvaluations[i].grade;
 
+                                thereWasAnEntry = true;
                                 totalPossiblePoints += maxGrade;
                                 termAchievedGrades.push(grade);
-                                thereWasAnEntry = true;
-                                gradedEvaluations++;
 
                                 const td = document.createElement("td"); // must be created inside of the if statement
                                 td.className = "recorded-grade";
@@ -853,32 +861,35 @@ const populateTbodyGradesRecords = () => {
                 }
             });
             if (evalThisTerm) { // calculate the average for this term
-                const colors = { success: "#30C1f9", warning: "#FE539B" };
-
-                const avg = document.createElement("td");
-                avg.className = "recorded-grade";
-                avg.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
+                const avg = createAverageGrade(totalPossiblePoints, termAchievedGrades, schoolMaxGrade, passGrade);
                 row.append(avg);
-
-                if (totalPossiblePoints != null) {
-
-                    let normalizedGrade = 0;
-                    termAchievedGrades.forEach(grade => {
-                        normalizedGrade += (grade / totalPossiblePoints);
-                    });
-                    const avgGrade = Number(normalizedGrade * schoolMaxGrade);
-
-                    const color = avgGrade >= passGrade ? colors.success : colors.warning;
-                    const text = schoolMaxGrade == 100 && avgGrade % 1 == 0 ? avgGrade : avgGrade.toFixed(1);
-
-                    const pieChart = createPieChart(normalizedGrade, color, text);
-                    avg.append(pieChart);
-                } else {
-                    avg.innerText = "-";
-                }
             }
         }
     });
+};
+
+const createAverageGrade = (totalPossiblePoints, achievedGrades, schoolMaxGrade, passGrade) => {
+    const avg = document.createElement("td");
+    avg.className = "term-final-grade";
+    avg.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
+
+    if (totalPossiblePoints != null) {
+
+        let normalizedGrade = 0;
+        achievedGrades.forEach(grade => {
+            normalizedGrade += (grade / totalPossiblePoints);
+        });
+        const avgGrade = Number(normalizedGrade * schoolMaxGrade);
+
+        const color = avgGrade >= passGrade ? colors.success : colors.warning;
+        const text = schoolMaxGrade == 100 && avgGrade % 1 == 0 ? avgGrade : avgGrade.toFixed(1);
+
+        const pieChart = createPieChart(normalizedGrade, color, text);
+        avg.append(pieChart);
+    }
+    else { avg.innerText = "-"; }
+
+    return avg;
 };
 
 /**** MAINS WITH FORMS */
