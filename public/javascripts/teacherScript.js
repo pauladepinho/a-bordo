@@ -487,9 +487,7 @@ const populateTheadGradebook = (row) => {
     notEval.id = "not-evaluated-header"
     notEval.innerText = "N/A";
 
-    const avg = document.createElement("th");
-    avg.className = "term-final-grade";
-    avg.innerText = "MÉDIA";
+    const avg = createAverageGradeTh();
 
     row.append(notEval, avg);
 };
@@ -509,7 +507,7 @@ const populateTheadAttendancesRecords = (row) => {
         const month = date.getMonth() + 1;
 
         const th = document.createElement("th");
-        th.innerText = `${weekDay}`;
+        th.innerText = `${weekDay}.`;
 
         const div = document.createElement("div");
         div.innerText = `${day}/${month}`;
@@ -563,6 +561,8 @@ const populateTheadGradesRecords = (row) => {
             academicTerms = c.school.academicTerms;
         }
     });
+    let thereWasAnyEntryAtAll = false;
+
     for (let term = 1; term <= academicTerms; term++) {
 
         let evalThisTerm = false; // teacher didn't fill student's grade input field
@@ -570,6 +570,8 @@ const populateTheadGradesRecords = (row) => {
         lessons.forEach(lesson => {
 
             if (lesson.evaluations.length && lesson.academicTerm == term) {
+
+                thereWasAnyEntryAtAll = true;
                 evalThisTerm = true;
 
                 const title = lesson.evaluations[0].title;
@@ -582,25 +584,42 @@ const populateTheadGradesRecords = (row) => {
                 th.style.fontWeight = 500;
 
                 const div = document.createElement("div");
-                div.innerText = `${evalMaxGrade} pts.`
+                div.innerText = `val. ${evalMaxGrade} pts.`
 
                 th.append(div);
                 row.append(th);
             }
         });
         if (evalThisTerm) {
-            const avg = document.createElement("th");
-            avg.innerText = "MÉDIA";
-            avg.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
+            const avg = createAverageGradeTh();
 
             const div = document.createElement("div");
-            div.innerText = `${schoolMaxGrade} pts.`
+            div.innerText = `val. ${schoolMaxGrade} pts.`
 
             avg.append(div);
             row.append(avg);
         }
     }
-};
+    if (thereWasAnyEntryAtAll) {
+        const finalGrade = document.createElement("th");
+        finalGrade.innerText = "RESULTADO";
+        finalGrade.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
+
+        const div = document.createElement("div");
+        div.innerText = `val. ${schoolMaxGrade} pts.`
+
+        finalGrade.append(div);
+        row.insertBefore(finalGrade, row.children[2]);
+    };
+}
+
+const createAverageGradeTh = (schoolMaxGrade) => {
+    const avg = document.createElement("th");
+    avg.innerText = "MÉDIA";
+    avg.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
+
+    return avg;
+}
 
 // TABLE BODY
 
@@ -799,19 +818,23 @@ const populateTbodyGradesRecords = () => {
     const rows = tbodyGradesRecords.childNodes;
     rows.forEach(row => {
         const studentId = row.childNodes[1].id;
+
         const schoolId = getSelectedOption(schoolSelect).value;
-        let academicTerms;
-        classes.forEach(c => {
-            if (c.school.id == schoolId) {
-                academicTerms = c.school.academicTerms;
-            }
-        });
         const schoolMaxGrade = getSelectedSchoolMaxGrade();
         const passGrade = getSelectedSchoolPassingGrade();
 
+        let achievedGrades = [];
+        let qntOfTermsWithGradedEval = 0;
+        let academicTerms;
+        classes.forEach(c => {
+            if (c.school.id == schoolId) { academicTerms = c.school.academicTerms; }
+        });
+
+        let thereWasAnyEntryAtAll = false;
+
         for (let term = 1; term <= academicTerms; term++) {
 
-            let evalThisTerm = false; // teacher didn't fill student's grade input field
+            let evalThisTerm = false; // teacher didn't fill up student's grade input field
             let totalPossiblePoints = null;
             let termAchievedGrades = [];
 
@@ -829,6 +852,7 @@ const populateTbodyGradesRecords = () => {
                                 const maxGrade = Number(lesson.evaluations[0].maxGrade);
                                 const grade = studentsEvaluations[i].grade;
 
+                                // thereWasAnyEntryAtAll = true;
                                 thereWasAnEntry = true;
                                 totalPossiblePoints += maxGrade;
                                 termAchievedGrades.push(grade);
@@ -863,17 +887,31 @@ const populateTbodyGradesRecords = () => {
             if (evalThisTerm) { // calculate the average for this term
                 const avg = createAverageGrade(totalPossiblePoints, termAchievedGrades, schoolMaxGrade, passGrade);
                 row.append(avg);
+
+                thereWasAnyEntryAtAll = true; // teacher graded at least one student this academic year
+
+                if (avg.innerText != "-") {
+                    const termAvgGrade = Number(avg.childNodes[0].childNodes[2].innerText);
+                    achievedGrades.push(termAvgGrade);
+
+                    qntOfTermsWithGradedEval++;
+                }
             }
+        }
+        if (thereWasAnyEntryAtAll) {
+            const totalPossiblePoints = schoolMaxGrade * qntOfTermsWithGradedEval;
+            const finalGrade = createAverageGrade(totalPossiblePoints, achievedGrades, schoolMaxGrade, passGrade);
+            row.insertBefore(finalGrade, row.children[2]);
         }
     });
 };
 
 const createAverageGrade = (totalPossiblePoints, achievedGrades, schoolMaxGrade, passGrade) => {
     const avg = document.createElement("td");
-    avg.className = "term-final-grade";
+    avg.className = "recorded-grade";
     avg.style.backgroundColor = "rgba(48, 193, 249, 0.2)";
 
-    if (totalPossiblePoints != null) {
+    if (totalPossiblePoints != null && achievedGrades.length) {
 
         let normalizedGrade = 0;
         achievedGrades.forEach(grade => {
