@@ -1,10 +1,11 @@
 const addChildBtn = document.getElementById("add-child");
 const delChildBtn = document.getElementById("del-child");
 const enter = 13; // keyboard key;
+const endpoint = 'http://localhost:3000/api';
 
 let childTabs = document.querySelectorAll("#new-child .child-tabs button");
 let childCount = 0;
-let childNumber = 0; 
+let childNumber = 0;
 
 // ADD CHILD
 window.addEventListener("load", () => addChild());
@@ -114,6 +115,7 @@ const addChild = () => {
     // CLASS NAME SELECT
     const classes = document.createElement("select");
     classes.name = '';
+    classes.id = `class${childNumber}`;
     classes.required = true;
     classes.disabled = true;
 
@@ -157,6 +159,8 @@ const addChild = () => {
     populateStatesSelect(state); // states select
     state.addEventListener("change", () => populateMunicipalitiesSelect(municipality, state)); // municipalities select
     municipality.addEventListener("change", () => populateSchoolsSelect(school, municipality)); // schools select
+    school.addEventListener("change", () => populateClassesSelect(classes, school)); // classes select
+    classes.addEventListener("change", () => populateStudentsSelect(student, classes)); // student select
 
     // ADD NEIGHBOR SCHOOL'S LOCATION TO THIS SCHOOL
     setTimeout(() => { // wait for populateStatesSelect() response
@@ -384,25 +388,26 @@ const populateMunicipalitiesSelect = (municipalitiesSelect, statesSelect) => {
 
 const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
 
-    [...schoolsSelect.options].map(option => option.remove()); // remove other municipality's schools
+    [...schoolsSelect.options].map(option => option.remove()); 
 
-    const selectedMunicipality = municipalitiesSelect.options[municipalitiesSelect.selectedIndex].value;
-    const code = selectedMunicipality.split(":")[0];
+    const municipality = municipalitiesSelect.options[municipalitiesSelect.selectedIndex].value;
+    // const code = municipality.split(":")[0];
+    const municipalitySelected = municipality.split(":")[1].toLowerCase();
 
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-        targetUrl = `http://educacao.dadosabertosbr.com/api/escolas/buscaavancada?cidade=${code}`;
-
-    fetch(proxyUrl + targetUrl)
+    fetch(`${endpoint}/schools`)
         .then(res => res.json())
         .then(schools => {
 
-            schools[1].forEach(school => {
+            schools.forEach(school => {
+                const stateSelected = document.getElementById(`state-school${childNumber}`)
 
-                const option = document.createElement("option");
-                option.value = school.nome;
-                option.textContent = school.nome;
+                if (school.state == stateSelected.value && school.municipality.toLowerCase() == municipalitySelected) {
+                    const option = document.createElement("option");
+                    option.value = school.id;
+                    option.textContent = school.name;
 
-                schoolsSelect.appendChild(option);
+                    schoolsSelect.appendChild(option);
+                }
             });
             const option = document.createElement("option");
             option.textContent = "Nome da escola";
@@ -411,8 +416,83 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
 
             schoolsSelect.prepend(option);
             schoolsSelect.disabled = false;
+
         })
         .catch(error => {
             console.log(error);
         });
 };
+
+const populateClassesSelect = (classesSelect, schoolsSelect) => {
+
+    [...classesSelect.options].map(option => option.remove()); 
+
+    fetch(`${endpoint}/classes`)
+        .then(res => res.json())
+        .then(classes => {
+
+            classes.forEach(clas => {
+                if (schoolsSelect.value == clas.schoolId) {
+                    const option = document.createElement("option");
+                    option.value = clas.id;
+                    option.textContent = `${clas.grade} ${clas.code}`;
+                    classesSelect.appendChild(option);
+                }
+            });
+
+            const option = document.createElement("option");
+            option.textContent = "Turma";
+            option.selected = "selected";
+            option.disabled = "disabled";
+
+            classesSelect.prepend(option);
+            classesSelect.disabled = false;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
+const populateStudentsSelect = (studentsSelect, classesSelect) => {
+
+    [...studentsSelect.options].map(option => option.remove());
+    const studentsIds = [];
+
+    fetch(`${endpoint}/classesStudents`)
+        .then(res => res.json())
+        .then(classes => {
+
+            classes.forEach(classStudent => {
+                if (classesSelect.value == classStudent.classId) {
+                    studentsIds.push(classStudent.studentId);
+                }
+            });
+
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    fetch(`${endpoint}/students`)
+        .then(res => res.json())
+        .then(students => {
+
+            students.forEach(student => {
+                if (studentsIds.includes(student.id)) {
+                    const option = document.createElement("option");
+                    option.value = student.id;
+                    option.textContent = student.name;
+                    studentsSelect.appendChild(option);
+                }
+            })
+
+            const option = document.createElement("option");
+            option.textContent = "Nome do aluno";
+            option.selected = "selected";
+            option.disabled = "disabled";
+
+            studentsSelect.prepend(option);
+            studentsSelect.disabled = false;
+        })
+
+}

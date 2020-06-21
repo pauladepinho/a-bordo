@@ -52,7 +52,7 @@ const sortSelect = (select) => {
         tmpAry[i][1] = select.options[i].value;
     }
     tmpAry.sort();
-    tmpAry = removeDuplicates(tmpAry);
+    // tmpAry = removeDuplicates(tmpAry);
     while (select.options.length > 0) {
         select.options[0] = null;
     }
@@ -63,15 +63,15 @@ const sortSelect = (select) => {
     return;
 };
 
-const removeDuplicates = (arr) => {
-    // OBS: arr == [ [option.text, option.value], [option.text, option.value] ]
-    let uniqueOpts = []
-    for (let i = 0; i < arr.length; i++) {
-        if (i == 0) { uniqueOpts.push(arr[i]) } // because arr[i=0 - 1] == undefined
-        else if (arr[i][0] != arr[i - 1][0]) { uniqueOpts.push(arr[i]); }
-    }
-    return uniqueOpts;
-};
+// const removeDuplicates = (arr) => {
+//     // OBS: arr == [ [option.text, option.value], [option.text, option.value] ]
+//     let uniqueOpts = []
+//     for (let i = 0; i < arr.length; i++) {
+//         if (i == 0) { uniqueOpts.push(arr[i]) } // because arr[i=0 - 1] == undefined
+//         else if (arr[i][0] != arr[i - 1][0]) { uniqueOpts.push(arr[i]); }
+//     }
+//     return uniqueOpts;
+// };
 
 const removeChildNodes = (elem) => {
     [...elem.childNodes].map(node => node.remove());
