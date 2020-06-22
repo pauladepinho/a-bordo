@@ -427,6 +427,8 @@ const listStudents = () => {
             });
         }
     });
+
+    document.getElementById("dashboard").hidden = true;
 };
 
 /********************
@@ -852,7 +854,6 @@ const populateTbodyGradesRecords = () => {
                                 const maxGrade = Number(lesson.evaluations[0].maxGrade);
                                 const grade = studentsEvaluations[i].grade;
 
-                                // thereWasAnyEntryAtAll = true;
                                 thereWasAnEntry = true;
                                 totalPossiblePoints += maxGrade;
                                 termAchievedGrades.push(grade);

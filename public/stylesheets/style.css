@@ -1384,3 +1384,25 @@ main#record-book #tbody-grades-table td.recorded-grade {
   clip: rect(0px, 60px, 60px, calc( 60px / 2 ));
   transform: rotate(0deg);
 }
+
+
+
+
+
+
+
+
+
+
+#dashboard {
+  background-image: url("../images/dashboard.jpg");
+  /* background-color: khaki; */
+  width: 65vw;
+  height: 400vh;
+  
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position-x: center;
+
+  margin: 3rem 0 0 3rem;
+}
