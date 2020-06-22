@@ -24,21 +24,21 @@ const getGuardianData = async (user) => {
     }
 
     for (classStudent of classesStudents) {
-        const clas = await Class.findOne({ where: { id: classStudent.classId}})
+        const clas = await Class.findOne({ where: { id: classStudent.classId } })
         classes.push(clas);
     }
 
     for (clas of classes) {
-        const course = await Course.findAll({ where: { classId: clas.id}})
+        const course = await Course.findAll({ where: { classId: clas.id } })
         courses.push(...course);
-        const school = await School.findOne({ where: {id: clas.schoolId}});        
+        const school = await School.findOne({ where: { id: clas.schoolId } });
         schools.push(school);
         console.log(school)
     }
 
     for (course of courses) {
-        const teacher = await Teacher.findOne({where: {id: course.teacherId}})
-        const subject = await Subject.findOne({where: {id: course.subjectId}})
+        const teacher = await Teacher.findOne({ where: { id: course.teacherId } })
+        const subject = await Subject.findOne({ where: { id: course.subjectId } })
         teachers.push(teacher);
         subjects.push(subject);
     }
@@ -92,13 +92,14 @@ module.exports = {
 
         // CREATE USER 
         const { forename, surname, email, phone, password } = req.body;
-        let picture = req.file ? req.file.name : null;
+        const picture = req.file ? req.file.filename : "default.jpg";
+        const validPhone = phone.length == 15 ? phone : null;
 
-        const user = User.create({
+        const user = await User.create({
             forename,
             surname,
-            email,
-            phone,
+            email: email.toLowerCase(),
+            phone: validPhone,
             password: bcrypt.hashSync(password, saltRounds),
             picture
         });
@@ -106,25 +107,21 @@ module.exports = {
         // MAKE THE USER A GUARDIAN
         const guardian = await Guardian.create({ userId: user.id });
 
-        const { selectState, selectCity } = req.body;
+        // CREATE CONNECTIONS STUDENTS AND GUARDIANS
+        const reqBodyStudents = Object.keys(req.body).filter(
+            key => key.substr(0, 7) == "student"
+        );
 
-        // SCHOOL LIST
-        const schools = await School.findAll({ where: { state: selectState, municipality: selectCity } });
-        const school = req.body.selectSchool;
-
-        // CLASS LIST
-        const classes = await Class.findAll({ where: { schoolId: school.id } });
-        const clas = req.body.selectClass;
-
-        const classStudent = await Class_Student.findAll({ where: { classId: clas.id } });
-
-        // STUDENT LIST
-        const students = await Student.findAll({ where: { id: classStudent.studentId } });
-        const selectStudent = req.body.selectStudent;
-        const student = await Student.findOne({ where: { name: selectStudent } });
-
-        // ASSOCIATE STUDENT TO GUARDIAN
-        const student_guardian = await Student_Guardian.create({ studentId: student.id, guardianId: guardian.id });
+        let list = [];
+        for (student of reqBodyStudents) { 
+            list.push(
+                {
+                    guardianId: guardian.id,
+                    studentId: req.body[student][0]                    
+                }
+            );
+        };
+        const studentGuardian = await Student_Guardian.bulkCreate(list);
 
         // SET A SESSION
         req.session.user = user;

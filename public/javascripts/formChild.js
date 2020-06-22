@@ -126,7 +126,7 @@ const addChild = () => {
 
     // STUDENT NAME SELECT
     const student = document.createElement("select");
-    student.name = '';
+    student.name = `student${childNumber}`;
     student.required = true;
     student.disabled = true;
 

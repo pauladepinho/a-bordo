@@ -123,15 +123,15 @@ const populateStudentSelect = () => {
     student.forEach(student => {
         createSelectOption(student.id, student.name, studentSelect);
     })
-    if (studentSelect.options.length < 2) { // there is only one school
+    if (studentSelect.options.length < 2) {
         callSelectedStudentRelatedFunctions();
     } else {
         sortSelect(studentSelect);
     }
     setSelectTitle("Alunos", studentSelect);
     setSelectTitle("Ano", yearSelect);
-    setSelectTitle("Turma", classSelect);
     setSelectTitle("Escola", schoolSelect);
+    setSelectTitle("Turma", classSelect);
     setSelectTitle("Período", termSelect);
 }
 
@@ -153,6 +153,9 @@ const populateYearSelect = () => {
         createSelectOption(year, year, yearSelect);
     })
     setSelectTitle("Ano", yearSelect);
+    setSelectTitle("Escola", schoolSelect);
+    setSelectTitle("Turma", classSelect);
+    setSelectTitle("Período", termSelect);
 }
 
 const populateSchoolSelect = () => {
@@ -179,7 +182,9 @@ const populateSchoolSelect = () => {
     } else {
         sortSelect(schoolSelect);
     }
-    setSelectTitle("Escola", schoolSelect);    
+    setSelectTitle("Escola", schoolSelect);
+    setSelectTitle("Turma", classSelect);
+    setSelectTitle("Período", termSelect);  
 }
 
 const populateClassSelect = () => {
@@ -201,6 +206,7 @@ const populateClassSelect = () => {
         sortSelect(classSelect);
     }
     setSelectTitle("Turma", classSelect);
+    setSelectTitle("Período", termSelect);
 }
 
 const populateTermSelect = () => {
