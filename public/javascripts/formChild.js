@@ -71,7 +71,7 @@ const addChild = () => {
 
     // NEW CONTENT DIV
     const childContent = document.createElement("div");
-    childContent.classList.add("child-content", `school${childNumber}`);
+    childContent.classList.add("child-content", `child${childNumber}`);
 
     // CREATE SCHOOL LOCATION TO APPEND STATE AND MUNICIPALITY SELECTS
     const schoolLocation = document.createElement("div");
