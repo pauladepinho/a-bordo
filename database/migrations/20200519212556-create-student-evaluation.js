@@ -29,7 +29,7 @@ module.exports = {
         onDelete: "CASCADE"
       },
       grade: {
-        type: Sequelize.DECIMAL,
+        type: Sequelize.DECIMAL(4, 1),
         allowNull: false
       },
       evaluated: {

@@ -210,7 +210,7 @@ module.exports = {
                     let classCourses = courses.filter(
                         course => course.classId == classes[i].id
                     );
-                    for (let j = 3; j < aStudent.length; j++) { // from index 3, there's a list of subjects ids the student is repeating
+                    for (let j = 3; j < aStudent.length; j++) { // from index 3, there's a ids list of subjects the student is repeating
 
                         for (course of classCourses) {
 
@@ -276,16 +276,17 @@ module.exports = {
         const reqBodyEvaluation = Object.keys(req.body).filter( // [ "evaluation-title", "evaluation-color", "evaluation-type", "evaluation-value" ]
             key => key.substr(0, 10) == "evaluation"
         );
-        if (!reqBodyEvaluation) { return res.redirect("/professor/home"); }
-        await Evaluation.create(
-            {
-                lessonId: lesson.id,
-                maxGrade: req.body["evaluation-value"],
-                title: req.body["evaluation-title"],
-                color: req.body["evaluation-color"],
-                type: req.body["evaluation-type"]
-            }
-        );
+        if (reqBodyEvaluation.length) {
+            await Evaluation.create(
+                {
+                    lessonId: lesson.id,
+                    maxGrade: req.body["evaluation-value"],
+                    title: req.body["evaluation-title"],
+                    color: req.body["evaluation-color"],
+                    type: req.body["evaluation-type"]
+                }
+            );
+        }
         return res.redirect("/professor/");
     },
 

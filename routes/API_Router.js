@@ -18,6 +18,8 @@ router.get("/students", API_Controller.students);
 router.get("/attendances", API_Controller.attendances);
 router.get("/evaluations", API_Controller.evaluations);
 
+router.get("/guardians", API_Controller.guardians);
+
 
 // IN USE
 
