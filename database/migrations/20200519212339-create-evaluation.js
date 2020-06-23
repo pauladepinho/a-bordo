@@ -19,7 +19,7 @@ module.exports = {
         onDelete: "CASCADE"
       },
       maxGrade: {
-        type: Sequelize.DECIMAL,
+        type: Sequelize.DECIMAL(4, 1),
         allowNull: false
       },
       title: {
