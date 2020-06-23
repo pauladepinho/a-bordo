@@ -5,16 +5,15 @@ const studentSelect = document.getElementById("student");
 const yearSelect = document.getElementById("year");
 const schoolSelect = document.getElementById("school");
 const classSelect = document.getElementById("class");
-const termSelect = document.getElementById("term");
+const subjectSelect = document.getElementById("subject");
 
 // NAV BUTTONS
 const btnContact = document.getElementById("btn-contact");
 const btnJustify = document.getElementById("btn-justify");
 const navButtons = [btnContact, btnJustify];
 
-// MAINS
-const mainHome = document.getElementById("home");
-const mains = [mainHome];
+// MAIN
+const main = document.querySelector('main')
 
 window.addEventListener("load", () => fetchData());
 
@@ -22,7 +21,7 @@ studentSelect.addEventListener("change", () => callSelectedStudentRelatedFunctio
 yearSelect.addEventListener("change", () => callSelectedYearRelatedFunctions());
 schoolSelect.addEventListener("change", () => callSelectedSchoolRelatedFunctions());
 classSelect.addEventListener("change", () => callSelectedClassRelatedFunctions());
-termSelect.addEventListener("change", () => callSelectedTermRelatedFunctions());
+subjectSelect.addEventListener("change", () => callSelectedSubjectRelatedFunctions());
 
 // DATABASE DATA FROM API
 
@@ -38,6 +37,7 @@ const fetchData = () => {
             guardian = data;
             student = data.student;
             populateStudentSelect();
+            dashboard();
         })
         .catch(error => console.log(error))
 };
@@ -52,7 +52,7 @@ const sortSelect = (select) => {
         tmpAry[i][1] = select.options[i].value;
     }
     tmpAry.sort();
-    // tmpAry = removeDuplicates(tmpAry);
+    tmpAry = removeDuplicates(tmpAry);
     while (select.options.length > 0) {
         select.options[0] = null;
     }
@@ -63,28 +63,26 @@ const sortSelect = (select) => {
     return;
 };
 
-// const removeDuplicates = (arr) => {
-//     // OBS: arr == [ [option.text, option.value], [option.text, option.value] ]
-//     let uniqueOpts = []
-//     for (let i = 0; i < arr.length; i++) {
-//         if (i == 0) { uniqueOpts.push(arr[i]) } // because arr[i=0 - 1] == undefined
-//         else if (arr[i][0] != arr[i - 1][0]) { uniqueOpts.push(arr[i]); }
-//     }
-//     return uniqueOpts;
-// };
+const removeDuplicates = (arr) => {
+    // OBS: arr == [ [option.text, option.value], [option.text, option.value] ]
+    let uniqueOpts = []
+    for (let i = 0; i < arr.length; i++) {
+        if (i == 0) { uniqueOpts.push(arr[i]) } // because arr[i=0 - 1] == undefined
+        else if (arr[i][0] != arr[i - 1][0]) { uniqueOpts.push(arr[i]); }
+    }
+    return uniqueOpts;
+};
 
 const removeChildNodes = (elem) => {
     [...elem.childNodes].map(node => node.remove());
 };
 
-const setSelectTitle = (title, select) => { // must be called only after other select options are created
+const setSelectTitle = (title, select, disable = true) => { // must be called only after other select options are created
     const option = document.createElement("option");
     option.value = "";
     option.innerText = title;
-    option.disabled = true;
-    if (select.options.length != 1) { // else, if select has only one available enabled option, that option will be automatically selected
-        option.selected = true;
-    }
+    option.disabled = disable;
+    option.selected = select.options.length != 1 ? true : false;
     select.prepend(option);
 };
 
@@ -114,7 +112,11 @@ const callSelectedSchoolRelatedFunctions = () => {
 };
 
 const callSelectedClassRelatedFunctions = () => {
-    populateTermSelect();
+    populateSubjectSelect();
+};
+
+const callSelectedSubjectRelatedFunctions = () => {
+    // populateTermSelect();
 };
 
 // POPULATE NAV SELECTS
@@ -132,49 +134,43 @@ const populateStudentSelect = () => {
     setSelectTitle("Ano", yearSelect);
     setSelectTitle("Escola", schoolSelect);
     setSelectTitle("Turma", classSelect);
-    setSelectTitle("Período", termSelect);
 }
 
 const populateYearSelect = () => {
-    let years = [];
     const selectedStudent = getSelectedOption(studentSelect);
-    studentSelected = student[selectedStudent.value -1];
-    console.log(studentSelected);    
+    studentSelected = student[selectedStudent.value - 1];
+    console.log(studentSelected);
     removeChildNodes(yearSelect);
     removeChildNodes(schoolSelect);
     removeChildNodes(classSelect);
-    removeChildNodes(termSelect);
+    removeChildNodes(subjectSelect);
 
     studentSelected.classStudents.forEach(c => {
-        years.push(c.class.year);
+        createSelectOption(c.class.year, c.class.year, yearSelect);
     })
-    years = new Set(years);
-    years.forEach(year => {
-        createSelectOption(year, year, yearSelect);
-    })
+
+    if (yearSelect.options.length < 2) {
+        callSelectedYearRelatedFunctions();
+    } else {
+        sortSelect(yearSelect);
+    }
     setSelectTitle("Ano", yearSelect);
     setSelectTitle("Escola", schoolSelect);
     setSelectTitle("Turma", classSelect);
-    setSelectTitle("Período", termSelect);
+    // setSelectTitle("Disciplina", subjectSelect);
 }
 
 const populateSchoolSelect = () => {
 
-    let schools = [];
     const selectYear = getSelectedOption(yearSelect);
     removeChildNodes(schoolSelect);
     removeChildNodes(classSelect);
-    removeChildNodes(termSelect);
-    
+    removeChildNodes(subjectSelect);
+
     studentSelected.classStudents.forEach(c => {
         if (c.class.year == selectYear.value) {
-            schools.push(c.class.school);
+            createSelectOption(c.class.school.id, c.class.school.name, schoolSelect);
         }
-    })
-    
-    schools = new Set(schools);
-    schools.forEach(school => {
-        createSelectOption(school.id, school.name, schoolSelect);        
     })
 
     if (schoolSelect.options.length < 2) { // there is only one class
@@ -182,17 +178,14 @@ const populateSchoolSelect = () => {
     } else {
         sortSelect(schoolSelect);
     }
-    setSelectTitle("Escola", schoolSelect);
-    setSelectTitle("Turma", classSelect);
-    setSelectTitle("Período", termSelect);  
 }
 
 const populateClassSelect = () => {
     const selectYear = getSelectedOption(yearSelect);
     const selectSchool = getSelectedOption(schoolSelect);
     removeChildNodes(classSelect);
-    removeChildNodes(termSelect);
-    
+    removeChildNodes(subjectSelect);
+
     studentSelected.classStudents.forEach(c => {
         if (c.class.year == selectYear.value && c.class.schoolId == selectSchool.value) {
             createSelectOption(c.id, c.class.grade + ' ' + c.class.code, classSelect);
@@ -205,20 +198,69 @@ const populateClassSelect = () => {
     } else {
         sortSelect(classSelect);
     }
-    setSelectTitle("Turma", classSelect);
-    setSelectTitle("Período", termSelect);
 }
 
-const populateTermSelect = () => {
-    termSelect.disabled = false; 
-    removeChildNodes(termSelect);  
-    
-    const selectClass = getSelectedOption(classSelect);
-    let nTerms = studentSelected.classStudents[selectClass.value -1].class.school.academicTerms;
+const populateSubjectSelect = () => {
+    subjectSelect.disabled = false;
+    removeChildNodes(subjectSelect);
 
-    for (i = 1; i <= nTerms; i++) {
-        createSelectOption(i, nTerms == 4 ? i +'º Bimestre' : i +'º Trimestre' , termSelect);
+    const classSelected = getSelectedOption(classSelect);
+
+    studentSelected.lessons.forEach(lesson => {
+        if (lesson.course.classId == classSelected.value) {
+            createSelectOption(lesson.course.subject.id, lesson.course.subject.name, subjectSelect);
+        }
+    })
+
+    if (subjectSelect.options.length < 2) { // there is only one class
+        callSelectedSubjectRelatedFunctions();
+    } else {
+        sortSelect(subjectSelect);
     }
-
-    setSelectTitle("Período", termSelect);
+    
+    sortSelect(subjectSelect);
+    setSelectTitle("Todas as disciplinas", subjectSelect, false);
 }
+
+/**************** 
+    DASHBOARD
+****************/
+const dashboard = () => {
+    student.forEach(student => {
+        const dashboard = document.createElement('div');
+        const name = document.createElement('h1');
+        name.innerHTML = student.name;
+
+        let all = student.attendances.length;
+        let present = 0;
+        let absent = 0;
+        let late = 0;
+        for (attendance of student.attendances) {
+            if (attendance.mark == 'present') {
+                present++;
+            } else if (attendance.mark == 'absent') {
+                absent++
+            } else if (attendance.mark == 'late') {
+                late++
+            }
+        }
+        const attendances = document.createElement('p');
+        attendances.innerHTML = `Total de aulas: ${all}`;
+
+        const presence = document.createElement('p');
+        presence.innerHTML = `Total de presenças: ${present}`;
+
+        const absence = document.createElement('p');
+        absence.innerHTML = `Total de ausências: ${absent}`;
+
+        const delay = document.createElement('p');
+        delay.innerHTML = `Total de atrasos: ${late}`;
+
+        dashboard.appendChild(name);
+        dashboard.appendChild(attendances);
+        dashboard.appendChild(presence);
+        dashboard.appendChild(absence);
+        dashboard.appendChild(delay);
+        main.appendChild(dashboard);
+    })
+};
