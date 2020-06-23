@@ -1,3 +1,104 @@
+const passwordField = document.getElementById("password");
+
+const lowerCase = document.getElementById("lower-case");
+const upperCase = document.getElementById("upper-case");
+const digit = document.getElementById("digit");
+const specialChar = document.getElementById("special-char");
+const minNumberOfChars = document.getElementById("min-number-of-chars");
+
+const deleteKey = 46; // keyboard key
+const backspace = 8;
+
+passwordField.addEventListener("keyup", evt => validatePassword(evt, passwordField));
+
+
+const validatePassword = (evt, passwordField) => {
+    if (evt.keyCode == deleteKey || evt.keyCode == backspace) {
+        uncheckPasswordChar(passwordField);
+    } else {
+        checkPasswordChar(passwordField);
+    }
+};
+
+const checkPasswordChar = (passwordField) => {
+    const value = [...passwordField.value];
+    const lastChar = value.pop();
+
+    if (!lastChar) { return; }
+
+    let regex = /[a-z]/;
+    if (regex.test(lastChar)) {
+        lowerCase.className = "check";
+    }
+    regex = /[A-Z]/;
+    if (regex.test(lastChar)) {
+        upperCase.className = "check";
+    }
+    regex = /[0-9]/;
+    if (regex.test(lastChar)) {
+        digit.className = "check";
+    }
+    regex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?@,.\/]/;
+    if (regex.test(lastChar)) {
+        specialChar.className = "check";
+    }
+    if (value.length + 1 >= 8) {
+        minNumberOfChars.className = "check";
+    }
+    passwordField.defaultValue = passwordField.value;
+};
+
+const uncheckPasswordChar = (passwordField) => {
+
+    const previousChars = [...passwordField.defaultValue]
+    const currentChars = [...passwordField.value];
+    passwordField.defaultValue = passwordField.value;
+
+    let deletedChar;
+    let similarCharLeft = false;
+
+    if (currentChars.length) {
+        currentChars.forEach(char => {
+            previousChars.forEach(prevChar => {
+                if (prevChar != char) { deletedChar = prevChar; }
+            });
+        });
+        currentChars.forEach(char => {
+            if (!similarCharLeft) {
+                similarCharLeft = checkCharsSimilarities(deletedChar, char);
+            }
+        });
+    } else { deletedChar = previousChars[0]; }
+
+    if (currentChars.length < 8) { minNumberOfChars.className = "x"; }
+
+    if (similarCharLeft) { return; }
+
+    let regex = /[a-z]/;
+    if (regex.test(deletedChar)) { return lowerCase.className = "x"; }
+    regex = /[A-Z]/;
+    if (regex.test(deletedChar)) { return upperCase.className = "x"; }
+    regex = /[0-9]/;
+    if (regex.test(deletedChar)) { return digit.className = "x"; }
+    regex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?@,.\/]/;
+    if (regex.test(deletedChar)) { return specialChar.className = "x"; }
+};
+
+const checkCharsSimilarities = (deletedChar, char) => {
+    let regex = /[a-z]/;
+    if (regex.test(deletedChar) && regex.test(char)) { return true; }
+    regex = /[A-Z]/;
+    if (regex.test(deletedChar) && regex.test(char)) { return true; }
+    regex = /[0-9]/;
+    if (regex.test(deletedChar) && regex.test(char)) { return true; }
+    regex = /[-!$%^&*()_+|~=`{}\[\]:";'<>?@,.\/]/;
+    if (regex.test(deletedChar) && regex.test(char)) { return true; }
+    return false;
+};
+
+
+
+
 /*
     TEACHER'S REGISTER FORM LAYOUT:
     (SCHOOLS SECTION - SS)
@@ -954,7 +1055,7 @@ const populateRepeatingCoursesSelect = (repeatCoursesSelect, subjects) => {
 // API
 
 // CALLED BY addSubjectsSelect()
-const populateSubjectsSelect = (subjectsSelect, subjectOptionDivider, newSubjectOption, ) => {
+const populateSubjectsSelect = (subjectsSelect, subjectOptionDivider, newSubjectOption,) => {
 
     fetch(`${endpoint}subjects`)
         .then(res => res.json())

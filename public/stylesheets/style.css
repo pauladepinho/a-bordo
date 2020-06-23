@@ -524,12 +524,24 @@ section#set-user ul {
 section#set-user ul li {
   font-size: 14px;
   color: #c4c4c4;
+
+  display: flex;
+  align-items: center;
 }
 
-section#set-user ul li span {
-  color: #fe539b;
-  font-weight: 700;
+.x, .check {
+  width: 1rem;
+  height: 1rem;
+  background-size: cover;
+  margin-right: .5rem;
 }
+.x {
+  background-image: url("../images/x.svg");
+}
+.check {
+  background-image: url("../images/check.svg");
+}
+
 /* END OF SETTING USER */
 
 /* BUTTONS FOR ADDING NEW SCHOOLS, CLASSES AND CHILDREN */
@@ -1362,6 +1374,7 @@ td.recorded-grade {
   border-radius: 100%;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 

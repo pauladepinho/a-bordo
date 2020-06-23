@@ -40,12 +40,12 @@
 
             <input type="text" name="surname" id="surname" placeholder="Sobrenome" required />
           </div>
-          <div id=" contact-info">
+          <div id="contact-info">
             <input type="email" name="email" id="email" placeholder="E-mail" />
 
             <input type="text" name="phone" id="phone" placeholder="Celular" />
           </div>
-          <div id=" add-password">
+          <div id="add-password">
             <div class="password">
               <input type="password" name="password" id="password" placeholder="Senha" required />
               <div class="eye-icon" id="eye-icon-1" onclick="toogleVisibility()"></div>
@@ -81,11 +81,21 @@
             <li>Força da senha</li>
           </ul>
           <ul>
-            <li><span>x</span> Minúscula</li>
-            <li><span>x</span> Maiúscula</li>
-            <li><span>x</span> Número</li>
-            <li><span>x</span> Símbolo</li>
-            <li><span>x</span> 8 caracteres</li>
+            <li>
+              <div class="x" id="lower-case"></div>Minúscula
+            </li>
+            <li>
+              <div class="x" id="upper-case"></div>Maiúscula
+            </li>
+            <li>
+              <div class="x" id="digit"></div>Número
+            </li>
+            <li>
+              <div class="x" id="special-char"></div>Símbolo
+            </li>
+            <li>
+              <div class="x" id="min-number-of-chars"></div>8 caracteres
+            </li>
           </ul>
         </section>
 
