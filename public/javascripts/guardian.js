@@ -8,12 +8,20 @@ const classSelect = document.getElementById("class");
 const subjectSelect = document.getElementById("subject");
 
 // NAV BUTTONS
-const btnContact = document.getElementById("btn-contact");
+const btnNotific = document.getElementById("btn-notific");
 const btnJustify = document.getElementById("btn-justify");
-const navButtons = [btnContact, btnJustify];
+const navButtons = [btnNotific, btnJustify];
 
 // MAIN
 const main = document.querySelector('main')
+const tableGeneral = document.querySelector('.general');
+const tableSubject = document.querySelector('.subject');
+const tbodyGeneral = document.querySelector('.tbodyGeneral');
+const tbodySubject = document.querySelector('.tbodySubject');
+const section = document.querySelector('section');
+const sectionTitle = document.querySelector('section h2');
+const teacherName = document.querySelector('.teacherName');
+section.hidden = true;
 
 window.addEventListener("load", () => fetchData());
 
@@ -115,7 +123,11 @@ const callSelectedClassRelatedFunctions = () => {
 };
 
 const callSelectedSubjectRelatedFunctions = () => {
-    // populateTermSelect();
+    if (subjectSelect.value == '') {
+        populateSubjectSelect();
+    } else {
+        subjectFilter();
+    }
 };
 
 // POPULATE NAV SELECTS
@@ -201,8 +213,12 @@ const populateClassSelect = () => {
 }
 
 const populateSubjectSelect = async () => {
+    tableGeneral.hidden = false;
+    section.hidden = true;
     subjectSelect.disabled = false;
+    btnNotific.disabled = false;
     removeChildNodes(subjectSelect);
+    removeChildNodes(tbodyGeneral);
 
     const classSelected = getSelectedOption(classSelect);
     const classesIds = [];
@@ -245,6 +261,7 @@ const populateSubjectSelect = async () => {
         let maxGrade = 0;
         let nAttendances = 0;
         let nPresents = 0;
+
         lessons.map(lesson => {
             if (lesson.course.subject.id == subject.id) {
 
@@ -260,12 +277,12 @@ const populateSubjectSelect = async () => {
                 });
             }
         })
-        let media = (grade * (10 / maxGrade)).toFixed(1);
-        let progress = (grade / maxGrade * 100).toFixed(1);
-        let presence = (nPresents / nAttendances * 100).toFixed();
+        let media = grade ? (grade * (10 / maxGrade)).toFixed(1) : 'N/A';
+        let progress = grade ? (grade / maxGrade * 100).toFixed(1) : 0;
+        let presence = nPresents ? (nPresents / nAttendances * 100).toFixed() : '';
 
         /********************************************************************** */
-        createRow(subject.name, media, progress, `${presence}%`, '@');
+        createRowTableGeneral(subject.name, media, progress, `${presence}%`, '@');
     })
 
     if (subjectSelect.options.length < 2) {
@@ -276,11 +293,83 @@ const populateSubjectSelect = async () => {
     setSelectTitle("Todas as disciplinas", subjectSelect, false);
 }
 
+const subjectFilter = async () => {
+    tableGeneral.hidden = true;
+    section.hidden = false;
+    removeChildNodes(tbodySubject);
+
+    /********************************************************************** */
+    await fetch(`${endpoint}subjects`)
+        .then(res => res.json())
+        .then(data => {
+            let subject = data.find(s => s.id == subjectSelect.value)
+            sectionTitle.innerHTML = subject.name
+        })
+        .catch(error => console.log(error))
+    /********************************************************************** */
+
+    const studentEvaluations = studentSelected.studentEvaluations;
+    const lessons = studentSelected.lessons;
+    const attendances = studentSelected.attendances;
+
+    let grade = 0;
+    let maxGrade = 0;
+    let nAttendances = 0;
+    let nPresents = 0;
+
+    lessons.map(lesson => {
+        if (lesson.course.subject.id == subjectSelect.value) {
+
+            studentEvaluations.map(student => {
+                if (student.evaluation.lessonId == lesson.id) {
+                    grade += Number(student.grade);
+                    maxGrade += Number(student.evaluation.maxGrade);
+                }
+            })
+            attendances.map(attendance => {
+                attendance.lessonId == lesson.id ? nAttendances++ : '';
+                attendance.lessonId == lesson.id && attendance.mark == 'present' ? nPresents++ : '';
+            });
+        }
+    })
+    let media = grade ? (grade * (10 / maxGrade)).toFixed(1) : 'N/A';
+    let progress = grade ? (grade / maxGrade * 100).toFixed(1) : 0;
+    let presence = nPresents ? (nPresents / nAttendances * 100).toFixed() : '';
+    createRowTableSubject('Geral', media, progress, `${presence}%`, '@');
+
+    /********************************************************************** */
+
+    let academicTerms = studentSelected.classStudents[0].class.school.academicTerms;
+    for (i = 1; i <= academicTerms; i++) {
+        grade = 0;
+        maxGrade = 0;
+        nAttendances = 0;
+        nPresents = 0;
+        lessons.map(lesson => {
+
+            if (lesson.course.subject.id == subjectSelect.value && lesson.academicTerm == i) {
+                studentEvaluations.map(student => {
+                    if (student.evaluation.lessonId == lesson.id) {
+                        grade += Number(student.grade);
+                        maxGrade += Number(student.evaluation.maxGrade);
+                    }
+                })
+                attendances.map(attendance => {
+                    attendance.lessonId == lesson.id ? nAttendances++ : '';
+                    attendance.lessonId == lesson.id && attendance.mark == 'present' ? nPresents++ : '';
+                });
+            }
+        })
+        media = grade ? (grade * (10 / maxGrade)).toFixed(1) : 'N/A';
+        progress = grade ? (grade / maxGrade * 100).toFixed(1) : 0;
+        presence = nPresents ? (nPresents / nAttendances * 100).toFixed() : '';
+        createRowTableSubject(`${i}º Bimestre`, media, progress, `${presence}%`, '@');
+    }
+}
+
 // CREATE TABLE ROWS
 
-const createRow = (subject, note, progress, presence, grafic) => {
-    const tbody = document.querySelector('tbody')
-
+const createRowTableGeneral = (subject, note, progress, presence, grafic) => {
     const tr = document.createElement('tr');
     const th = document.createElement('th');
     th.setAttribute('scope', 'row');
@@ -302,13 +391,47 @@ const createRow = (subject, note, progress, presence, grafic) => {
     const tdPresense = document.createElement('td');
     tdPresense.innerHTML = presence;
 
-    const tdGrafico = document.createElement('td');
-    tdGrafico.innerHTML = grafic;
+    const tdGrafic = document.createElement('td');
+    tdGrafic.innerHTML = grafic;
 
     tr.appendChild(th);
     tr.appendChild(tdNote);
     tr.appendChild(tdProgress);
     tr.appendChild(tdPresense);
-    tr.appendChild(tdGrafico);
-    tbody.appendChild(tr);
+    // tr.appendChild(tdGrafic);
+    tbodyGeneral.appendChild(tr);
+}
+
+const createRowTableSubject = async (period, note, progress, presence, grafic) => {
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    th.setAttribute('scope', 'row');
+    th.innerHTML = period;
+    teacherName.innerHTML = `Professor(a):`;
+
+    const tdNote = document.createElement('td');
+    tdNote.innerHTML = note;
+
+    const tdProgress = document.createElement('td');
+    const divProgress = document.createElement('div');
+    divProgress.classList.add('progress')
+    const divProgressBar = document.createElement('div');
+    divProgressBar.classList.add('progress-bar');
+    divProgressBar.setAttribute('role', 'progressbar');
+    divProgressBar.setAttribute('style', `width: ${progress}%`);
+    divProgress.appendChild(divProgressBar);
+    tdProgress.appendChild(divProgress);
+
+    const tdPresense = document.createElement('td');
+    tdPresense.innerHTML = presence;
+
+    const tdGrafic = document.createElement('td');
+    tdGrafic.innerHTML = grafic;
+
+    tr.appendChild(th);
+    tr.appendChild(tdNote);
+    tr.appendChild(tdProgress);
+    tr.appendChild(tdPresense);
+    // tr.appendChild(tdGrafic);
+    tbodySubject.appendChild(tr);    
 }

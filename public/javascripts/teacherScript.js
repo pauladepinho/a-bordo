@@ -218,7 +218,7 @@ const setSelectTitle = (title, select) => { // must be called only after other s
     const option = document.createElement("option");
     option.value = "";
     option.innerText = title;
-    option.disabled = true;
+    // option.disabled = true;
     if (select.options.length != 1) { // else, if select has only one available enabled option, that option will be automatically selected
         option.selected = true;
     }

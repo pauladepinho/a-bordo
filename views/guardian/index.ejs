@@ -16,26 +16,46 @@
 
         <div class="navbar">
             <ul class="nav">
-                <li><button id="btn-contact" type="button" disabled>Ver notificações</button></li>
+                <li><button id="btn-notific" type="button" disabled>Ver notificações</button></li>
                 <li><button id="btn-justify" type="button" disabled>Justificar faltas</button></li>
             </ul>
         </div>
     </nav>
 
     <main id="home">
-        <table class="table table-striped">
+        <table class="table table-striped general">
             <thead>
                 <tr>
-                    <th style="width:25%" scope="col">Disciplinas</th>
+                    <th style="width:30%" scope="col">Disciplinas</th>
                     <th style="width:10%" scope="col"></th>
-                    <th style="width:45%" scope="col">Média Geral</th>
-                    <th style="width:10%" scope="col">Presença</th>
-                    <th style="width:10%" scope="col"></th>
+                    <th style="width:30%" scope="col">Média Geral</th>
+                    <th style="width:20%" scope="col">Presença</th>
+                    <!-- <th style="width:10%" scope="col"></th> -->
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="tbodyGeneral">
+            <tbody>                
+            </tbody>
             </tbody>
         </table>
+
+        <section>
+            <h2></h2>
+            <p class="teacherName"></p>
+            <table class="table table-striped subject">
+                <thead>
+                    <tr>
+                        <th style="width:30%" scope="col">Período</th>
+                        <th style="width:10%" scope="col">Média</th>
+                        <th style="width:30%" scope="col"></th>
+                        <th style="width:20%" scope="col">Presença</th>
+                        <!-- <th style="width:10%" scope="col">@</th> -->
+                    </tr>
+                </thead>
+                <tbody class="tbodySubject">                    
+                </tbody>
+            </table>
+        </section>
     </main>
 
     <script src="../../javascripts/guardian.js"></script>
