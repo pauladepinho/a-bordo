@@ -37,7 +37,6 @@ const fetchData = () => {
             guardian = data;
             student = data.student;
             populateStudentSelect();
-            dashboard();
         })
         .catch(error => console.log(error))
 };
@@ -137,9 +136,10 @@ const populateStudentSelect = () => {
 }
 
 const populateYearSelect = () => {
-    const selectedStudent = getSelectedOption(studentSelect);
-    studentSelected = student[selectedStudent.value - 1];
+    const getStudent = getSelectedOption(studentSelect);
+    studentSelected = student.find(s => s.id == getStudent.value)
     console.log(studentSelected);
+
     removeChildNodes(yearSelect);
     removeChildNodes(schoolSelect);
     removeChildNodes(classSelect);
@@ -188,7 +188,7 @@ const populateClassSelect = () => {
 
     studentSelected.classStudents.forEach(c => {
         if (c.class.year == selectYear.value && c.class.schoolId == selectSchool.value) {
-            createSelectOption(c.id, c.class.grade + ' ' + c.class.code, classSelect);
+            createSelectOption(c.class.code, c.class.grade + ' - Turma ' + c.class.code, classSelect);
         }
     })
 
@@ -200,67 +200,115 @@ const populateClassSelect = () => {
     }
 }
 
-const populateSubjectSelect = () => {
+const populateSubjectSelect = async () => {
     subjectSelect.disabled = false;
     removeChildNodes(subjectSelect);
 
     const classSelected = getSelectedOption(classSelect);
+    const classesIds = [];
+    const subjectsIds = [];
+    const subjects = [];
+    /********************************************************************** */
+    await fetch(`${endpoint}classes`)
+        .then(res => res.json())
+        .then(data => {
+            let classes = data.filter(item => item.code == classSelected.value);
+            classes.map(item => classesIds.push(item.id))
+        })
+        .catch(error => console.log(error))
+    /********************************************************************** */
+    await fetch(`${endpoint}courses`)
+        .then(res => res.json())
+        .then(data => {
+            let courses = data.filter(item => classesIds.includes(item.classId));
+            courses.map(item => subjectsIds.push(item.subjectId));
+        })
+        .catch(error => console.log(error))
+    /********************************************************************** */
+    await fetch(`${endpoint}subjects`)
+        .then(res => res.json())
+        .then(data => {
+            subjectsIds.forEach(id => {
+                subjects.push(data.find(item => item.id == id))
+            })
+        })
+        .catch(error => console.log(error))
+    /********************************************************************** */
+    const studentEvaluations = studentSelected.studentEvaluations;
+    const lessons = studentSelected.lessons;
+    const attendances = studentSelected.attendances;
 
-    studentSelected.lessons.forEach(lesson => {
-        if (lesson.course.classId == classSelected.value) {
-            createSelectOption(lesson.course.subject.id, lesson.course.subject.name, subjectSelect);
-        }
+    subjects.forEach(subject => {
+        createSelectOption(subject.id, subject.name, subjectSelect);
+
+        let grade = 0;
+        let maxGrade = 0;
+        let nAttendances = 0;
+        let nPresents = 0;
+        lessons.map(lesson => {
+            if (lesson.course.subject.id == subject.id) {
+
+                studentEvaluations.map(student => {
+                    if (student.evaluation.lessonId == lesson.id) {
+                        grade += Number(student.grade);
+                        maxGrade += Number(student.evaluation.maxGrade);
+                    }
+                })
+                attendances.map(attendance => {
+                    attendance.lessonId == lesson.id ? nAttendances++ : '';
+                    attendance.lessonId == lesson.id && attendance.mark == 'present' ? nPresents++ : '';
+                });
+            }
+        })
+        let media = (grade * (10 / maxGrade)).toFixed(1);
+        let progress = (grade / maxGrade * 100).toFixed(1);
+        let presence = (nPresents / nAttendances * 100).toFixed();
+
+        /********************************************************************** */
+        createRow(subject.name, media, progress, `${presence}%`, '@');
     })
 
-    if (subjectSelect.options.length < 2) { // there is only one class
+    if (subjectSelect.options.length < 2) {
         callSelectedSubjectRelatedFunctions();
     } else {
         sortSelect(subjectSelect);
     }
-    
-    sortSelect(subjectSelect);
     setSelectTitle("Todas as disciplinas", subjectSelect, false);
 }
 
-/**************** 
-    DASHBOARD
-****************/
-const dashboard = () => {
-    student.forEach(student => {
-        const dashboard = document.createElement('div');
-        const name = document.createElement('h1');
-        name.innerHTML = student.name;
+// CREATE TABLE ROWS
 
-        let all = student.attendances.length;
-        let present = 0;
-        let absent = 0;
-        let late = 0;
-        for (attendance of student.attendances) {
-            if (attendance.mark == 'present') {
-                present++;
-            } else if (attendance.mark == 'absent') {
-                absent++
-            } else if (attendance.mark == 'late') {
-                late++
-            }
-        }
-        const attendances = document.createElement('p');
-        attendances.innerHTML = `Total de aulas: ${all}`;
+const createRow = (subject, note, progress, presence, grafic) => {
+    const tbody = document.querySelector('tbody')
 
-        const presence = document.createElement('p');
-        presence.innerHTML = `Total de presenças: ${present}`;
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    th.setAttribute('scope', 'row');
+    th.innerHTML = subject;
 
-        const absence = document.createElement('p');
-        absence.innerHTML = `Total de ausências: ${absent}`;
+    const tdNote = document.createElement('td');
+    tdNote.innerHTML = note;
 
-        const delay = document.createElement('p');
-        delay.innerHTML = `Total de atrasos: ${late}`;
+    const tdProgress = document.createElement('td');
+    const divProgress = document.createElement('div');
+    divProgress.classList.add('progress')
+    const divProgressBar = document.createElement('div');
+    divProgressBar.classList.add('progress-bar');
+    divProgressBar.setAttribute('role', 'progressbar');
+    divProgressBar.setAttribute('style', `width: ${progress}%`);
+    divProgress.appendChild(divProgressBar);
+    tdProgress.appendChild(divProgress);
 
-        dashboard.appendChild(name);
-        dashboard.appendChild(attendances);
-        dashboard.appendChild(presence);
-        dashboard.appendChild(absence);
-        dashboard.appendChild(delay);
-        main.appendChild(dashboard);
-    })
-};
+    const tdPresense = document.createElement('td');
+    tdPresense.innerHTML = presence;
+
+    const tdGrafico = document.createElement('td');
+    tdGrafico.innerHTML = grafic;
+
+    tr.appendChild(th);
+    tr.appendChild(tdNote);
+    tr.appendChild(tdProgress);
+    tr.appendChild(tdPresense);
+    tr.appendChild(tdGrafico);
+    tbody.appendChild(tr);
+}

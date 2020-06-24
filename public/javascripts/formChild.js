@@ -391,8 +391,8 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
     [...schoolsSelect.options].map(option => option.remove()); 
 
     const municipality = municipalitiesSelect.options[municipalitiesSelect.selectedIndex].value;
-    // const code = municipality.split(":")[0];
-    const municipalitySelected = municipality.split(":")[1].toLowerCase();
+    const code = municipality.split(":")[0];
+    // const municipalitySelected = municipality.split(":")[1].toLowerCase();
 
     fetch(`${endpoint}/schools`)
         .then(res => res.json())
@@ -401,7 +401,7 @@ const populateSchoolsSelect = (schoolsSelect, municipalitiesSelect) => {
             schools.forEach(school => {
                 const stateSelected = document.getElementById(`state-school${childNumber}`)
 
-                if (school.state == stateSelected.value && school.municipality.toLowerCase() == municipalitySelected) {
+                if (school.state == stateSelected.value && school.municipality.split(":")[0] == code) {
                     const option = document.createElement("option");
                     option.value = school.id;
                     option.textContent = school.name;

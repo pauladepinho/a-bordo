@@ -1,4 +1,4 @@
-<%- include("../partials/header.ejs", { title: "aBordo - Fazer chamada" }) %>
+<%- include("../partials/header.ejs", { title: "aBordo" }) %>
 </head>
 
 <body>
@@ -11,7 +11,7 @@
             <select name="school" id="school" required></select>
             <select name="class" id="class" required disabled></select>
             <select name="subject" id="subject" required disabled>Disciplinas</select>
-            <select id="term" name="academicTerm" form="form-attendance-sheet" required disabled></select>
+            <!-- <select id="term" name="academicTerm" form="form-attendance-sheet" required disabled></select> -->
         </div>
 
         <div class="navbar">
@@ -23,7 +23,19 @@
     </nav>
 
     <main id="home">
-        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width:25%" scope="col">Disciplinas</th>
+                    <th style="width:10%" scope="col"></th>
+                    <th style="width:45%" scope="col">Média Geral</th>
+                    <th style="width:10%" scope="col">Presença</th>
+                    <th style="width:10%" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </main>
 
     <script src="../../javascripts/guardian.js"></script>

@@ -1,0 +1,11 @@
+#home {
+  padding: 50px;
+}
+
+.progress {
+  height: 25px;
+}
+
+.progress-bar{
+  background-color: #30C1F9;
+}
