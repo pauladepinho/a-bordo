@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       as: "user"
     });
     Guardian.belongsToMany(models.Student, {
-      as: "kids",
+      as: "student",
       foreignkey: "guardianId",
       through: models.Student_Guardian
     })

@@ -1,78 +1,62 @@
-<%- include("../partials/header.ejs", { title: "aBordo - Fazer chamada" }) %>
+<%- include("../partials/header.ejs", { title: "aBordo" }) %>
 </head>
 
 <body>
-    <header>
-        <a href="/" id="logo">
-            <img class="logo" src="../images/airplane.svg" alt="">
-            <h1 class="logo">aBordo</h1>
-        </a>
-        <div id="top-right-menu">
-            <div id="notifications">
-                <img src="../images/sino.png" alt=" ">
-            </div>
-
-            <div id="user-options">
-                <img src="../images/professor.png" alt="">
-                <span>
-                    <p>Nome do responsável</p>
-                    <p>RESPONSÁVEL</p>
-                </span>
-
-                <div>
-                    <a href="/logout">Sair</a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <%- include("../partials/guardian-topMenu.ejs") %>
 
     <nav>
         <div class="navbar select">
-            <select name="school" id="school" required>
-                <option disabled selected>Aluno</option>
-                <option value="0">123 de Oliveira 4</option>
-            </select>
-
-            <select name="school" id="school" required>
-                <option disabled selected>Ano letivo</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-            </select>
-
-            <select name="school" id="school" required>
-                <option disabled selected>Escola</option>
-                <option value="0">Colégio Pedro II</option>
-                <option value="1">Escola Técnica Estadual do Ensino Fundamental Visconde de Mauá</option>
-            </select>
-
-            <select name="class" id="class" required>
-                <option value="" disabled selected>Turma</option>
-                <option value="2223">Turma 2223</option>
-                <option value="1121">Turma 1121</option>
-            </select>
-
-            <select name="term" id="term" required>
-                <option value="all" selected>Todos os trimestres</option>
-                <option value="1">1º Trimestre</option>
-                <option value="2">2º Trimestre</option>
-                <option value="3">3º Trimestre</option>
-            </select>
+            <select name="student" id="student" required></select>
+            <select name="year" id="year" required></select>
+            <select name="school" id="school" required></select>
+            <select name="class" id="class" required disabled></select>
+            <select name="subject" id="subject" required disabled>Disciplinas</select>
+            <!-- <select id="term" name="academicTerm" form="form-attendance-sheet" required disabled></select> -->
         </div>
 
         <div class="navbar">
             <ul class="nav">
-                <li><a class="nav-link" href="#">
-                        Contatar responsáveis
-                    </a></li>
-                <li><a class="nav-link" href="#">
-                        Justificar faltas
-                    </a></li>
+                <li><button id="btn-notific" type="button" disabled>Ver notificações</button></li>
+                <li><button id="btn-justify" type="button" disabled>Justificar faltas</button></li>
             </ul>
         </div>
     </nav>
 
-    <main id="">
-        Home do responsável/Boletim escolar
+    <main id="home">
+        <table class="table table-striped general">
+            <thead>
+                <tr>
+                    <th style="width:30%" scope="col">Disciplinas</th>
+                    <th style="width:10%" scope="col"></th>
+                    <th style="width:30%" scope="col">Média Geral</th>
+                    <th style="width:20%" scope="col">Presença</th>
+                    <!-- <th style="width:10%" scope="col"></th> -->
+                </tr>
+            </thead>
+            <tbody class="tbodyGeneral">
+            <tbody>                
+            </tbody>
+            </tbody>
+        </table>
+
+        <section>
+            <h2></h2>
+            <p class="teacherName"></p>
+            <table class="table table-striped subject">
+                <thead>
+                    <tr>
+                        <th style="width:30%" scope="col">Período</th>
+                        <th style="width:10%" scope="col">Média</th>
+                        <th style="width:30%" scope="col"></th>
+                        <th style="width:20%" scope="col">Presença</th>
+                        <!-- <th style="width:10%" scope="col">@</th> -->
+                    </tr>
+                </thead>
+                <tbody class="tbodySubject">                    
+                </tbody>
+            </table>
+        </section>
     </main>
 
+    <script src="../../javascripts/guardian.js"></script>
     <%- include("../partials/footer.ejs") %>

@@ -34,6 +34,8 @@ router.get("/schools/:municipality", API_Controller.schoolsByMunicipality); // i
 router.get("/schools/name/:name", API_Controller.schoolsByName); // in use (register form)
 router.get("/classes/:schoolId/:year/:levelOfEducation/:grade", API_Controller.specificClasses); // in use (register form)
 
+// GUARDIAN HOME
+router.get("/guardian/user/:userId", API_Controller.guardian); // in use (guardian home)
 
 
 module.exports = router;
