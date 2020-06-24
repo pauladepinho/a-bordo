@@ -218,7 +218,7 @@ const setSelectTitle = (title, select) => { // must be called only after other s
     const option = document.createElement("option");
     option.value = "";
     option.innerText = title;
-    // option.disabled = true;
+    option.disabled = true;
     if (select.options.length != 1) { // else, if select has only one available enabled option, that option will be automatically selected
         option.selected = true;
     }
@@ -316,7 +316,7 @@ const populateClassSelect = () => { // when a school is selected
         disableNavReportsAndContactBtns();
     }
     classes.forEach(c => {
-        if (selectedSchool.innerText == c.school.name) {
+        if (selectedSchool.value == c.school.id) {
             createSelectOption(c.id, c.code, classSelect);
         }
     });
@@ -356,7 +356,7 @@ const populateTermSelect = () => { // when a school is selected
     removeChildNodes(termSelect);
     let yearDivision;
     classes.forEach(c => {
-        if (selectedSchool.innerText == c.school.name) {
+        if (selectedSchool.value == c.school.id) {
             const numberOfterms = c.school.academicTerms;
             yearDivision = numberOfterms == 3 ? "Trimestre" : "Bimestre";
             for (let i = 1; i <= numberOfterms; i++) {
@@ -953,7 +953,8 @@ const populateTbodyGradebook = () => {
             input.placeholder = "Nota";
             if (grade == "N/A") {
                 input.type = "text";
-                input.addEventListener("keydown", (evt) => { if (input.type == "text") { evt.preventDefault() } });
+                // input.addEventListener("keydown", (evt) => { if (input.type == "text") { evt.preventDefault() } });
+                input.addEventListener("keydown", (evt) => preventInputChange(evt, input));
             }
             input.value = grade;
             input.disabled = true;
@@ -991,6 +992,10 @@ const populateTbodyGradebook = () => {
 
         checkbox.addEventListener("change", () => markAsNotEvaluated(checkbox, `input.grade.student${studentId}`));
     });
+};
+
+const preventInputChange = (evt, input) => {
+    if (input.type == "text") { evt.preventDefault(); }
 };
 
 const populateTbodyAttendancesRecords = () => {
@@ -1596,6 +1601,7 @@ const markAsNotEvaluated = (checkbox, inputSelector) => {
     if (checkbox.checked) {
         targetInput.type = "text";
         targetInput.value = "N/A";
+        targetInput.addEventListener("keydown", (evt) => preventInputChange(evt, targetInput));
     } else {
         targetInput.type = "number";
     }
