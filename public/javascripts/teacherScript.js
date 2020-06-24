@@ -73,7 +73,7 @@ const finalGradeBar = document.getElementById("final-grade-bar");
 
 
 
-const colors = { present: "#30C1F9", late: "#FFCC33", absent: "#FE539B", success: "#30C1f9", warning: "#FE539B" };
+const colors = { present: "#30C1F9", late: "#FFCC33", absent: "#FE539B", success: "#30C1f9", warning: "#FE539B", orange: "#f95f2f" };
 
 
 
@@ -296,10 +296,12 @@ const populateSchoolSelect = () => {
     } else {
         sortSelect(schoolSelect);
         setSelectTitle("Turma", classSelect);
+        setSelectTitle("Disciplina", subjectSelect);
+        setSelectTitle("Etapa", termSelect);
     }
     setSelectTitle("Escola", schoolSelect);
-    setSelectTitle("Disciplina", subjectSelect);
-    setSelectTitle("Etapa", termSelect);
+    // setSelectTitle("Disciplina", subjectSelect);
+    // setSelectTitle("Etapa", termSelect);
 }
 
 const populateClassSelect = () => { // when a school is selected
@@ -445,34 +447,31 @@ const listStudents = () => {
 const showStatitics = () => {
     removeChildNodes(mainStatistics);
 
-    const passGrade = getSelectedSchoolPassingGrade();
+    const passGrade = Number(getSelectedSchoolPassingGrade());
+    const schoolMaxGrade = Number(getSelectedSchoolMaxGrade());
+
     const studentsgradesCharts = document.querySelectorAll(".final-grade .inner-circle");
 
     let highGrades = [];
     let lowGrades = [];
     [...studentsgradesCharts].forEach(div => {
-        grade = div.innerText;
-        if (grade >= passGrade) {
-            highGrades.push(grade);
-        } else if (grade < passGrade) {
-            lowGrades.push(grade);
-        }
-        console.log(grade);
-
+        grade = Number(div.innerText);
+        if (grade >= passGrade) { highGrades.push(grade); }
+        else if (grade < passGrade) { lowGrades.push(grade); }
     });
     const totalOfGrades = highGrades.length + lowGrades.length;
     const ratioOfHighGrades = highGrades.length ? highGrades.length / totalOfGrades : 0;
     const ratioOfLowGrades = lowGrades.length ? lowGrades.length / totalOfGrades : 0;
 
-    const chart = createPieChart(ratioOfHighGrades, colors.success, ratioOfHighGrades.toFixed(1));
-    chart.style.width = "15rem";
-    chart.style.height = "15rem";
-    chart.style.marginLeft = "7rem";
-    chart.style.marginTop = "7rem";
+    // PIE CHART
 
-    const cutterRightHalf = chart.childNodes[0];
-    const cutterLeftHalf = chart.childNodes[1];
-    const innerCircle = chart.childNodes[2];
+    const pieChart = createPieChart(ratioOfHighGrades, colors.success, ratioOfHighGrades.toFixed(1));
+    pieChart.style.width = "15rem";
+    pieChart.style.height = "15rem";
+
+    const cutterRightHalf = pieChart.childNodes[0];
+    const cutterLeftHalf = pieChart.childNodes[1];
+    const innerCircle = pieChart.childNodes[2];
 
     cutterRightHalf.style.backgroundColor = lowGrades.length ? colors.warning : "#EAEAEA";
     cutterRightHalf.style.clip = "rect(0px, 15rem, 15rem, calc( 15rem / 2 ))";
@@ -501,7 +500,6 @@ const showStatitics = () => {
     complement.innerText = "alunos avaliados";
     complement.style.fontSize = ".75rem";
     totalOfStudents.append(numberOfStudents, complement);
-
 
     const high = document.createElement("div");
     high.style.display = "flex";
@@ -534,8 +532,136 @@ const showStatitics = () => {
 
     innerCircle.append(totalOfStudents, high, low);
 
-    mainStatistics.append(chart);
+    // BARS CHART
+
+    let bars = [];
+
+    const barsChart = document.createElement("div");
+    barsChart.style.minWidth = "35rem";
+    barsChart.style.height = "15rem";
+    barsChart.style.marginLeft = "3rem"
+    barsChart.style.display = "flex";
+    barsChart.style.flexDirection = "column";
+
+    const columnsContainer = document.createElement("div");
+    columnsContainer.style.width = "100%";
+    columnsContainer.style.height = "100%";
+    columnsContainer.style.display = "flex";
+    columnsContainer.style.justifyContent = "space-evenly";
+
+    const multiplier = schoolMaxGrade / 10;
+    for (let i = 0; i <= 20; i++) {
+        const column = document.createElement("div");
+        column.style.width = "100%";
+        column.style.height = "100%";
+        column.style.display = "flex";
+        column.style.flexDirection = "column";
+        column.style.alignItems = "center";
+
+        const barContainer = document.createElement("div");
+        barContainer.style.width = "100%";
+        barContainer.style.height = "100%";
+        barContainer.style.display = "flex";
+        barContainer.style.flexDirection = "column";
+        barContainer.style.justifyContent = "flex-end";
+
+        const gradeText = document.createElement("div");
+        gradeText.style.backgroundColor = "white";
+        gradeText.style.width = "100%";
+        gradeText.style.height = "2rem";
+        gradeText.style.borderTop = "2px solid #c4c4c4";
+        gradeText.style.marginTop = ".5rem";
+        gradeText.style.display = "flex";
+        gradeText.style.justifyContent = "center";
+        gradeText.style.alignItems = "flex-end";
+
+        if (i % 2 == 0) { // even
+            gradeText.innerText = (i * multiplier) / 2;
+        }
+        else { // odd
+            gradeText.innerText = "";
+            barContainer.style.backgroundColor = "#EAEAEA";
+            barContainer.style.borderTopLeftRadius = "10px";
+            barContainer.style.borderTopRightRadius = "10px";
+            barContainer.style.position = "relative";
+            const bar = document.createElement("div");
+            bar.style.width = "100%";
+            bar.style.borderTopLeftRadius = "10px";
+            bar.style.borderTopRightRadius = "10px";
+            // bar.style.position = "relative";
+            barContainer.append(bar);
+            bars.push(bar);
+        }
+        column.append(barContainer, gradeText);
+        columnsContainer.append(column);
+    }
+
+    barsChart.append(columnsContainer);
+
+    for (let i = 0; i < passGrade / multiplier; i++) {
+        bars[i].style.backgroundColor = colors.warning;
+        let gradesInInterval = 0;
+        lowGrades.forEach(grade => {
+            if (grade >= i * multiplier && grade < (i * multiplier) + multiplier) { gradesInInterval++; }
+        });
+        bars[i].style.height = `${(gradesInInterval / totalOfGrades * 100)}%`;
+
+        const barContainer = bars[i].parentNode;
+        const firstGradeOfInterval = i * multiplier;
+        const lastGradeOfInterval = (i * multiplier) + multiplier;
+        const percentageOfStudents = (gradesInInterval / totalOfGrades * 100).toFixed(0);
+        barContainer.addEventListener("mouseenter", () => showNumberOfStudentsInGradeInterval(firstGradeOfInterval, lastGradeOfInterval, numberOfStudents.innerText, percentageOfStudents, barContainer));
+        barContainer.addEventListener("mouseleave", () => hideNumberOfStudentsInGradeInterval(barContainer));
+    }
+    for (let i = passGrade / multiplier; i < 10; i++) {
+        bars[i].style.backgroundColor = colors.success;
+        let gradesInInterval = 0;
+        highGrades.forEach(grade => {
+            if (grade >= i * multiplier && grade < (i * multiplier) + multiplier) { gradesInInterval++; }
+            else if (i == 9) {
+                if (grade >= i * multiplier) { gradesInInterval++; }
+            }
+        });
+        bars[i].style.height = `${(gradesInInterval / totalOfGrades * 100)}%`;
+
+        const barContainer = bars[i].parentNode;
+        const firstGradeOfInterval = i * multiplier;
+        const lastGradeOfInterval = (i * multiplier) + multiplier;
+        const percentageOfStudents = (gradesInInterval / totalOfGrades * 100).toFixed(0);
+        barContainer.addEventListener("mouseenter", () => showNumberOfStudentsInGradeInterval(firstGradeOfInterval, lastGradeOfInterval, numberOfStudents.innerText, percentageOfStudents, barContainer));
+        barContainer.addEventListener("mouseleave", () => hideNumberOfStudentsInGradeInterval(barContainer));
+    }
+
+    // CHARTS CONTAINER
+
+    const chartsContainer = document.createElement("div");
+    chartsContainer.style.margin = "7rem";
+    chartsContainer.style.display = "flex";
+
+    chartsContainer.append(pieChart, barsChart);
+    mainStatistics.append(chartsContainer);
 };
+
+const showNumberOfStudentsInGradeInterval = (firstGradeOfInterval, lastGradeOfInterval, numberOfStudents, percentageOfStudents, parent) => {
+    const div = document.createElement("div");
+    div.style.backgroundColor = "white";
+    div.style.border = "1px solid #c4c4c4";
+    div.style.borderRadius = "10px";
+    div.style.width = "8rem";
+    div.style.padding = ".5rem";
+    div.style.position = "absolute";
+    div.style.top = "15rem";
+    div.style.left = "-2.5rem";
+    div.style.zIndex = 10;
+    div.style.fontSize = ".75rem";
+
+    const students = Number((percentageOfStudents * numberOfStudents / 100).toFixed(0)) ? (percentageOfStudents * numberOfStudents / 100).toFixed(0) : 0;
+    div.innerText = `${students} aluno(s) com nota entre ${firstGradeOfInterval} e ${lastGradeOfInterval}.`;
+    parent.append(div);
+};
+const hideNumberOfStudentsInGradeInterval = (parent) => {
+    parent.childNodes[1].remove();
+}
 
 /********************
     MAINS' TABLES
