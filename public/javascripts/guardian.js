@@ -297,6 +297,9 @@ const subjectFilter = async () => {
     tableGeneral.hidden = true;
     section.hidden = false;
     removeChildNodes(tbodySubject);
+    
+    let course;
+    let teacher;
 
     /********************************************************************** */
     await fetch(`${endpoint}subjects`)
@@ -304,6 +307,28 @@ const subjectFilter = async () => {
         .then(data => {
             let subject = data.find(s => s.id == subjectSelect.value)
             sectionTitle.innerHTML = subject.name
+        })
+        .catch(error => console.log(error))
+    /********************************************************************** */
+    await fetch(`${endpoint}courses`)
+        .then(res => res.json())
+        .then(data => {
+            course = data.find(c => c.subjectId == subjectSelect.value)       
+        })
+        .catch(error => console.log(error))
+    /********************************************************************** */
+    await fetch(`${endpoint}teachers`)
+        .then(res => res.json())
+        .then(data => {
+            teacher = data.find(t => t.id == course.teacherId);  
+        })
+        .catch(error => console.log(error))
+    /********************************************************************** */
+    await fetch(`${endpoint}users`)
+        .then(res => res.json())
+        .then(data => {
+            user = data.find(u => u.id == teacher.userId);
+            teacherName.innerHTML = `Professor(a): ${user.forename} ${user.surname}`;                      
         })
         .catch(error => console.log(error))
     /********************************************************************** */
@@ -406,8 +431,7 @@ const createRowTableSubject = async (period, note, progress, presence, grafic) =
     const tr = document.createElement('tr');
     const th = document.createElement('th');
     th.setAttribute('scope', 'row');
-    th.innerHTML = period;
-    teacherName.innerHTML = `Professor(a):`;
+    th.innerHTML = period;    
 
     const tdNote = document.createElement('td');
     tdNote.innerHTML = note;
