@@ -1,0 +1,136 @@
+<%- include("../partials/header.ejs", {title: "aBordo - Cadastro"}) %>
+</head>
+
+<body>
+  <header>
+    <a href="/login" id="logo">
+      <img class="logo" src="../images/airplane.svg" alt="">
+      <h1 class="logo">aBordo</h1>
+    </a>
+  </header>
+
+  <nav>
+    <h2>Cadastrar</h2>
+    <div class="navbar">
+      <ul class="nav">
+        <li><a class="nav-link" href="#set-user">Dados pessoais</a></li>
+        <li><a class="nav-link" href="#set-schools">Escolas</a></li>
+        <li><a class="nav-link" href="#set-classes">Turmas</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="register-teacher">
+
+    <form id="create" action="/professor/cadastrar" method="POST" enctype="multipart/form-data" autocomplete="on">
+
+      <div data-spy="scroll" data-target=".navbar" data-offset="450">
+
+        <section id="set-user">
+          <div class="add-pic">
+            <label for="pic-file" class="add-pic">
+              <img src="../images/silhouette.jpg" id="user-pic" width="176px" height="176px" />
+              <div id="text-on-hover"><span>Nova imagem</span></div>
+            </label>
+            <input type="file" name="picture" id="pic-file" onchange="addPic()" />
+          </div>
+
+          <div id="full-name">
+            <input type="text" name="forename" id="name" placeholder="Nome" required />
+
+            <input type="text" name="surname" id="surname" placeholder="Sobrenome" required />
+          </div>
+          <div id="contact-info">
+            <input type="email" name="email" id="email" placeholder="E-mail" />
+
+            <input type="text" name="phone" id="phone" placeholder="Celular" />
+          </div>
+          <div id="add-password">
+            <div class="password">
+              <input type="password" name="password" id="password" placeholder="Senha" required />
+              <div class="eye-icon" id="eye-icon-1" onclick="toogleVisibility()"></div>
+            </div>
+
+            <div class="password">
+              <input type="password" id="confirm-password" placeholder="Confirme a senha" required />
+              <div class="eye-icon" id="eye-icon-2" onclick="toogleVisibility()"></div>
+            </div>
+          </div>
+
+          <% 
+            if(typeof errors != "undefined") { 
+              errors.forEach(error => { 
+          %>
+          <span><%= error %></span>
+          <% 
+              }); 
+            } 
+          %>
+
+          <ul id="password-strength">
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li>Força da senha</li>
+          </ul>
+          <ul>
+            <li>
+              <div class="x" id="lower-case"></div>Minúscula
+            </li>
+            <li>
+              <div class="x" id="upper-case"></div>Maiúscula
+            </li>
+            <li>
+              <div class="x" id="digit"></div>Número
+            </li>
+            <li>
+              <div class="x" id="special-char"></div>Símbolo
+            </li>
+            <li>
+              <div class="x" id="min-number-of-chars"></div>8 caracteres
+            </li>
+          </ul>
+        </section>
+
+        <section id="set-schools">
+          <div id="new-schools">
+            <div class="schools-tabs"></div>
+            <div class="buttons">
+              <button type="button" class="btn-add" id="add-school"></button>
+              <button type="button" class="btn-del" id="del-school" disabled></button>
+            </div>
+          </div>
+          <div class="gray-box"></div>
+        </section>
+
+        <section id="set-classes">
+          <div id="new-classes">
+            <div class="schools-tabs"></div>
+            <div id="classes">
+              <div id="classes-tabs"></div>
+              <div class="buttons">
+                <button type="button" class="btn-add" id="add-class"></button>
+                <button type="button" class="btn-del" id="del-class" disabled></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="gray-box">
+            <h3 id="class-school"></h3>
+          </div>
+
+          <button type="submit" class="special">Finalizar e levantar voo!</button>
+        </section>
+      </div>
+    </form>
+  </main>
+
+  <script src="/javascripts/formItems.js"></script>
+  <%- include("../partials/footer.ejs") %>

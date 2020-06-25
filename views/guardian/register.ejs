@@ -1,0 +1,124 @@
+<%- include("../partials/header.ejs", {title: "aBordo - Cadastrar"}) %>
+</head>
+
+<body>
+  <header>
+    <a href="/" id="logo">
+      <img class="logo" src="../images/airplane.svg" alt="">
+      <h1 class="logo">aBordo</h1>
+    </a>
+  </header>
+
+  <nav>
+    <h2>Cadastrar</h2>
+    <div class="navbar">
+      <ul class="nav">
+        <li>
+          <a class="nav-link" href="#set-user">
+            Dados pessoais
+          </a>
+        </li>
+        <li>
+          <a class="nav-link" href="#set-child">
+            Filhos
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="register-guardian">
+    <form id="create" action="/responsavel/cadastrar" method="POST" enctype="multipart/form-data" autocomplete="on">
+      <div data-spy="scroll" data-target=".navbar" data-offset="450">
+        <section id="set-user">
+          <div class="add-pic">
+            <label for="pic-file" class="add-pic">
+              <img src="../images/silhouette.jpg" id="user-pic" width="176px" height="176px" />
+              <div id="text-on-hover"><span>Nova imagem</span></div>
+            </label>
+            <input type="file" name="picture" id="pic-file" onchange="addPic()" />
+          </div>
+
+          <div id="full-name">
+            <input type="text" name="forename" id="name" placeholder="Nome" />
+
+            <input type="text" name="surname" id="surname" placeholder="Sobrenome" />
+          </div>
+          <div id="contact-info">
+            <input type="email" name="email" id="email" placeholder="E-mail" />
+
+            <input type="tel" name="phone" id="phone" placeholder="Celular" />
+          </div>
+          <div id="add-password">
+            <div class="password">
+              <input type="password" name="password" id="password" placeholder="Senha" />
+              <div class="eye-icon" id="eye-icon-1" onclick="toogleVisibility()"></div>
+            </div>
+
+            <div class="password">
+              <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirme a senha" />
+              <div class="eye-icon" id="eye-icon-2" onclick="toogleVisibility()"></div>
+            </div>
+          </div>
+
+          <% 
+            if(typeof errors != "undefined") { 
+              errors.forEach(error => { 
+          %>
+          <span><%= error %></span>
+          <% 
+              }); 
+            } 
+          %>
+
+          <ul id="password-strength">
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li class="dash"></li>
+            <li>Força da senha</li>
+          </ul>
+          <ul>
+            <li><span>x</span> Minúscula</li>
+            <li><span>x</span> Maiúscula</li>
+            <li><span>x</span> Número</li>
+            <li><span>x</span> Símbolo</li>
+            <li><span>x</span> 8 caracteres</li>
+          </ul>
+        </section>
+
+        <section id="set-child">
+
+          <div id="new-child">
+            <div class="align-left">
+              <div class="child-tabs">
+                <!-- JAVASCRIPT ADDED
+                <button type="button" class="school1 selected">Filho 1</button>
+                -->
+              </div>
+              <button type="button" class="btn-add" id="add-child">+</button>
+            </div>
+            <button type="button" class="btn-del" id="del-child" disabled></button>
+          </div>
+          
+          <div class="gray-box">
+            <!-- JS ADDED -->
+        </div> 
+
+          <button type="submit" class="special">Finalizar e levantar voo!</button>
+        </section>
+
+      </div>
+    </form>
+  </main>
+
+  
+  <!-- <script src="/javascripts/api.js"></script> -->
+  <script src="/javascripts/formChild.js"></script>
+  <%- include("../partials/footer.ejs") %>

@@ -1,0 +1,191 @@
+<%- include("../partials/header.ejs", {title: "aBordo - Diário de classe"}) %>
+<!-- DAILY STYLE -->
+<link rel="stylesheet" href="/stylesheets/styleDaily.css">
+<!-- ANYCHART STYLE -->
+<link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"
+  type="text/css" rel="stylesheet">
+<link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css?hcode=c11e6e3cfefb406e8ce8d99fa8368d33"
+  type="text/css" rel="stylesheet">
+</head>
+
+<body>
+  <%- include("../partials/teacher-topMenu.ejs") %>
+
+  <nav>
+    <div class="navbar select">
+
+      <select name="school" required>
+        <option disabled selected>Escola</option>
+        <% schools.forEach(school => { %>
+        <option value="<%= school.id %>"><%= school.name %></option>
+        <% }) %>
+      </select>
+
+      <select name=" subject" required>
+        <option disabled selected>Disciplina</option>
+      </select>
+
+      <select name="class" required>
+        <option disabled selected>Turma</option>
+      </select>
+
+      <select name="term" required>
+        <% 
+              schools.forEach(school => { 
+                  let terms = school.academicTerms;
+                  let termType;
+
+                  if (terms == 4) { termType = "Bimestre" }
+                  else if (terms == 3) { termType = "Trimestre" }
+          %>
+        <option disabled selected><%= termType %></option>
+        <% 
+                  for (let term = 1; term <= terms; term++) { 
+          %>
+        <option value="<%= term %>"><%= term + "º " + termType %></option>
+        <% 
+                  }
+              }) 
+          %>
+      </select>
+
+    </div>
+
+    <div class="navbar">
+      <ul class="nav">
+        <li><a class="nav-link" href="/professor/fazer-chamada">
+            Fazer chamada
+          </a></li>
+        <li><a class="nav-link" href="/professor/lancar-notas">
+            Lançar notas
+          </a></li>
+        <li><a class="nav-link active" href="/professor/diario-de-classe">
+            Diário de classe
+          </a></li>
+        <li><a class="nav-link" href="#">
+            Estatísticas
+          </a></li>
+        <li><a class="nav-link" href="#">
+            Contatar responsáveis
+          </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="record-book">
+    <section class="table-settings">
+      <div class="switch-table">
+        <button class="selected" type="button" id="chamada" onclick="showAttendanceSheet()">Chamada</button>
+        <button type="button" id="nota" onclick="showGradebook()">Notas</button>
+      </div>
+
+      <div class="selectors">
+        <select name="filter" id="filter">
+          <option value="" disabled>MOSTRAR:</option>
+          <option value="0" selected>Todos os trimestres</option>
+          <option value="1">1° trimestre</option>
+          <option value="2">2° trimestre</option>
+          <option value="3">3° trimestre</option>
+          <option value="" class="order-grades" hidden disabled>[NOTAS]</option>
+          <option value="4" class="order-grades" hidden>Apenas as médias</option>
+        </select>
+        <select id="order" name="order">
+          <option value="" disabled>ORDENAR POR:</option>
+          <option value="0" selected>Ordem: N° crescente</option>
+          <option value="1">Ordem: N° decrescente</option>
+          <option value="2">Ordem: ALUNO a-z</option>
+          <option value="3">Ordem: ALUNO z-a</option>
+          <option value="" class="order-attendance" disabled>[CHAMADA]</option>
+          <option value="4" class="order-attendance">Ordem: Mais PRESENÇAS</option>
+          <option value="5" class="order-attendance">Ordem: Mais FALTAS</option>
+          <option value="6" class="order-attendance">Ordem: Mais ATRASOS</option>
+          <option value="" class="order-grades" hidden disabled>[NOTAS]</option>
+          <option value="7" class="order-grades" hidden>Ordem: Maior nota</option>
+          <option value="8" class="order-grades" hidden>Ordem: Menor nota</option>
+        </select>
+      </div>
+
+      <div class="chart">
+        <div id="chart"></div>
+      </div>
+    </section>
+
+    <section class="table">
+      <table class="table-striped" id="attendance-table">
+        <thead>
+          <tr>
+            <th class="student-number">Nº</th>
+            <th class="student-name">ALUNO</th>
+
+            <th>Seg. 04/05</th>
+            <th>Ter. 05/05</th>
+            <th>Qua. 06/05</th>
+            <th>Qui. 07/05</th>
+            <th>Sex. 08/05</th>
+            <th>Seg. 11/05</th>
+            <th>Ter. 12/05</th>
+            <th>Qua. 13/05</th>
+            <th>Qui. 14/05</th>
+            <th>Sex. 15/05</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < students.length; i++) { %>
+          <tr>
+            <td class="student-number"><%= students[i].number %></td>
+            <td class="student-name"><%= students[i].name %></td>
+            <% for (let j = 1; j <= 10; j++) { %>
+            <td>
+              <div class="attendance">
+                <span class="present">P</span>
+                <span class="absent">F</span>
+                <span class="late">A</span>
+              </div>
+            </td>
+            <% } %>
+          </tr>
+          <% } %>
+          <tr>
+        </tbody>
+      </table>
+
+      <table class="table table-striped" id="grades-table" hidden>
+        <thead>
+          <tr>
+            <th class="student-number">Nº</th>
+            <th class="student-name">ALUNO</th>
+
+            <th>1ª AVAL.<div>max. 10,0 pts</div>
+            </th>
+            <th>2ª AVAL.<div>max. 2,0 pts</div>
+            </th>
+            <th>3ª AVAL.<div>max. 4,0 pts</div>
+            </th>
+            <th>4ª AVAL.<div>max. 10,0 pts</div>
+            </th>
+            <th>MÉDIA<div>max. 10,0 pts</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < students.length; i++) { %>
+          <tr>
+            <td class="student-number"><%= students[i].number %></td>
+            <td class="student-name"><%= students[i].name %></td>
+            <% for (let j = 1; j <= 5; j++) { %>
+            <td>
+              <div>6/10</div>
+            </td>
+            <% } %>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- APEXCHARTS JS -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <!-- DAILY JS -->
+  <script src="/javascripts/daily.js"></script>
+  <%- include("../partials/footer.ejs") %>

@@ -1,0 +1,19 @@
+th {
+  font-weight: 500;
+}
+
+#home {
+  padding: 50px;
+}
+
+.progress {
+  height: 30px;
+}
+
+tbody tr:nth-child(odd) .progress-bar {
+  background-color: #30C1F9;
+}
+
+tbody tr:nth-child(even) .progress-bar{
+  background-color: #FE539B;
+}

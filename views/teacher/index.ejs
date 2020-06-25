@@ -1,0 +1,190 @@
+<%- include("../partials/header.ejs", { title: "aBordo - Docente" }) %>
+</head>
+
+<body>
+    <%- include("../partials/teacher-topMenu.ejs") %>
+
+    <nav>
+        <!-- <div> -->
+        <div class="navbar select">
+            <select id="school" required></select>
+            <select id="class" required disabled></select>
+            <select id="subject" required disabled></select>
+            <select id="term" name="academicTerm" form="form-attendance-sheet" required disabled></select>
+        </div>
+
+        <div class="navbar">
+            <ul class="nav">
+                <li><button id="btn-statistics" type="button" disabled>Estatísticas</button></li>
+                <li><button id="btn-records" type="button" disabled>Diário de classe</button></li>
+                <li><button id="btn-attendance-sheet" type="button" disabled>Fazer chamada</button></li>
+                <li><button id="btn-gradebook" type="button" disabled>Lançar notas</button></li>
+                <!-- <li><button id="btn-records" type="button" disabled>Diário de classe</button></li> -->
+                <!-- <li><button id="btn-statistics" type="button" disabled>Estatísticas</button></li> -->
+                <li><button id="btn-contact" type="button" disabled>Contactar responsáveis</button></li>
+            </ul>
+        </div>
+        <!-- </div> -->
+    </nav>
+
+
+
+
+    <main id="home">
+        <div id="dashboard"></div>
+    </main>
+
+
+
+
+    <main id="statistics" hidden>
+        <ul id="ul-students"></ul>
+        <!-- <section id="statistics-charts"></section> -->
+    </main>
+
+
+
+
+    <main id="record-book" hidden>
+        <section class="table-settings">
+            <div class="switch-table">
+                <button class="selected" type="button" id="attendances">Chamadas</button>
+                <button type="button" id="grades">Notas</button>
+            </div>
+
+            <div class="selectors">
+                <select name="filter" id="filter">
+                    <option value="" disabled>MOSTRAR:</option>
+                    <option value="0" selected>Todos os trimestres</option>
+                    <option value="1">1° trimestre</option>
+                    <option value="2">2° trimestre</option>
+                    <option value="3">3° trimestre</option>
+                    <option value="" class="order-grades" hidden disabled>[NOTAS]</option>
+                    <option value="4" class="order-grades" hidden>Apenas as médias</option>
+                </select>
+                <select id="order" name="order">
+                    <option value="" disabled>ORDENAR POR:</option>
+                    <option value="0" selected>Ordem: N° crescente</option>
+                    <option value="1">Ordem: N° decrescente</option>
+                    <option value="2">Ordem: ALUNO a-z</option>
+                    <option value="3">Ordem: ALUNO z-a</option>
+                    <option value="" class="order-attendance" disabled>[CHAMADA]</option>
+                    <option value="4" class="order-attendance">Ordem: Mais PRESENÇAS</option>
+                    <option value="5" class="order-attendance">Ordem: Mais FALTAS</option>
+                    <option value="6" class="order-attendance">Ordem: Mais ATRASOS</option>
+                    <option value="" class="order-grades" hidden disabled>[NOTAS]</option>
+                    <option value="7" class="order-grades" hidden>Ordem: Maior nota</option>
+                    <option value="8" class="order-grades" hidden>Ordem: Menor nota</option>
+                </select>
+            </div>
+
+            <div id="recorded-grades-chart-container">
+                <div id="recorded-grades-chart" hidden>
+                    <div id="terms-bars-container">
+                    </div>
+                    <div id="final-grade-bar-container">
+                        <div id="final-grade-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="table">
+            <table class="table-striped" id="table-attendances">
+                <thead id="thead-attendances-table"></thead>
+                <tbody id="tbody-attendances-table"></tbody>
+            </table>
+
+            <table class="table table-striped" id="table-grades" hidden>
+                <thead id="thead-grades-table"></thead>
+                <tbody id="tbody-grades-table"></tbody>
+            </table>
+        </section>
+    </main>
+
+
+
+
+    <main id="attendance-sheet" hidden>
+        <form id="form-attendance-sheet" action="/professor/fazer-chamada" method="POST">
+
+            <section id="lesson">
+                <input type="hidden" name="courseId" id="input-courseId" required>
+                <div class="selectors">
+                    <input type="date" name="date" id="date" required
+                        value=<%= new Date().toISOString().substr(0, 10) %> />
+                    <select name="periods" id="periods" required>
+                        <option selected disabled>Tempos de aula</option>
+                        <option value="1">1 tempo</option>
+                        <option value="2">2 tempos</option>
+                        <option value="3">3 tempos</option>
+                        <option value="4">4 tempos</option>
+                        <option value="5">5 tempos</option>
+                    </select>
+                </div>
+                <textarea name="observations" id="observations" placeholder="Observações"></textarea>
+            </section>
+
+            <section id="set-evaluation">
+                <div id="evaluation-info"></div>
+                <label class="checkbox-container">Dia de avaliação
+                    <input type="checkbox" id="evaluation-day" />
+                    <span class="checkmark"></span>
+                </label>
+            </section>
+
+            <section class="table">
+                <table class="table-striped">
+                    <thead>
+                        <tr>
+                            <th class="student-number">Nº</th>
+                            <th class="student-name">ALUNO</th>
+                            <th class="attendance-check"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-attendance-sheet"></tbody>
+                </table>
+            </section>
+
+            <button type="submit" class="special" id="btn-submit-attendance-sheet" disabled>Salvar</button>
+        </form>
+    </main>
+
+
+
+
+    <main id="gradebook" hidden>
+        <form id="form-gradebook" action="/professor/lancar-notas" method="POST">
+
+            <section id="course-term-evaluations-data">
+                <div class="selectors">
+                    <select id="gradebook-evaluation-select"></select>
+                </div>
+
+                <div id="gradebook-chart" hidden>
+                    <div id="instructions">
+                        <p>Pontuação máxima de cada avaliação:</p>
+                        <div id="disclaimer"></div>
+                    </div>
+                    <div id="input-fields"></div>
+                    <div id="container"></div>
+                </div>
+            </section>
+
+            <section class="table">
+                <table class="table-striped">
+                    <thead id="thead-gradebook"></thead>
+                    <tbody id="tbody-gradebook"></tbody>
+                </table>
+            </section>
+
+            <button type="submit" class="special" id="btn-submit-gradebook" disabled>Salvar</button>
+        </form>
+    </main>
+
+
+
+
+    <script src="../../javascripts/teacherScript.js"></script>
+
+    <%- include("../partials/footer.ejs") %>

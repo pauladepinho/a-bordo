@@ -1,0 +1,101 @@
+<%- include("../partials/header.ejs", { title: "aBordo - Fazer chamada" }) %>
+</head>
+
+<body>
+  <%- include("../partials/teacher-topMenu.ejs") %>
+
+  <nav>
+    <div class="navbar select">
+
+      <select name="school" required></select>
+      <select name=" subject" required></select>
+      <select name="class" required></select>
+      <select name="term" required></select>
+
+    </div>
+
+    <div class="navbar">
+      <ul class="nav">
+        <li><a class="nav-link active" href="/professor/fazer-chamada">
+            Fazer chamada
+          </a></li>
+        <li><a class="nav-link" href="/professor/lancar-notas">
+            Lançar notas
+          </a></li>
+        <li><a class="nav-link" href="/professor/diario-de-classe">
+            Diário de classe
+          </a></li>
+        <li><a class="nav-link" href="#">
+            Estatísticas
+          </a></li>
+        <li><a class="nav-link" href="#">
+            Contatar responsáveis
+          </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="take-attendance">
+    <section class="table-settings">
+      <div class="selectors">
+        <input type="date" name="date" id="date" value=<%= new Date().toISOString().substr(0, 10) %> />
+        <select name="period" id="period" onchange="renderAttendanceSheet()">
+          <option selected disabled>Tempos de aula</option>
+          <option value="1">1 tempo de aula</option>
+          <option value="2">2 tempos de aula</option>
+          <option value="3">3 tempos de aula</option>
+          <option value="4">4 tempos de aula</option>
+        </select>
+      </div>
+
+      <div class="observations">
+        <textarea placeholder="Observações" name="observations" id="observations"></textarea>
+        <label for="evaluation-day" class="checkbox-container">Dia de avaliação
+          <input type="checkbox" name="evaluation-day" id="evaluation-day" />
+          <span class="checkmark"></span>
+        </label>
+      </div>
+    </section>
+
+    <section class="table">
+      <table class="table-striped">
+        <thead>
+          <tr>
+            <th class="student-number">Nº</th>
+            <th class="student-name">ALUNO</th>
+
+            <th class="attendance-check"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < students.length; i++) { %>
+          <tr id=<%= "student" + (i + 1) %>>
+            <td class="student-number" id=<%= "student-number" + (i + 1) %>><%= students[i].number %></td>
+            <td class="student-name" id=<%= "student-name" + (i + 1) %>><%= students[i].name %></td>
+            <td class="attendance-check">
+              <% for (let j = 1; j <= 3; j++) { %>
+              <div class="attendance-check" id=<%= "student" + i + "-period" + j %>>
+                <label class="present" onclick="checkAttendance()" for=<%= "present-student" + i + "-period" + j %>>
+                  PRESENTE
+                  <input type="checkbox" name=<%= "attendance-student" + i + "-period" + j %>
+                    id=<%= "present-student" + i + "-period" + j %>></label>
+                <label class="absent" onclick="checkAttendance()" for=<%= "absent-student" + i + "-period" + j %>>
+                  FALTOU
+                  <input type="checkbox" name=<%= "attendance-student" + i + "-period" + j %>
+                    id=<%= "absent-student" + i + "-period" + j %>></label>
+                <label class="late" onclick="checkAttendance()" for=<%= "late-student" + i + "-period" + j %>>
+                  ATRASADO
+                  <input type="checkbox" name=<%= "attendance-student" + i + "-period" + j %>
+                    id=<%= "late-student" + i + "-period" + j %>></label>
+              </div>
+              <% } %>
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../../javascripts/teacher.js"></script>
+  <%- include("../partials/footer.ejs") %>
