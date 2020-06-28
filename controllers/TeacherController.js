@@ -2,59 +2,6 @@ const { User, School, Subject, Student, Teacher, Guardian, Class, Course, Studen
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-const getTeacherData = async (user) => {
-
-    let subjectsIds = [];
-    let classesIds = [];
-    let subjects = [];
-    let classes = [];
-    let classesStudents = [];
-    let students = []; // {id, number, name}
-    let schools = [];
-
-    const teacher = await Teacher.findOne({ where: { userId: user.id } });
-    const courses = await Course.findAll({ where: { teacherId: teacher.id } });
-
-    for (course of courses) {
-        subjectsIds.push(course.subjectId);
-        classesIds.push(course.classId);
-    }
-    // SUBJECTS
-    for (id of subjectsIds) {
-        let subject = await Subject.findOne({ where: { id } });
-        subjects.push(subject);
-    }
-    // CLASSES AND CLASS_STUDENTS
-    for (id of classesIds) {
-        let c = await Class.findOne({ where: { id } });
-        let thisClassStudents = await Class_Student.findAll({ where: { classId: id } });
-        classes.push(c);
-        classesStudents.push(...thisClassStudents);
-    }
-    // STUDENTS
-    for (student of classesStudents) {
-        let thisStudent = await Student.findOne({ where: { id: student.studentId } });
-        students.push({
-            id: thisStudent.id,
-            number: student.number,
-            name: thisStudent.name
-        });
-    }
-    // SCHOOLS
-    for (c of classes) {
-        let school = await School.findOne({ where: { id: c.schoolId } });
-        schools.push(school);
-    }
-    // DATA
-    return {
-        user,
-        subjects,
-        classes,
-        schools,
-        students
-    };
-}
-
 const getTeacher = async (user) => {
     const teacher = await Teacher.findOne({
         where: {
@@ -135,6 +82,11 @@ module.exports = {
         const reqBodyClass = Object.keys(req.body).filter( // [ "class1-school1", "class2-school1", "class1-school2" ]
             key => key.substr(0, 5) == "class"
         );
+
+
+        console.log(reqBodyClass);
+
+
         let classesList = [];
         for (let i = 0; i < schools.length; i++) {
             let schoolClasses = reqBodyClass.filter(
@@ -142,6 +94,9 @@ module.exports = {
             );
             for (aClass of schoolClasses) { // req.body[ aClass ] = [ 0=year, 1=levelOfEducation-grade, 2=code ]
                 let eduLvl = req.body[aClass][1].split("-"); // ex.: [ "Ensino Fundamental ", " 6º ano" ]
+
+                console.log(req.body[aClass]);
+
 
                 classesList.push(
                     {
@@ -154,12 +109,19 @@ module.exports = {
                 );
             };
         };
+
+        console.log(classesList);
+
         const classes = await Class.bulkCreate(classesList);
 
         // CREATE COURSES
         const reqBodySubjects = Object.keys(req.body).filter( // [ "subjects-class1-school1", "subjects-class2-school1", "subjects-class1-school2" ]
             key => key.substr(0, 8) == "subjects"
         );
+
+        console.log(reqBodySubjects);
+
+
         let coursesList = [];
         for (let i = 0; i < classes.length; i++) {
             let classSubjects = reqBodySubjects.filter(
@@ -177,6 +139,9 @@ module.exports = {
                 );
             }
         }
+
+        console.log(coursesList);
+
         const courses = await Course.bulkCreate(coursesList);
 
         // CREATE STUDENTS
@@ -234,16 +199,6 @@ module.exports = {
         return res.redirect("/professor/home");
     },
 
-    // GET professor/fazer-chamada
-    renderAttendanceSheet: async (req, res) => {
-        // USER IS LOGGED IN
-        const user = req.session.user;
-        // GET TEACHER'S DATAS
-        let data = await getTeacherData(user);
-        // RENDER PAGE WITH DATA
-        return res.render("teacher/take-attendance", data);
-    },
-
     // POST professor/fazer-chamada
     recordAttendances: async (req, res) => {
         // CREATE LESSON
@@ -288,17 +243,6 @@ module.exports = {
             );
         }
         return res.redirect("/professor/");
-    },
-
-    // GET professor/lancar-notas
-    renderGradeBook: async (req, res) => {
-        // USER IS LOGGED IN
-        const user = req.session.user;
-        // GET TEACHER'S DATAS
-        // let data = await getTeacherData(user);
-        // RENDER PAGE WITH DATA
-        // return res.render("teacher/grade", data);
-        return res.render("teacher/grade", { user });
     },
 
     // POST professor/lancar-notas
@@ -363,16 +307,6 @@ module.exports = {
         }
         await Student_Evaluation.bulkCreate(studentsEvaluations);
         return res.redirect("/professor/");
-    },
-
-    // GET professor/diario-de-classe
-    renderRecordBook: async (req, res) => {
-        // USER IS LOGGED IN
-        const user = req.session.user;
-        // GET TEACHER'S DATAS
-        let data = await getTeacherData(user);
-        // RENDER PAGE WITH DATA
-        return res.render("teacher/records", data);
     },
 
     // GET professor/atualizar

@@ -267,7 +267,7 @@ const addSchool = () => {
         CLASSES' FORM SECTION
     ****************************/
 
-    createClassContent(true, cSchoolTab);
+    createClassContent(true, classNumber, cSchoolTab);
 };
 
 const delSchool = () => {
@@ -742,7 +742,7 @@ const addClass = () => {
         NEW CLASS CONTENT
     ***********************/
 
-    createClassContent(false, school);
+    createClassContent(false, classNumber, school);
 
     /************************
         WRAP EVERYTHING UP
@@ -920,12 +920,12 @@ const changeClassTabText = (select) => {
     }
 };
 
-const addSubjectsSelect = (subjectsDiv, school, divider, addBtn, delBtn) => {
+const addSubjectsSelect = (subjectsDiv, aClass, school, divider, addBtn, delBtn) => {
 
     /**** CREATE ELEMENTS ****/
 
     const subjectsSelect = document.createElement("select");
-    subjectsSelect.name = `subjects-class${classNumber}-${school}[]`;
+    subjectsSelect.name = `subjects-class${aClass}-${school}[]`;
     subjectsSelect.required = true;
 
     const subjectsHeader = document.createElement("option");
@@ -1272,7 +1272,7 @@ const createSchoolContent = (schoolTab, cSchoolTab, classTab) => {
     trimonthly.addEventListener("click", () => toggleYearDivision(evaluationSystem, trimonthly, bimonthly));
 };
 
-const createClassContent = (createdWithSchool, cSchoolTab) => {
+const createClassContent = (createdWithSchool, classNumber, cSchoolTab) => {
     const school = cSchoolTab.classList[0];
 
     /**********************
@@ -1388,7 +1388,7 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
     delBtn.className = "btn-del";
 
     // SUBJECTS SELECT
-    addSubjectsSelect(subjects, school, divider, addBtn, delBtn);
+    addSubjectsSelect(subjects, classNumber, school, divider, addBtn, delBtn);
 
     /**********************
         APPEND ELEMENTS
@@ -1430,7 +1430,7 @@ const createClassContent = (createdWithSchool, cSchoolTab) => {
     yearSelect.addEventListener("change", () => addYearOption(yearSelect, previousYearOption));
     eduLvlSelect.addEventListener("change", () => populateCodesSelect(codeSelect, codeHeader, codeOptionDivider, newCodeOption, school, yearSelect, eduLvlSelect));
     codeSelect.addEventListener("change", () => addCodeOption(codeSelect, newCodeOption));
-    addBtn.addEventListener("mouseup", () => addSubjectsSelect(subjects, school, divider, addBtn, delBtn));
+    addBtn.addEventListener("mouseup", () => addSubjectsSelect(subjects, classNumber, school, divider, addBtn, delBtn));
     delBtn.addEventListener("mouseup", () => delSubjectsSelect(subjects, addBtn, delBtn));
 
     /****************************

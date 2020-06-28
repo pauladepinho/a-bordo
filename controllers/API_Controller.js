@@ -13,7 +13,9 @@ module.exports = {
 
     // GET /schools
     schools: async (req, res) => {
-        await School.findAll()
+        await School.findAll({
+            include: { model: Class, as: "classes" }
+        })
             .then(schools => res.status(200).json(schools))
             .catch(error => res.status(400).json(error))
     },

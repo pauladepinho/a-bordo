@@ -31,13 +31,8 @@ router.use(isTeacher);
 router.get("/", TeacherController.renderHome);
 router.get("/home", TeacherController.renderHome);
 /*****************************************************************************/
-// router.get("/fazer-chamada", TeacherController.renderAttendanceSheet);
 router.post("/fazer-chamada", TeacherController.recordAttendances);
-/*****************************************************************************/
-router.get('/lancar-notas', TeacherController.renderGradeBook);
 router.post('/lancar-notas', TeacherController.recordGrades);
-/*****************************************************************************/
-router.get('/diario-de-classe', TeacherController.renderRecordBook);
 /*****************************************************************************/
 router.get("/atualizar", TeacherController.renderUpdateForm);
 router.put("/atualizar", upload.single("picture"), TeacherController.updateTeacher);
